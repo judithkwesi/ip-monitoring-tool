@@ -8,11 +8,11 @@
     </head>
     <body>
         <div id="header">
-            <span class = "logo">Django myapp</span>
+            <span class = "logo">User Authentication</span>
             {% if request.user.is_authenticated %}
             <ul class="menu">
                 <li {% if section == "dashboard" %} class="selected" {% endif %}>
-                    <a href="{%url 'dashboard' %}">My Dashboard</a>
+                    <a href="{%url 'dashboard' %}"> My Dashboard</a>
                 </li>
             </ul>
             {% endif %}
