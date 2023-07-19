@@ -6,3 +6,7 @@
 David Ssenabulya
 
 Charles Kasasira
+
+Nantale Tracy Cynthia
+
+Kizza Judith Kwesiga
