@@ -7,16 +7,16 @@
         <link href="{% static 'css\base.css' %}" rel="stylesheet">
     </head>
     <body>
+        {% if request.user.is_authenticated %}
         <div id="header">
             <span class = "logo">User Authentication</span>
-            {% if request.user.is_authenticated %}
             <ul class="menu">
                 <li {% if section == "dashboard" %} class="selected" {% endif %}>
                     <a href="{%url 'dashboard' %}"> My Dashboard</a>
                 </li>
             </ul>
-            {% endif %}
         </div>
+        {% endif %}
         <div id="content">
             {% block content %}
             {% endblock %}
