@@ -1,10 +1,21 @@
- {% extends "base.html" %}
+{% extends "base.html" %} {% block title %}Dashboard{% endblock %} 
+{% block content %}
+<div id="content">
+  <h2>Reputation Monitor</h2>
 
- {% block title %}Dashboard{% endblock %}
- {% block content %}
-    <h1>Dashboard</h1>
-    Hello, {{ request.user.username }}
-    <p>Welcome to your page</p>
-    <p>You can change your password <a href="{% url 'password_change' %}">here</a></p>
-    <a href="{% url 'logout' %}">Logout</a>
+  <div class="search">
+    <select name="" id="">
+      <option value="">All Databases</option>
+      <option value="">Spamhaus</option>
+      <option value="">Blocklist.de</option>
+      <option value="">CINS</option>
+      <option value="">AbuselIPDB</option>
+    </select>
+    <button class="btn">Add IP Space</button>
+  </div>
+
+  <div class="result">
+    <p>None of RENU IP is listed in All Databases lists</p>
+  </div>
+</div>
 {% endblock %}
