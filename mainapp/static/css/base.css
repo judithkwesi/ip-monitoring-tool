@@ -56,15 +56,15 @@ ol {
   color: #fff;
   display: flex;
   right: 0;
-  padding: 4px 80px;
-  height: 75px;
+  padding: 0 80px;
+  height: 60px;
   align-items: center;
   justify-content: space-between;
 }
 
 #header ul.menu {
   list-style: none;
-  padding: 4px 10px;
+  padding: 0 10px;
   display: flex;
   gap: 30px;
 }
@@ -78,7 +78,21 @@ ol {
 
 .logo-menu {
   display: flex;
+  align-items: center;
   gap: 50px;
+  height: 60px;
+}
+
+.menu-item a {
+  height: 60px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.selected {
+  background-color: #074e6f;
 }
 
 /* css for content*/
