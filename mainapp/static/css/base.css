@@ -113,7 +113,8 @@ form {
 }
 
 form p {
-  width: 350px;
+  width: 340px;
+  padding: 0 10px;
 }
 
 label {
@@ -124,12 +125,10 @@ label {
 }
 input,
 textarea {
-  clear: both;
-  background: #efefef;
-  border: 0;
+  background: transparent;
+  border: 1px solid black;
   padding: 6px 10px;
-  font-size: 14px;
-  width: 350px;
+  width: 320px;
   height: 28px;
   border-radius: 5px;
 }
