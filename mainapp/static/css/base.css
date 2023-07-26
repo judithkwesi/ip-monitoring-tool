@@ -223,6 +223,40 @@ ul.messages li a.choice {
   padding: 15px 0;
 }
 
+.search {
+  display: flex;
+  justify-content: space-between;
+}
+
+.result {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-top: 20px;
+  padding: 20px 0;
+}
+
+.result p {
+  text-align: center;
+}
+
+select {
+  background-color: transparent;
+  padding: 8px 12px;
+  height: 35px;
+  width: 300px;
+}
+
+.btn {
+  color: white;
+  background-color: #00334e;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  height: 35px;
+  padding: 8px 12px;
+}
+
 .login-btn {
   width: 350px;
   color: white;
