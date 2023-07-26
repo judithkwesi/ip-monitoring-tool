@@ -131,3 +131,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_REDIRECT_URL = 'dashboard'
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
+
+# Session
+SESSION_COOKIE_AGE = 3600  # 1 hour
+
+# Secure flag for the session cookie (set it to True for HTTPS-only)
+SESSION_COOKIE_SECURE = False
