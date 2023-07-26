@@ -8,3 +8,5 @@ db.sqlite3
 static
 .DS_Store
 myapp/.DS_Store
+mainapp/static/.DS_Store
+mainapp/.DS_Store
