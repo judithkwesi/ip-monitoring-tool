@@ -91,6 +91,10 @@ ol {
   justify-content: center;
 }
 
+.menu-item a:hover {
+  background-color: #074e6f8d;
+}
+
 .selected {
   background-color: #074e6f;
 }
