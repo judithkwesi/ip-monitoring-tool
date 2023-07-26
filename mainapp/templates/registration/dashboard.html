@@ -1,5 +1,19 @@
 {% extends "base.html" %} {% block title %}Dashboard{% endblock %} 
 {% block content %}
 <h2>Reputation Monitor</h2>
-<a href="{% url 'logout' %}">Logout</a>
+
+<div class="search">
+  <select name="" id="">
+    <option value="">All Databases</option>
+    <option value="">Spamhaus</option>
+    <option value="">Blocklist.de</option>
+    <option value="">CINS</option>
+    <option value="">AbuselIPDB</option>
+  </select>
+  <button class="btn">Add IP Space</button>
+</div>
+
+<div class="result">
+  <p>None of RENU IP is listed in All Databases lists</p>
+</div>
 {% endblock %}
