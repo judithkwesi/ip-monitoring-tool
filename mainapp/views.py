@@ -13,19 +13,13 @@ from django.contrib.auth.views import LogoutView
 def dashboard(request):   #Main screen
     return render(request, 'registration/dashboard.html', {'section': 'dashboard'})
 
+@login_required(login_url='login')
+def users(request):
+    return render(request, 'registration/users.html', {'section': 'users'})
 
-# class CustomLogoutView(LogoutView):
-#     def dispatch(self, request, *args, **kwargs):
-#         response = super().dispatch(request, *args, **kwargs)
-#         # Set HTTP headers to prevent caching
-#         response['Cache-Control'] = 'no-cache, no-store, must-revalidate'
-#         response['Pragma'] = 'no-cache'
-#         response['Expires'] = '0'
-#         return response
-
-#     def get_next_page(self):
-#         # Redirect to the login page after logout
-#         return '/login/'  # Replace '/login/' with the URL for your login view
+@login_required(login_url='login')
+def settings(request):
+    return render(request, 'registration/settings.html', {'section': 'settings'})
 
 @login_required(login_url='login')
 def logout_user(request):
