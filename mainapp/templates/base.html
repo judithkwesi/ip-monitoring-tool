@@ -12,13 +12,13 @@
             <div class="logo-menu">
                 <span class = "logo">RENU</span>
             <ul class="menu">
-                <li {% if section == "dashboard" %} class="selected" {% endif %}>
+                <li class="menu-item selected" {% if section == "dashboard" %} class="menu-item selected" {% endif %}>
                     <a href="{%url 'dashboard' %}">Monitor</a>
                 </li>
-                <li {% if section == "dashboard" %} class="selected" {% endif %}>
+                <li class="menu-item" {% if section == "dashboard" %} class="selected" {% endif %}>
                     <a href="{%url 'dashboard' %}">Users</a>
                 </li>
-                <li {% if section == "dashboard" %} class="selected" {% endif %}>
+                <li class="menu-item" {% if section == "dashboard" %} class="selected" {% endif %}>
                     <a href="{%url 'dashboard' %}">Settings</a>
                 </li>
             </ul>
