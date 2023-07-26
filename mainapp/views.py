@@ -2,9 +2,8 @@
 
 from django.shortcuts import render, redirect, HttpResponse
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
+from django.contrib.auth import logout
 from django.contrib import messages
-from django.contrib.auth.views import LogoutView
 
 
 # Create your views here. 
