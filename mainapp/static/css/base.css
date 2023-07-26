@@ -100,9 +100,9 @@ ol {
 }
 
 /* css for content*/
-/* #content {
-    padding:30px 100px;
-} */
+#content {
+  padding: 0 80px;
+}
 
 /*forms*/
 form {
