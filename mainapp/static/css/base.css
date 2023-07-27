@@ -11,6 +11,7 @@ body {
   width: 100vw;
   overflow: hidden;
   min-height: 100vh;
+  background-color: #f4f4f4;
 }
 
 p {
@@ -267,4 +268,29 @@ select {
   font-weight: bold;
   cursor: pointer;
   height: 35px;
+}
+
+table {
+  margin-top: 50px;
+  margin-bottom: 50px;
+  width: 100%;
+  border: none;
+  border-collapse: collapse;
+}
+
+thead {
+  background-color: #6a6a6a;
+  color: white;
+  border: none;
+}
+
+tbody {
+  background-color: white;
+}
+
+th,
+td {
+  padding: 16px 16px;
+  text-align: left;
+  border: none;
 }

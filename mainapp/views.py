@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from django.contrib import messages
 import subprocess
+from django.contrib.auth.models import User
 
 
 # Create your views here. 
@@ -15,7 +16,8 @@ def dashboard(request):   #Main screen
 
 @login_required(login_url='login')
 def users(request):
-    return render(request, 'registration/users.html', {'section': 'users'})
+    users = User.objects.all()
+    return render(request, 'registration/users.html', {'users': users})
 
 @login_required(login_url='login')
 def settings(request):
