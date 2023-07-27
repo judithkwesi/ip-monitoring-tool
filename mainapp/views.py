@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout, login, authenticate
 from django.contrib.auth.models import User
 from django.core.cache import cache
+from .forms import MySelectForm
 # from django_ratelimit.decorators import ratelimit
 
 # Create your views here. 
@@ -37,12 +38,28 @@ def login_view(request):
 
 @login_required(login_url='login')
 def dashboard(request):   #Main screen
-    return render(request, 'registration/dashboard.html', {'section': 'dashboard'})
+    if request.method == 'POST':
+        form = MySelectForm(request.POST)
+        if form.is_valid():
+            selected_option = form.cleaned_data['select_choice']
+
+            selected_option_label = dict(form.fields['select_choice'].choices).get(selected_option)
+            # Render the same template with updated options
+            return render(request, 'registration/dashboard.html', {'section': 'dashboard', 'form': form, 'selected_option': selected_option, 'selected_label': selected_option_label})
+    else:
+        form = MySelectForm(initial={'select_choice': 'option1'})
+        selected_option = form.initial['select_choice']
+
+        selected_option_label = dict(form.fields['select_choice'].choices).get(selected_option)
+
+        return render(request, 'registration/dashboard.html', {'section': 'dashboard', 'form': form, 'selected_option': selected_option, 'selected_label': selected_option_label})
+
+    return render(request, 'registration/dashboard.html', {'section': 'dashboard', 'form': ""})
 
 @login_required(login_url='login')
 def users(request):
     users = User.objects.all()
-    return render(request, 'registration/users.html', {'users': users})
+    return render(request, 'registration/users.html', {'users': users, 'section': 'users'})
 
 @login_required(login_url='login')
 def settings(request):

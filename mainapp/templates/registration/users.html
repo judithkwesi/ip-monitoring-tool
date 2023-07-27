@@ -1,4 +1,12 @@
-{% extends "base.html" %} {% block title %}Users{% endblock %} {% block content%}
+{% extends "base.html" %} 
+{% block title %}Users{% endblock %} 
+
+{% load static %}
+{% block extra_css %}
+<link type="text/css" href="{% static 'css\user-management.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content%}
 <div id="content">
   <h2>User Management</h2>
 
@@ -23,7 +31,5 @@
         {% endfor %}
       </tbody>
     </table>
-
-  <a href="{% url 'logout' %}">Logout</a>
 </div>
 {% endblock %}
