@@ -6,9 +6,33 @@
 <main class="login-form-container">
   <div class="login-form">
     <h1>Welcome</h1>
-    <form action="{% url 'login' %}" method="post">
-      {{form.as_p}} {% csrf_token %}
-      <input type="hidden" name="next" value="{{ next }}" />
+    <form action="{% url 'login' %}" method="POST">
+      {% csrf_token %}
+      <div class="input-fields">
+        <label for="">Username</label>
+        <div>
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Username"
+            name="username"
+            required
+          />
+        </div>
+      </div>
+      <div class="input-fields">
+        <label for="">password</label>
+        <div>
+          <input
+            type="password"
+            class="form-control"
+            placeholder="Password"
+            name="password"
+            required
+          />
+        </div>
+      </div>
+      <!-- {{form.as_p}} {% csrf_token %} -->
       <input type="submit" value="Login" class="login-btn" />
     </form>
     <p>
