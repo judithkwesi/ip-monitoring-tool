@@ -1,22 +1,5 @@
-@import url(//fonts.googleapis.com/css?family=Muli);
-@import url(https://fonts.googleapis.com/css?family=Open+Sans%3A600%2C700);
-@import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro%3A600%2C700);
-html {
-	font-size:62.5%;
-}
-* {
-	margin: 0;
-	padding: 0;
-}
-ul, li {
-	list-style: none;
-}
-input {
-	border: none;
-}
-body {
-  width: 128rem;
-}.user-management-vrd {
+
+.user-management-vrd {
   width: 100%;
   height: 83.2rem;
   position: relative;
