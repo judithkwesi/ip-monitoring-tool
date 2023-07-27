@@ -17,8 +17,6 @@ def download_sites_file():
     cins_output_file = "./mainapp/sites/cins.txt"
     spam_output_file = "./mainapp/sites/spamhaus.txt"
 
-    print(block_url)
-
     # Use wget to download the file
     download_block = f"wget -O {block_output_file} {block_url}"
     download_cins_url = f"wget -O {cins_output_file} {cins_url}"

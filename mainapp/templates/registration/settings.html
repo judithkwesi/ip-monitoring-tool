@@ -1,4 +1,13 @@
-{% extends "base.html" %} {% block title %}Settings{% endblock %}
+{% extends "base.html" %} 
+
+{% block title %}Settings{% endblock %}
+
+{% load static %}
+
+{% block extra_css %}
+ <link type="text/css" href="{% static 'css\settings.css' %}" rel="stylesheet" />
+{% endblock %}
+
 {% block content %}
 <div id="content">
   <h2>Settings</h2>
