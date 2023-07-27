@@ -11,7 +11,7 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "myapp.settings")
 settings._wrapped = None
 
 # Configure Django settings
-settings.configure()
+# settings.configure()
 
 if settings.DEBUG:
     sys.exit("ERROR: Debug mode must be set to False for the production environment.")
