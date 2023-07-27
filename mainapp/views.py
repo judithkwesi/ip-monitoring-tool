@@ -2,7 +2,6 @@ from django.shortcuts import render, redirect, HttpResponse
 from django.http import HttpResponseForbidden
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout, login, authenticate
-from django.contrib import messages
 from django.contrib.auth.models import User
 from django.core.cache import cache
 # from django_ratelimit.decorators import ratelimit
@@ -52,7 +51,6 @@ def settings(request):
 @login_required(login_url='login')
 def logout_user(request):
 	logout(request)
-	messages.success(request, ('Successful logged out!'))
         
 	response = HttpResponse()
 	response['Cache-Control'] = 'no-cache, no-store, must-revalidate'
@@ -64,7 +62,6 @@ def logout_user(request):
 @login_required(login_url='login')
 def logout_user(request):
 	logout(request)
-	messages.success(request, ('Successful logged out!'))
         
 	response = HttpResponse()
 	response['Cache-Control'] = 'no-cache, no-store, must-revalidate'
