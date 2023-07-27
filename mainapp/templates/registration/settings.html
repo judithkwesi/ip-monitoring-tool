@@ -2,10 +2,17 @@
 {% block content %}
 <div id="content">
   <h2>Settings</h2>
-   <h3>Change Reputation Sync Interval </h3><br>
-   <input type="text" id="hours" name="Hours" maxlength="3" size="3" ><br><br>
-   <label for="hours">Hours</label><br><br>
-    <button type="Update" value="Update">Update</button><br><br>
-  <a href="{% url 'logout' %}">Logout</a>
+  <div class="frame-1-mKf">
+    <div class="frame-3-ugm">
+      <p class="change-reputation-sync-interval-rc1">Change Reputation Sync Interval</p>
+      <div class="frame-4-PM3">
+       <input class="frame-2-8Jd" type="text" id="name" style="width: 5.4rem;" value="12">
+        <p class="hours-Dqs">Hours</p>
+      </div>
+    </div>
+    <div class="button-AFK">Update</div>
+    </div>
+    <div class="button-AFK"><a href="{% url 'logout' %}">Logout</a></div>
+  </div>
 </div>
 {% endblock %}
