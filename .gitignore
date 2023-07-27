@@ -10,3 +10,6 @@ static
 myapp/.DS_Store
 mainapp/static/.DS_Store
 mainapp/.DS_Store
+
+#Except
+!mainapp/static
