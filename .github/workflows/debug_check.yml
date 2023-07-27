@@ -24,3 +24,6 @@ jobs:
       - name: Run Debug Check
         run: python .github/check_debug_setting.py
         working-directory: .
+      - name: Print DEBUG value
+        run: |
+          echo "DEBUG Value: ${{ env.DEBUG }}"
