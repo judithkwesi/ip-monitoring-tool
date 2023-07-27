@@ -5,9 +5,6 @@ from django.core.exceptions import ImproperlyConfigured
 # Set the Django settings module to your_project_name.settings
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "myapp.settings")
 
-# Fails secret_key for tests
-SECRET_KEY = os.environ.get("SECRET_KEY")
-
 try:
     # Import the Django settings module
     from django.conf import settings
