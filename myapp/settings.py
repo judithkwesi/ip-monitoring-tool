@@ -26,7 +26,7 @@ else:
 DEBUG = False
 
 
-ALLOWED_HOSTS = ['137.63.148.213', '127.0.0.1']
+ALLOWED_HOSTS = ['137.63.148.213', '127.0.0.1' '*']
 
 
 # Application definition
