@@ -1,35 +1,29 @@
-{% extends "base.html" %} {% block title %}Users{% endblock %} 
-{% block content %}
+{% extends "base.html" %} {% block title %}Users{% endblock %} {% block content%}
 <div id="content">
   <h2>User Management</h2>
-<div class="user-management-ik1">
-  <div class="auto-group-p2pf-Vw7">
-    <div class="frame-1-2g9">
-      <div class="frame-5-AXT">Search for user </div>
-      <div class="button-FYu" ><a class="button-FYu" style="text-decoration: none;" href="user-management-FNH.html" target="_blank">Add user</a></div>
-    </div>
-    <div class="frame-11-N7j">
-      <div class="th-udT">
-        <p class="column-3Um">Name</p>
-        <p class="column-AZP">Column</p>
-        <p class="column-VLm">Column</p>
-        <p class="column-2Lh">Access Levels</p>
-      </div>
-      <div class="td-ASu">
-        <p class="column-J3K">Admin</p>
-        <p class="column-qZ3">Column</p>
-        <p class="column-BN1">Column</p>
-        <p class="column-82M">admin</p>
-      </div>
-      <div class="td-4gh">
-        <p class="column-yHs">S. David</p>
-        <p class="column-Jb3">Column</p>
-        <p class="column-eQ1">Column</p>
-        <p class="column-Beq">Sys Admin</p>
-      </div>
-    </div>
+
+  <div class="search">
+    <input type="text" placeholder="Search for user" name="" id="" />
+    <button class="btn">Add User</button>
   </div>
-</div>
-<a href="{% url 'logout' %}">Logout</a>
+
+    <table class="auto-group-p2pf-Vw7">
+      <thead class="frame-11-N7j">
+        <tr>
+          <th class="column-3Um">Name</th>
+          <th class="column-2Lh">Access Levels</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for user in users %}
+        <tr class="td-ASu">
+          <td >{{ user.username|capfirst }}</td>
+          <td>{% if user.is_superuser %}Admin{% else %}User{% endif %}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+  <a href="{% url 'logout' %}">Logout</a>
 </div>
 {% endblock %}
