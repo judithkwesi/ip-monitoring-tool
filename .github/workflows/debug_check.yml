@@ -22,4 +22,13 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Run Debug Check
+<<<<<<< HEAD
         run: python check_debug_setting.py
+=======
+        run: python .github/check_debug_setting.py
+        working-directory: .
+        
+      - name: Print DEBUG value
+        run: |
+          echo "DEBUG Value: ${{ env.DEBUG }}"
+>>>>>>> 6c38a81b03ca6662bda437b4bdbde68f8438269f
