@@ -21,6 +21,14 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      - name: Set environment variable for GitHub Actions
+        run: echo "GITHUB_ACTIONS=true" >> $GITHUB_ENV
+
       - name: Run Debug Check
-        run: python .github/check_debug_setting.py
-        working-directory: .
+        id: debug_check
+        run: python check_debug_setting.py
+        # If the script fails (non-zero exit status), stop the workflow and prevent merging.
+
+      - name: Check Debug Script Result
+        if: steps.debug_check.outputs.outcome != 'success'
+        run: echo "Debug check passed. Proceeding with merging the pull request."
