@@ -1,50 +1,28 @@
-@import url(//fonts.googleapis.com/css?family=Muli);
-@import url(https://fonts.googleapis.com/css?family=Open+Sans%3A600%2C700);
-@import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro%3A600%2C700);
 
-html {
-	font-size:62.5%;
-}
-* {
-	margin: 0;
-	padding: 0;
-}
 ul, li {
 	list-style: none;
 }
 input {
 	border: none;
 }
-body {
-  width: 128rem;
-}.user-management-ik1 {
-  width: 100%;
+
+
+.user-management-ik1 {
+  /* width: 100%; */
   overflow: hidden;
   position: relative;
   display: flex;
   flex-direction: column;
-  background-color: #f4f4f4;
 }
-.user-management-ik1 .navbar-scu {
-  margin-bottom: 4rem;
-  box-sizing: border-box;
-  padding: 0 9.6rem;
-  width: 100%;
-  height: 7.5rem;
-  display: flex;
-  align-items: center;
-  background-color: #00334e;
-  flex-shrink: 0;
-}
+
 .user-management-ik1 .navbar-scu .menu-Dgm {
-  margin-right: 45.5rem;
   height: 100%;
   display: flex;
   align-items: center;
   flex-shrink: 0;
+  outline: 3px solid black;
 }
 .user-management-ik1 .navbar-scu .menu-Dgm .renu-logo-miH {
-  margin: 0rem 9.6rem 0rem 0rem;
   width: 5rem;
   height: 4.2683rem;
   object-fit: cover;
@@ -101,7 +79,6 @@ body {
   flex-shrink: 0;
 }
 .user-management-ik1 .user-management-N5o {
-  margin-left: 0rem;
   font-size: 2.6rem;
   font-weight: 700;
   line-height: 1.3625;
@@ -113,27 +90,22 @@ body {
 .user-management-ik1 .auto-group-p2pf-Vw7 {
   box-sizing: border-box;
   padding: 3.9rem 9.6rem 39.4rem 8.6rem;
-  width: 100%;
-  margin-left: 0;
+  /* width: 100%; */
   align-items: center;
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
 }
 .user-management-ik1 .auto-group-p2pf-Vw7 .frame-1-2g9 {
-  margin: 0rem 0rem 5.6rem 1rem;
-  width: calc(100% - 1rem);
   height: 4rem;
   display: flex;
   align-items: center;
   flex-shrink: 0;
+  outline: 3px solid;
 }
 .user-management-ik1 .auto-group-p2pf-Vw7 .frame-1-2g9 .frame-5-AXT {
-  margin-right: 34rem;
   box-sizing: border-box;
-  margin-left: 0;
-  padding: 0.75rem 1.6rem;
-  width: 50rem;
+  /* padding: 0.75rem 1.6rem; */
   height: 100%;
   font-size: 1.8rem;
   font-weight: 600;
