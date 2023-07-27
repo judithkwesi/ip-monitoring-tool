@@ -34,24 +34,15 @@ def logout_user(request):
 	response['Expires'] = '0'
 	return redirect('login')
 
-def download_sites_file(request):
-    # Sites url
-    spam_url = "https://www.spamhaus.org/drop/drop.txt"
-    block_url = "https://lists.blocklist.de/lists/all.txt"
-    cins_url = "http://cinsscore.com/list/ci-badguys.txt"
-    
-		# Output path
-    block_output_file = "./sites/blocklist.txt"
-    spam_output_file = "./sites/spamhaus.txt"
-    cins_output_file = "./sites/cins.txt"
 
-    # Use wget to download the file
-    download_spamhaus = f"wget -O {spam_output_file} {spam_url}"
-    download_block = f"wget -O {block_output_file} {block_url}"
-    download_cins_url = f"wget -O {cins_output_file} {cins_url}"
+@login_required(login_url='login')
+def logout_user(request):
+	logout(request)
+	messages.success(request, ('Successful logged out!'))
+        
+	response = HttpResponse()
+	response['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+	response['Pragma'] = 'no-cache'
+	response['Expires'] = '0'
+	return redirect('login')
 
-    subprocess.call(download_spamhaus, shell=True)
-    subprocess.call(download_block, shell=True)
-    subprocess.call(download_cins_url, shell=True)
-
-    return "Done"
