@@ -11,6 +11,7 @@ myapp/.DS_Store
 mainapp/static/.DS_Store
 mainapp/.DS_Store
 secret_key.txt
+__pycache__/*
 
 #Except
 !mainapp/static
