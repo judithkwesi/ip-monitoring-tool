@@ -1,6 +1,7 @@
 {% extends "base.html" %} {% block title %}Settings{% endblock %}
 {% block content %}
 <div id="content">
+<<<<<<< HEAD
 <head>
   <meta charset="utf-8" />
   <link rel="icon" href="/favicon.ico" />
@@ -112,5 +113,13 @@
 </div>
 </body>
    
+=======
+  <h2>Settings</h2>
+   <h3>Change Reputation Sync Interval </h3><br>
+   <input type="text" id="hours" name="Hours" maxlength="3" size="3" ><br><br>
+   <label for="hours">Hours</label><br><br>
+    <button type="Update" value="Update">Update</button><br><br>
+  <a href="{% url 'logout' %}">Logout</a>
+>>>>>>> 57bdcf7ef215d226fba51d5d11f8eea2ff375287
 </div>
 {% endblock %}
