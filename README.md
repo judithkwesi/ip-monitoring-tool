@@ -1,7 +1,7 @@
 # IP MONITORING TOOL
 
 
-#### Term 1
+#### Team 1
 
 David Ssenabulya
 
