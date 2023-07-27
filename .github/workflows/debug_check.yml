@@ -26,12 +26,8 @@ jobs:
 
       - name: Run Debug Check
         run: python check_debug_setting.py
+        # If the script fails (non-zero exit status), stop the workflow and prevent merging.
+        if: ${{ steps.Run Debug Check.outcome != 'success' }}
 
       - name: Check Debug Script Result
-        run: |
-          if [ $? -eq 0 ]; then
-            echo "Debug check passed. Proceeding with merging the pull request."
-          else
-            echo "ERROR: Debug check failed. The pull request cannot be merged."
-            exit 1
-          fi
+        run: echo "Debug check passed. Proceeding with merging the pull request."
