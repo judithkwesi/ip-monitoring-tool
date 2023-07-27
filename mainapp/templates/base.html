@@ -5,6 +5,8 @@
     <head>
         <title>{% block title %}{% endblock %}</title>
         <link href="{% static 'css\base.css' %}" rel="stylesheet">
+        <link href="{% static 'css\settings.css' %}" rel="stylesheet">
+        <link rel="icon" type="image/x-icon" href="{% static 'renu_logo.png' %}">
     </head>
     <body>
         {% if request.user.is_authenticated %}

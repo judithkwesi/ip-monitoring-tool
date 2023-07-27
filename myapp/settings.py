@@ -1,15 +1,27 @@
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 9b9425f00591eb859dc79da1809734c02945206a
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-7j)8rkkk&b7ge$k2)tg#4r3scck5bj^!k-56r-qdot2a=*(si^'
+with open(os.path.join(BASE_DIR, 'secret_key.txt')) as f:
+	SECRET_KEY = f.read().strip()
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
+<<<<<<< HEAD
 ALLOWED_HOSTS = ['*']
+=======
+
+ALLOWED_HOSTS = ['137.63.148.213', '127.0.0.1']
+>>>>>>> 9b9425f00591eb859dc79da1809734c02945206a
 
 
 # Application definition
@@ -109,3 +121,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_REDIRECT_URL = 'dashboard'
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
+
+# Session
+SESSION_COOKIE_AGE = 3600  # 1 hour
+
+# Secure flag for the session cookie (set it to True for HTTPS-only)
+SESSION_COOKIE_SECURE = False
