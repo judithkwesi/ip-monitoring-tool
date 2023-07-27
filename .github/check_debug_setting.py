@@ -5,7 +5,10 @@ import sys
 import os
 
 # Set the Django settings module to your_project_name.settings
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "your_project_name.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "myapp.settings")
+
+# Reset Django settings to force reconfiguration
+settings._wrapped = None
 
 # Configure Django settings
 settings.configure()
