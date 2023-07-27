@@ -11,8 +11,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-with open(os.path.join(BASE_DIR, 'secret_key.txt')) as f:
-	SECRET_KEY = f.read().strip()
+# with open(os.path.join(BASE_DIR, 'secret_key.txt')) as f:
+# 	SECRET_KEY = f.read().strip()
+
+if os.environ.get("GITHUB_ACTIONS") == "true":
+    # Running in GitHub Actions, get the secret key from the environment variable
+    SECRET_KEY = '459a2211e3e1cb2219fde2460560070c7081872b629211708'
+else:
+    # Not running in GitHub Actions, read the secret key from the file
+    with open(os.path.join(BASE_DIR, 'secret_key.txt')) as f:
+        SECRET_KEY = f.read().strip()
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
