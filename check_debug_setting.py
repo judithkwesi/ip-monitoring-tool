@@ -4,7 +4,7 @@ from django.core.exceptions import ImproperlyConfigured
 import sys
 
 # Set the Django settings module to your_project_name.settings
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "myapp.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "ip-monitoring-tool.settings")
 
 try:
     # Import the Django settings module
