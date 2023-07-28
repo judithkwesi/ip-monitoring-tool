@@ -7,10 +7,13 @@ __pycache__/
 db.sqlite3
 static
 .DS_Store
-myapp/.DS_Store
+ip-monitoring-tool/.DS_Store
 mainapp/static/.DS_Store
 mainapp/.DS_Store
 secret_key.txt
+**/__pycache__/
+ip-monitoring-tool/__pycache__/
+**/migrations/
 
 #Except
 !mainapp/static

@@ -1,10 +1,16 @@
-{% extends "base.html" %} {% block title %}Settings{% endblock %}
+{% extends "base.html" %} 
+
+{% block title %}Settings{% endblock %}
+
+{% load static %}
+
+{% block extra_css %}
+ <link type="text/css" href="{% static 'css\settings.css' %}" rel="stylesheet" />
+{% endblock %}
+
 {% block content %}
 <div id="content">
   <h2>Settings</h2>
-<<<<<<< HEAD
-  <a href="{% url 'logout' %}">Logout</a>
-=======
   <div class="frame-1-mKf">
     <div class="frame-3-ugm">
       <p class="change-reputation-sync-interval-rc1">Change Reputation Sync Interval</p>
@@ -15,8 +21,6 @@
     </div>
     <div class="button-AFK">Update</div>
     </div>
-    <div class="button-AFK"><a href="{% url 'logout' %}">Logout</a></div>
   </div>
->>>>>>> 9b9425f00591eb859dc79da1809734c02945206a
 </div>
 {% endblock %}

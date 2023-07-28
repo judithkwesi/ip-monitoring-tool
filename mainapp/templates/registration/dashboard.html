@@ -4,18 +4,35 @@
   <h2>Reputation Monitor</h2>
 
   <div class="search">
-    <select name="" id="">
-      <option value="">All Databases</option>
-      <option value="">Spamhaus</option>
-      <option value="">Blocklist.de</option>
-      <option value="">CINS</option>
-      <option value="">AbuselIPDB</option>
+    <form method="post" id="myForm">
+      {% csrf_token %}
+    <select name="select_choice" id="id_select_choice">
+      {% for value, label in form.fields.select_choice.choices %}
+          <option value="{{ value }}" {% if value == form.cleaned_data.select_choice %}selected{% endif %}>{{ label }}</option>
+      {% endfor %}
     </select>
+    </form>
     <button class="btn">Add IP Space</button>
   </div>
 
   <div class="result">
-    <p>None of RENU IP is listed in All Databases lists</p>
+    <p>None of RENU IP is listed in <span id="selected_site">{{ selected_label }}</span> lists</p>
   </div>
 </div>
+
+<!-- Add the JavaScript to handle the change event -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+      const selectElement = document.getElementById('id_select_choice');
+      const formElement = document.getElementById('myForm');
+
+      console.log(formElement)
+      console.log(selectElement)
+      
+      selectElement.addEventListener('change', function() {
+          // Submit the form automatically when an option is selected
+          formElement.submit();
+      });
+  });
+</script>
 {% endblock %}
