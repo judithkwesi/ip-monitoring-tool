@@ -308,3 +308,14 @@ td {
   text-align: left;
   border: none;
 }
+
+.profile {
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.profile a {
+  color: white;
+}
