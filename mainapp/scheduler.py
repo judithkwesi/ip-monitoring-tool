@@ -8,7 +8,6 @@ def updater():
     scheduler.start()
 
 def download_sites_file():
-    print("running")
     # Sites url
     block_url = "https://lists.blocklist.de/lists/all.txt"
     cins_url = "http://cinsscore.com/list/ci-badguys.txt"
