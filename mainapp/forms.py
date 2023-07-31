@@ -11,7 +11,7 @@ class MySelectForm(forms.Form):
     OPTIONS = [
         ('option1', 'All Databases'),
         ('option2', 'Spamhaus'),
-        ('option3', 'Blocklist.de'),
+        ('option3', 'Blocklist'),
         ('option4', 'CINS'),
         ('option5', 'AbuselIPDB'),
     ]

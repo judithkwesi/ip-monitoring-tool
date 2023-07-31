@@ -15,23 +15,76 @@
     <button class="btn">Add IP Space</button>
   </div>
 
-  <div class="result">
-    <p>None of RENU IP is listed in <span id="selected_site">{{ selected_label }}</span> lists</p>
-  </div>
+    <div class="result" id="noDataMessage">
+      <p>None of RENU IP is listed in <span id="selected_site">{{ selected_label }}</span> lists</p>
+    </div>
+
+    <table class="auto-group-p2pf-Vw7" id="ipTable">
+      <thead class="frame-11-N7j">
+        <tr>
+          <th class="column-3Um">IP address</th>
+          <th class="column-2Lh">Site</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for value in blocklist %}
+        <tr class="td-ASu">
+          <td >{{ value.ip }}</td>
+          <td>{{ value.source }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+
 </div>
 
 <!-- Add the JavaScript to handle the change event -->
-<script>
+<script data-blocklist="{{ blocklist }}" data-label="{{ selected_label }}">
+  const data = document.currentScript.dataset
+  
   document.addEventListener('DOMContentLoaded', function() {
       const selectElement = document.getElementById('id_select_choice');
       const formElement = document.getElementById('myForm');
+      const ipTable = document.getElementById('ipTable');
+      const ipTableBody = document.getElementById('ipTable').querySelector('tbody');
+      const noDataMessage = document.getElementById('noDataMessage')
 
-      console.log(formElement)
-      console.log(selectElement)
+      const blocklist = JSON.parse(data.blocklist)
+      const selectedLabel = data.label
+
+        let currentList = []
+        if(selectedLabel === "All Databases"){
+          currentList = blocklist
+        } else {
+          currentList = blocklist.filter(ip => ip.source === selectedLabel)
+        }
+        
+        console.log(currentList)
+
+        ipTableBody.innerHTML = '';
+
+        if(currentList.length > 0){
+          noDataMessage.style.display = 'none';
+          currentList.forEach(entry => {
+          const row = document.createElement('tr');
+          const ipCell = document.createElement('td');
+          ipCell.textContent = entry.ip;
+          const sourceCell = document.createElement('td');
+          sourceCell.textContent = entry.source;
+          row.appendChild(ipCell);
+          row.appendChild(sourceCell);
+          ipTableBody.appendChild(row);
+    });
+        } else { 
+          noDataMessage.style.display = 'block';
+          ipTable.style.display = 'none'
+        }
       
-      selectElement.addEventListener('change', function() {
+      selectElement.addEventListener('change', function (event) {
+        event.preventDefault()
           // Submit the form automatically when an option is selected
-          formElement.submit();
+          formElement.submit()
       });
   });
 </script>
