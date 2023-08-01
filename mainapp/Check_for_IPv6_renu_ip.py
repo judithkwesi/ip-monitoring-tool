@@ -1,5 +1,8 @@
 import ipaddress
 
+# Allow user to input ipv6 address full address
+ipv6_full_address = input("Enter the full IPv6 address with prefix length (e.g., 2c0f:f6d0::abcd:1234/32): ")
+
 def check_ipv6_subnet_length(ipv6_address):
     try:
         # Split the IPv6 address and prefix length
@@ -16,17 +19,7 @@ def check_ipv6_subnet_length(ipv6_address):
         
     except ValueError:
         return False
-
-if __name__ == "__main__":
-    ipv6_full_address = input("Enter the full IPv6 address with prefix length (e.g., 2c0f:f6d0::abcd:1234/32): ")
-
-    if check_ipv6_subnet_length(ipv6_full_address):
-        print(f"The subnet prefix length in {ipv6_full_address} is less than 32.")
-        exit()
-    else:
-        print(f"The subnet prefix length in {ipv6_full_address} is greater than or equal to 32")
-
-
+    
 def check_ipv6_prefix(ipv6_address):
     try:
         # Split the IPv6 address and prefix length
@@ -48,10 +41,22 @@ def check_ipv6_prefix(ipv6_address):
         return False
 
 if __name__ == "__main__":
-    ipv6_address_to_check = input("Enter the IPv6 address to check for similarity (e.g., 2c0f:f6d0::abcd:1234): ")
+    
+    if check_ipv6_subnet_length(ipv6_full_address):
+        exit()
 
-    if check_ipv6_prefix(ipv6_address_to_check):
-        print(f"The first 32 bits of the IPv6 address {ipv6_address_to_check} are similar to 2c0f:f6d0.")
     else:
-        print(f"The first 32 bits of the IPv6 address {ipv6_address_to_check} are different from 2c0f:f6d0.")
+        if check_ipv6_prefix(ipv6_full_address):
+            print(f"The ip address {ipv6_full_address} is a subnet.")
+        else:
+            print(f"The ip address {ipv6_full_address} is not a subnet.")
+            exit()
+        
+    
+
+
+
+    
+    
+
 
