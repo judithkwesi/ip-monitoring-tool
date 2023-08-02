@@ -115,7 +115,15 @@ def dashboard(request):   #Main screen
 @login_required(login_url='login')
 def users(request):
     users = User.objects.all()
-    return render(request, 'registration/users.html', {'users': users, 'section': 'users'})
+    # users_json = json.dump(users)
+    usernames_list = [{"username": user.username, "access_level": user.is_superuser} for user in users]
+    data = {"users": usernames_list}
+    print(json.dumps(data))
+    context = {
+         "users": json.dumps(data),
+         "section": "users"
+    }
+    return render(request, 'registration/users.html', context)
 
 @login_required(login_url='login')
 def settings(request):
