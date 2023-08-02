@@ -338,6 +338,22 @@ td {
   display: none;
 }
 
+#overlay-dashboard {
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#overlay-dashboard {
+  display: none;
+}
+
 #add_user_form {
   background-color: white;
   padding: 10px 25px;
