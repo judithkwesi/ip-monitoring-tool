@@ -19,7 +19,21 @@
         id="search_element"
       />
     </form>
-    <button class="btn">Add User</button>
+    <button class="btn" id="add_user_btn">Add User</button>
+  </div>
+
+  <div id="overlay">
+    <form action="{% url 'add_user' %}" method="post" id="add_user_form">
+      {% csrf_token %}
+      <h2>Add User</h2>
+      <input type="text" name="username" placeholder="Enter username" />
+      <input type="text" name="password1" placeholder="Set password" />
+      <input type="text" name="password2" placeholder="Set password" />
+      <div class="btn_group">
+        <button type="button" class="btn cancel" id="cancel_btn">Cancel</button>
+        <button type="submit" class="btn add">Add</button>
+      </div>
+    </form>
   </div>
 
   <div class="result" id="noDataMessage">
@@ -55,8 +69,19 @@
       .getElementById("ipTable")
       .querySelector("tbody");
     const noDataMessage = document.getElementById("noDataMessage");
-
     let filteredUsers = users.users;
+    cancelBtn = document.getElementById("cancel_btn");
+    addUserBtn = document.getElementById("add_user_btn");
+    const overlay = document.getElementById("overlay");
+
+    addUserBtn.addEventListener("click", function (event) {
+      overlay.style.display = "flex";
+    });
+
+    cancelBtn.addEventListener("click", function (event) {
+      console.log("clicked");
+      overlay.style.display = "none";
+    });
 
     const updateTable = (searchBy) => {
       if (searchBy) {
@@ -79,7 +104,7 @@
           const nameCell = document.createElement("td");
           nameCell.textContent = entry.username;
           const roleCell = document.createElement("td");
-          roleCell.textContent = "user";
+          roleCell.textContent = entry.access_level ? "admin" : "user";
           row.appendChild(nameCell);
           row.appendChild(roleCell);
           ipTableBody.appendChild(row);

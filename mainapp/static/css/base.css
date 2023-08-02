@@ -320,3 +320,47 @@ td {
 .profile a {
   color: white;
 }
+
+/* Add User Overlay */
+#overlay {
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#overlay {
+  display: none;
+}
+
+#add_user_form {
+  background-color: white;
+  padding: 10px 25px;
+  opacity: 100%;
+  overflow-x: hidden;
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+  align-items: start;
+  justify-content: center;
+}
+
+.btn_group {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.cancel {
+  background-color: #808080;
+}
+
+#add_user_form input {
+  width: 100%;
+}
