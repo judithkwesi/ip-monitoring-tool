@@ -6,5 +6,5 @@ class MainappConfig(AppConfig):
     name = 'mainapp'
 
     def ready(self):
-        from .scheduler import updater
-        updater()
+        from .scheduler import schedule_site_downloads
+        schedule_site_downloads()
