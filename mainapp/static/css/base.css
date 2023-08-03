@@ -150,7 +150,7 @@ select {
 }
 
 .errorlist {
-  color: #cc0033;
+  color: #fff;
   float: left;
   clear: both;
   padding-left: 10px;
@@ -165,9 +165,16 @@ select {
 
 /*Messages*/
 ul.messages {
-  margin: 10px 100px;
+  position: absolute;
+  z-index: 1001;
+  margin-top: 20px;
   padding: 0;
   list-style-type: none;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
 }
 ul.messages li.success,
 ul.messages li.warning,
@@ -180,18 +187,13 @@ ul.messages li.info {
 }
 
 ul.messages li.success {
-  background: #81ce81;
-}
-ul.messages li.success a {
-  color: #0ac33e;
+  background-color: #d1e7dd;
+  color: #105233;
 }
 
 ul.messages li.error {
-  background: #a30029;
-  color: #e9828e;
-}
-ul.messages li.error {
-  color: #e9828e;
+  background-color: #f8d7da;
+  color: #86242d;
 }
 
 ul.messages li.info {
