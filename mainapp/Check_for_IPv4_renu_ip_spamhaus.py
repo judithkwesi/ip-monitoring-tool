@@ -16,7 +16,9 @@ def expand_ipv4_to_bits(ipv4_address):
 
 def check_ipv4_subnet_length(test_ip_address, reference_ip_address):
     try:
-        # Split the IPv6 address and prefix length
+
+        # Split the IPv4 address and prefix length
+
         _, prefix_length1 = test_ip_address.split('/')
         _, prefix_length2= reference_ip_address.split('/')
 
@@ -33,19 +35,21 @@ def check_ipv4_subnet_length(test_ip_address, reference_ip_address):
 
 def check_ipv4_prefix(test_ip_address, reference_ip_address):
     try:
-        # Split the IPv6 address and prefix length
+
+        # Split the IPv4 address and prefix length
         address1, _ = test_ip_address.split('/')
         address2, prefix_length2 = reference_ip_address.split('/')
 
-        # Convert IPv6 addresses to IPv6Address objects
+        # Convert IPv4 addresses to IPv4 Address objects
         ipv6_addr1 = ipaddress.IPv4Address(address1)
         ipv6_addr2 = ipaddress.IPv4Address(address2)
 
-        # Expands IPv6 addresses into full form
+        # Expands IPv4 addresses into full form
         ipv6_prefix1 = ipv6_addr1.exploded[:]  
         ipv6_prefix2 = ipv6_addr2.exploded[:]
 
-        #Expands ipv6 address into bits
+        #Expands ipv4 address into bits
+
         ipv6_prefix1_in_bits1 = expand_ipv4_to_bits(ipv6_prefix1)
         ipv6_prefix1_in_bits2 = expand_ipv4_to_bits(ipv6_prefix2)
 
