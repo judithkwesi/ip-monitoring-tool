@@ -11,6 +11,7 @@ import ipaddress
 from django.views.decorators.cache import never_cache
 from django.contrib.auth.forms import AuthenticationForm
 from .models import IPSpace
+from django.contrib.auth.decorators import user_passes_test
 
 
 @never_cache
@@ -32,7 +33,12 @@ def login_view(request):
      return render(request, 'registration/login.html', {})
 
 
+def is_superuser(user):
+    return user.is_superuser 
+
+
 @login_required(login_url='login')
+@never_cache
 def dashboard(request):
      all_ips = IPSpace.objects.all()
      renu_ips = [ip_obj.ip_space for ip_obj in all_ips]
@@ -113,6 +119,7 @@ def add_ip_space(request):
      form = AddIPForm() 
 
 @login_required(login_url='login')
+@user_passes_test(is_superuser)
 def add_user(request):
      if request.method == 'POST':
           form = AddUserForm(request.POST)
@@ -128,9 +135,10 @@ def add_user(request):
 
             return HttpResponseRedirect('/users')
      form = AddUserForm() 
-     
+
 
 @login_required(login_url='login')
+@user_passes_test(is_superuser)
 def users(request):
     users = User.objects.all()
     usernames_list = [{"username": user.username, "access_level": user.is_superuser} for user in users]
@@ -142,6 +150,7 @@ def users(request):
     return render(request, 'registration/users.html', context)
 
 @login_required(login_url='login')
+@user_passes_test(is_superuser)
 def settings(request):
     return render(request, 'registration/settings.html', {'section': 'settings'})
 

@@ -24,12 +24,14 @@
                 <li  {% if section == "dashboard" %} class="menu-item selected" {% else %} class="menu-item" {% endif %}>
                     <a href="{%url 'dashboard' %}">Monitor</a>
                 </li>
-                <li {% if section == "users" %} class="menu-item selected" {% else %} class="menu-item" {% endif %}>
-                    <a href="{%url 'users' %}">Users</a>
-                </li>
-                <li {% if section == "settings" %} class="menu-item selected" {% else %} class="menu-item" {% endif %}>
-                    <a href="{%url 'settings' %}">Settings</a>
-                </li>
+                {% if user.is_superuser %}
+                    <li {% if section == "users" %} class="menu-item selected" {% else %} class="menu-item" {% endif %}>
+                        <a href="{%url 'users' %}">Users</a>
+                    </li>
+                    <li {% if section == "settings" %} class="menu-item selected" {% else %} class="menu-item" {% endif %}>
+                        <a href="{%url 'settings' %}">Settings</a>
+                    </li>
+                {% endif %}
             </ul>
             </div>
             
