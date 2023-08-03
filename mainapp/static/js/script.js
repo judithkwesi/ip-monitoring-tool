@@ -1,5 +1,7 @@
 const message = document.getElementById("msg");
 
 setTimeout(() => {
-  message.remove();
+  if (message) {
+    message.remove();
+  }
 }, 2000);
