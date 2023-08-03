@@ -15,5 +15,10 @@ secret_key.txt
 ip-monitoring-tool/__pycache__/
 **/migrations/
 
+.coverage
+htmlcov/
+
+mainapp/tests
+
 #Except
 !mainapp/static
