@@ -2,6 +2,7 @@
 * {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
 body {
@@ -105,7 +106,7 @@ form {
 }
 
 form p {
-  width: 340px;
+  width: 350px;
   padding: 0 10px;
 }
 
@@ -126,8 +127,8 @@ textarea {
   background: transparent;
   border: 1px solid black;
   padding: 6px 10px;
-  width: 320px;
-  height: 28px;
+  width: 348px;
+  height: 40px;
   border-radius: 5px;
 }
 
@@ -140,7 +141,7 @@ select {
   border: 1px solid black;
   padding: 6px 10px;
   width: 320px;
-  height: 32px;
+  height: 40px;
   border-radius: 5px;
 }
 
@@ -267,7 +268,7 @@ select {
   border: none;
   font-weight: bold;
   cursor: pointer;
-  height: 35px;
+  height: 40px;
   padding: 8px 20px;
 }
 
@@ -281,7 +282,7 @@ select {
   border-radius: 5px;
   font-weight: bold;
   cursor: pointer;
-  height: 35px;
+  height: 40px;
 }
 
 table {
@@ -318,4 +319,68 @@ td {
 
 .profile a {
   color: white;
+}
+
+/* Add User Overlay */
+#overlay {
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#overlay {
+  display: none;
+}
+
+#overlay-dashboard {
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#overlay-dashboard {
+  display: none;
+}
+
+#add_user_form {
+  background-color: white;
+  padding: 10px 25px;
+  opacity: 100%;
+  overflow-x: hidden;
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+  align-items: start;
+  justify-content: center;
+}
+
+.btn_group {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.cancel {
+  background-color: #808080;
+}
+
+#add_user_form input {
+  width: 100%;
+}
+
+#add_user_form textarea {
+  width: 100%;
 }

@@ -1,35 +1,127 @@
-{% extends "base.html" %} 
-{% block title %}Users{% endblock %} 
-
-{% load static %}
+{% extends "base.html" %} {% block title %}Users{% endblock %} {% load static %}
 {% block extra_css %}
-<link type="text/css" href="{% static 'css\user-management.css' %}" rel="stylesheet">
-{% endblock %}
-
-{% block content%}
+<link
+  type="text/css"
+  href="{% static 'css\user-management.css' %}"
+  rel="stylesheet"
+/>
+{% endblock %} {% block content%}
 <div id="content">
   <h2>User Management</h2>
 
   <div class="search">
-    <input type="text" placeholder="Search for user" name="" id="" />
-    <button class="btn">Add User</button>
+    <form method="post" id="myForm">
+      {% csrf_token %}
+      <input
+        type="text"
+        placeholder="Search for user"
+        name=""
+        id="search_element"
+      />
+    </form>
+    <button class="btn" id="add_user_btn">Add User</button>
   </div>
 
-    <table class="auto-group-p2pf-Vw7">
-      <thead class="frame-11-N7j">
-        <tr>
-          <th class="column-3Um">Name</th>
-          <th class="column-2Lh">Access Levels</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for user in users %}
-        <tr class="td-ASu">
-          <td >{{ user.username|capfirst }}</td>
-          <td>{% if user.is_superuser %}Admin{% else %}User{% endif %}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+  <div id="overlay">
+    <form action="{% url 'add_user' %}" method="post" id="add_user_form">
+      {% csrf_token %}
+      <h2>Add User</h2>
+      <input type="text" name="username" placeholder="Enter username" />
+      <input type="text" name="password1" placeholder="Set password" />
+      <input type="text" name="password2" placeholder="Set password" />
+      <div class="btn_group">
+        <button type="button" class="btn cancel" id="cancel_btn">Cancel</button>
+        <button type="submit" class="btn add">Add</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="result" id="noDataMessage">
+    <p>None of RENU IP is listed in lists</p>
+  </div>
+
+  <table class="auto-group-p2pf-Vw7" id="ipTable">
+    <thead class="frame-11-N7j">
+      <tr>
+        <th class="column-3Um">Name</th>
+        <th class="column-2Lh">Access Levels</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- <tr class="td-ASu">
+        <td>{{ user.username|capfirst }}</td>
+        <td>{% if user.is_superuser %}Admin{% else %}User{% endif %}</td>
+      </tr> -->
+    </tbody>
+  </table>
 </div>
+
+<!-- Add the JavaScript to handle the change event -->
+<script data-users=" {{ users }}">
+  const data = document.currentScript.dataset;
+  const users = JSON.parse(data.users);
+
+  document.addEventListener("DOMContentLoaded", function () {
+    const searchElement = document.getElementById("search_element");
+    const formElement = document.getElementById("myForm");
+    const ipTable = document.getElementById("ipTable");
+    const ipTableBody = document
+      .getElementById("ipTable")
+      .querySelector("tbody");
+    const noDataMessage = document.getElementById("noDataMessage");
+    let filteredUsers = users.users;
+    cancelBtn = document.getElementById("cancel_btn");
+    addUserBtn = document.getElementById("add_user_btn");
+    const overlay = document.getElementById("overlay");
+
+    addUserBtn.addEventListener("click", function (event) {
+      overlay.style.display = "flex";
+    });
+
+    cancelBtn.addEventListener("click", function (event) {
+      console.log("clicked");
+      overlay.style.display = "none";
+    });
+
+    const updateTable = (searchBy) => {
+      if (searchBy) {
+        filteredUsers = users.users.filter(
+          (user) =>
+            user.username &&
+            user.username.toLowerCase().indexOf(searchBy.toLowerCase()) > -1
+        );
+      } else {
+        filteredUsers = users.users;
+      }
+
+      ipTableBody.innerHTML = "";
+
+      if (filteredUsers.length > 0) {
+        noDataMessage.style.display = "none";
+        ipTable.style.display = "table";
+        filteredUsers.forEach((entry) => {
+          const row = document.createElement("tr");
+          const nameCell = document.createElement("td");
+          nameCell.textContent = entry.username;
+          const roleCell = document.createElement("td");
+          roleCell.textContent = entry.access_level ? "admin" : "user";
+          row.appendChild(nameCell);
+          row.appendChild(roleCell);
+          ipTableBody.appendChild(row);
+        });
+      } else {
+        noDataMessage.style.display = "block";
+        ipTable.style.display = "none";
+      }
+    };
+
+    // Call updateTable with an empty string to display all users initially
+    updateTable("");
+
+    searchElement.addEventListener("input", function (event) {
+      event.preventDefault();
+      updateTable(event.target.value);
+    });
+  });
+</script>
 {% endblock %}

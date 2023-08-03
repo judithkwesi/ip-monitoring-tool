@@ -1,84 +1,11 @@
-
-
-.settings-T45 {
- white-space: nowrap;
- flex-shrink: 0;
- margin: 0rem 0rem 3.9rem 9.6rem;
- font-size: 2.6rem;
- font-weight: 700;
- line-height: 1.3625;
- color: #000000;
-}
-.frame-1-mKf {
- width: 28.3rem;
- flex-shrink: 0;
- margin-left: 0;
-
- .frame-3-ugm {
-   margin-bottom: 3.2rem;
-   width: 100%;
-   display: flex;
-   flex-direction: column;
-
-   .change-reputation-sync-interval-rc1 {
-     margin-bottom: 1.6rem;
-     font-size: 1.8rem;
-     font-weight: 600;
-     line-height: 1.3625;
-     color: #000000;
-     font-family: Open Sans, 'Source Sans Pro';
-     white-space: nowrap;
-     flex-shrink: 0;
-   }
-   .frame-4-PM3 {
-     flex-shrink: 0;
-     margin-right: 15.3rem;
-     width: calc(100% - 15.3rem);
-     height: 4.1rem;
-     display: flex;
-     align-items: center;
-
-     .frame-2-8Jd {
-       align-items: center;
-       flex-shrink: 0;
-       font-family: Open Sans, 'Source Sans Pro';
-       justify-content: center;
-       border: solid 0.1rem #000000;
-       margin-right: 0.8rem;
-       height: 100%;
-       color: #3d3d3d;
-       display: flex;
-       box-sizing: border-box;
-       width: 6.9rem;
-       font-weight: 600;
-       line-height: 1.3625;
-       font-size: 1.8rem;
-       white-space: nowrap;
-     }
-     .hours-Dqs {
-       color: #000000;
-       font-family: Open Sans, 'Source Sans Pro';
-       white-space: nowrap;
-       flex-shrink: 0;
-       font-size: 1.8rem;
-       font-weight: 600;
-       line-height: 1.3625;
-     }
-   }
- }
- .button-AFK {
-   color: #ffffff;
-   white-space: nowrap;
-   align-items: center;
-   line-height: 1.3625;
-   font-family: Open Sans, 'Source Sans Pro';
-   display: flex;
-   justify-content: center;
-   width: 12.8rem;
-   height: 4rem;
-   font-size: 1.8rem;
-   font-weight: 600;
-   background-color: #074e6f;
- }
+.hours {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  align-items: center;
 }
 
+#hours {
+  width: 80px;
+  border-radius: 2px;
+}
