@@ -12,7 +12,20 @@
       {% endfor %}
     </select>
     </form>
-    <button class="btn">Add IP Space</button>
+    <button class="btn" id="add_ip_btn">Add IP Space</button>
+  </div>
+
+  <div id="overlay-dashboard">
+    <form action="{% url 'add_ip_space' %}" method="post" id="add_user_form">
+      {% csrf_token %}
+      <h2>Add IP Space</h2>
+      <input type="text" name="ip_space" placeholder="Enter IP Address Space" />
+      <textarea name="description" id="" cols="30" rows="10" placeholder="Enter description"></textarea>
+      <div class="btn_group">
+        <button type="button" class="btn cancel" id="cancel_btn">Cancel</button>
+        <button type="submit" class="btn add">Add</button>
+      </div>
+    </form>
   </div>
 
     <div class="result" id="noDataMessage">
@@ -49,6 +62,18 @@
       const ipTable = document.getElementById('ipTable');
       const ipTableBody = document.getElementById('ipTable').querySelector('tbody');
       const noDataMessage = document.getElementById('noDataMessage')
+      cancelBtn = document.getElementById("cancel_btn");
+      addUserBtn = document.getElementById("add_ip_btn");
+      const overlay = document.getElementById("overlay-dashboard");
+
+      addUserBtn.addEventListener("click", function (event) {
+        overlay.style.display = "flex";
+      });
+
+      cancelBtn.addEventListener("click", function (event) {
+        console.log("clicked");
+        overlay.style.display = "none";
+      });
 
       const blocklist = JSON.parse(data.blocklist)
       const selectedLabel = data.label

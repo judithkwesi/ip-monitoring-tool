@@ -1,17 +1,14 @@
 import json
-from django.shortcuts import render, redirect, HttpResponse
+from django.shortcuts import render, redirect
 from django.http import HttpResponseForbidden, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout, login, authenticate
 from django.contrib.auth.models import User
 from django.core.cache import cache
-from .forms import MySelectForm
+from .forms import MySelectForm, AddUserForm, AddIPForm
 import ipaddress
 from django.views.decorators.cache import never_cache
-# from django_ratelimit.decorators import ratelimit
 
-# Create your views here. 
-# @ratelimit(key='ip', rate='5/h', block=True)
 @never_cache
 def login_view(request):
       if request.user.is_authenticated:
@@ -33,7 +30,6 @@ def login_view(request):
             return redirect('dashboard')
         else:
              if attempts >= 5:  # Limiting to 5 login attempts per hour
-                  print("Too many login attempts. Try again later.")
                   return HttpResponseForbidden("<h1>403 Forbidden.</h1><p>Too many failed login attempts. Try again later.</p>")
              else:
                   if(username):
@@ -53,8 +49,6 @@ def dashboard(request):   #Main screen
     blacklisted_spamhaus = []
 
     with open('./mainapp/sites/cins.txt', 'r') as file:
-            # lines = file.readlines()
-            # blocklist.append(lines)
             for line in file.readlines():
                  ip_address = ipaddress.ip_address(line.strip())
                  for entry in renu_ips:
@@ -110,32 +104,57 @@ def dashboard(request):   #Main screen
 
         return render(request, 'registration/dashboard.html', context)
 
-    # return render(request, 'registration/dashboard.html', {'section': 'dashboard', 'form': "", 'blocklist' : blocklist,})
+@login_required(login_url='login')
+def add_ip_space(request):
+     if request.method == 'POST':
+          form = AddIPForm(request.POST)
+          print(request) 
+          if form.is_valid():
+               form.save()
+               return HttpResponseRedirect('/')
+          else:
+            for field, errors in form.errors.items():
+                for error in errors:
+                     print(f"{field}: {error}")
+
+            return HttpResponseRedirect('/')
+     form = AddIPForm() 
+
+@login_required(login_url='login')
+def add_user(request):
+     if request.method == 'POST':
+          form = AddUserForm(request.POST)
+          print(request) 
+          if form.is_valid():
+               form.save()
+               return HttpResponseRedirect('/users')
+          else:
+            for field, errors in form.errors.items():
+                for error in errors:
+                     print(f"{field}: {error}")
+
+            return HttpResponseRedirect('/users')
+     form = AddUserForm() 
+     
 
 @login_required(login_url='login')
 def users(request):
     users = User.objects.all()
-    return render(request, 'registration/users.html', {'users': users, 'section': 'users'})
+    usernames_list = [{"username": user.username, "access_level": user.is_superuser} for user in users]
+    data = {"users": usernames_list}
+    context = {
+         "users": json.dumps(data),
+         "section": "users"
+    }
+    return render(request, 'registration/users.html', context)
 
 @login_required(login_url='login')
 def settings(request):
     return render(request, 'registration/settings.html', {'section': 'settings'})
 
-# @login_required(login_url='login')
-# def logout_user(request):
-#     logout(request)
-#     request.session.clear()
-#     return redirect('login')
-
-
 @login_required(login_url='login')
 def logout_user(request):
     request.session.flush()
     logout(request)
-
-    # response = HttpResponse()
-    # response['Cache-Control'] = 'no-cache, no-store, must-revalidate'
-	# response['Pragma'] = 'no-cache'
-	# response['Expires'] = '0'
     return HttpResponseRedirect('/')
 

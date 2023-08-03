@@ -1,28 +1,18 @@
-{% extends "base.html" %} 
-
-{% block title %}Settings{% endblock %}
-
-{% load static %}
-
-{% block extra_css %}
- <link type="text/css" href="{% static 'css\settings.css' %}" rel="stylesheet" />
-{% endblock %}
-
-{% block content %}
+{% extends "base.html" %} {% block title %}Settings{% endblock %} 
+{% load static %} {% block extra_css %}
+<link type="text/css" href="{% static 'css\settings.css' %}" rel="stylesheet" />
+{% endblock %} {% block content %}
 <div id="content">
   <h2>Settings</h2>
   <div class="frame-1-mKf">
-    <div class="frame-4-ugm">
-      <p class="change-reputation-sync-interval-rc1"><h3>Change Reputation Sync Interval</h3></p>
-      <div class="frame-4-PM3">
-       <p>
-          <input class="frame-2-8Jd" type="text" id="name" style="width: 5.0rem;" value="10">
-          <p class="hours-Dqs"><h3>Hours</h3></p>
-       </p>
-      </div>
+    <p class="change-reputation-sync-interval-rc1">
+      Change Reputation Sync Interval
+    </p>
+    <div class="hours">
+      <input class="" type="text" id="hours" value="12" />
+      <p>Hours</p>
     </div>
-    <div class="button-AFK"><h3>Update</h3></div>
-    </div>
+    <btn class="btn">Update</btn>
   </div>
 </div>
 {% endblock %}
