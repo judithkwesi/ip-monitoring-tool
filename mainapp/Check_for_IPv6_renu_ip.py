@@ -14,16 +14,18 @@ def expand_ipv6_to_bits(ipv6_address):
         return None
     
 
-def check_ipv6_subnet_length(ipv6_address):
+def check_ipv6_subnet_length(test_ip_address, reference_ip_address):
     try:
         # Split the IPv6 address and prefix length
-        _, prefix_length = ipv6_address.split('/')
+        _, prefix_length1 = test_ip_address.split('/')
+        _, prefix_length2= reference_ip_address.split('/')
 
         # Convert the prefix length to an integer
-        prefix_length = int(prefix_length)
-
-        # Check if the prefix length is less than to 32
-        return prefix_length < 32
+        prefix_length1 = int(prefix_length1)
+        prefix_length2 = int(prefix_length2)
+        
+        # Check if the test prefix length  is less than to reference prefix length
+        return prefix_length1 < prefix_length2
         
     except ValueError:
         return False
@@ -67,7 +69,7 @@ def identify_ipv6_addresses(input_file, reference_ipv6_address):
         
             if __name__ == "__main__":
                 
-                if check_ipv6_subnet_length(ipv6_full_address):
+                if check_ipv6_subnet_length(ipv6_full_address, reference_ipv6_address):
                     
                     pass
                 else:
