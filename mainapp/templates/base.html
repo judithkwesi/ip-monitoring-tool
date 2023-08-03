@@ -9,6 +9,13 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     </head>
     <body>
+        {% if messages %}
+            <ul class="messages" id="msg">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
         {% if request.user.is_authenticated %}
         <nav>
             <div class="logo-menu">
