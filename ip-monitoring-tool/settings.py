@@ -1,5 +1,6 @@
 from pathlib import Path
 import os
+import sys
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,6 +21,16 @@ else:
 DEBUG = True
 
 ALLOWED_HOSTS = ['137.63.148.213', '127.0.0.1']
+
+if 'test' in sys.argv or 'test_coverage' in sys.argv:
+    COVERAGE_MODULE_EXCLUDES = [
+        'tests',  # Exclude the tests directory from coverage
+        'mainapp/migrations',
+        'migrations',  # Exclude migrations
+        'settings',  # Exclude settings.py
+    ]
+    COVERAGE_REPORT_HTML_OUTPUT_DIR = 'coverage_html'
+
 
 # Application definition
 

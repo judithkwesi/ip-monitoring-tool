@@ -18,5 +18,7 @@ ip-monitoring-tool/__pycache__/
 .coverage
 htmlcov/
 
+mainapp/tests
+
 #Except
 !mainapp/static
