@@ -380,3 +380,7 @@ td {
 #add_user_form input {
   width: 100%;
 }
+
+#add_user_form textarea {
+  width: 100%;
+}

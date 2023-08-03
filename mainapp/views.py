@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout, login, authenticate
 from django.contrib.auth.models import User
 from django.core.cache import cache
-from .forms import MySelectForm, AddUserForm
+from .forms import MySelectForm, AddUserForm, AddIPForm
 import ipaddress
 from django.views.decorators.cache import never_cache
 
@@ -103,6 +103,22 @@ def dashboard(request):   #Main screen
 
 
         return render(request, 'registration/dashboard.html', context)
+
+@login_required(login_url='login')
+def add_ip_space(request):
+     if request.method == 'POST':
+          form = AddIPForm(request.POST)
+          print(request) 
+          if form.is_valid():
+               form.save()
+               return HttpResponseRedirect('/')
+          else:
+            for field, errors in form.errors.items():
+                for error in errors:
+                     print(f"{field}: {error}")
+
+            return HttpResponseRedirect('/')
+     form = AddIPForm() 
 
 @login_required(login_url='login')
 def add_user(request):

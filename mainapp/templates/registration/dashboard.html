@@ -16,10 +16,11 @@
   </div>
 
   <div id="overlay-dashboard">
-    <form action="{% url 'add_user' %}" method="post" id="add_user_form">
+    <form action="{% url 'add_ip_space' %}" method="post" id="add_user_form">
       {% csrf_token %}
       <h2>Add IP Space</h2>
-      <input type="text" name="ip_address" placeholder="Enter IP Address Space" />
+      <input type="text" name="ip_space" placeholder="Enter IP Address Space" />
+      <textarea name="description" id="" cols="30" rows="10" placeholder="Enter description"></textarea>
       <div class="btn_group">
         <button type="button" class="btn cancel" id="cancel_btn">Cancel</button>
         <button type="submit" class="btn add">Add</button>
