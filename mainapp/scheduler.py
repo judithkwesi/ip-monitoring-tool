@@ -1,6 +1,10 @@
 from apscheduler.schedulers.background import BackgroundScheduler
 import subprocess
 from .models import SyncInterval
+import logging
+
+
+logger = logging.getLogger('ip-monitoring-tool')
 
 
 # Constants for URLs and output file paths
@@ -36,7 +40,9 @@ def download_sites_file():
         subprocess.call(f"wget -O {CINS_OUTPUT_FILE} {CINS_URL}")
         subprocess.call(f"wget -O {SPAMHAUS_OUTPUT_FILE} {SPAMHAUS_URL}")
         subprocess.call(f"wget -O {SPAMHAUSV6_OUTPUT_FILE} {SPAMHAUSV6_URL}")
+
+        logger.error("Successfully downloaded files")
     except Exception as e:
-        print(f"Error occurred during download: {e}")
+        logger.error(f"Error occurred during download: {e}")
 
     return "Done"
