@@ -12,6 +12,10 @@ from django.contrib.auth.forms import AuthenticationForm
 from .models import IPSpace, SyncInterval
 from mainapp.utils.utils import generateContext, handle_invalid_login_attempt, check_file
 from mainapp.utils.custom_decorators import custom_admin_only, custom_authorised_user
+import logging
+
+
+logger = logging.getLogger('ip-monitoring-tool')
 
 
 @never_cache
@@ -23,6 +27,7 @@ def login_view(request):
         if form.is_valid():
             user = form.get_user()
             login(request, user)
+            logger.info(f"{user} logged in")
             messages.success(request, "Successfully logged in")
             cache.delete(f'login_attempts:{request.META.get("REMOTE_ADDR")}')
             return redirect('dashboard')
@@ -64,12 +69,14 @@ def add_ip_space(request):
           form = AddIPForm(request.POST)
           if form.is_valid():
                form.save()
+               logger.info("Successfully added IP space")
                messages.success(request, f"Successfully added IP space")
                return HttpResponseRedirect('/')
           else:
             for field, errors in form.errors.items():
                 for error in errors:
                      messages.error(request, f"{error}")
+                     logger.info(f"Failed to add IP space: {error}")
 
             return HttpResponseRedirect('/')
      form = AddIPForm() 
@@ -81,11 +88,13 @@ def add_user(request):
           if form.is_valid():
                form.save()
                messages.success(request, "Successfully added user")
+               logger.info("Successfully added user")
                return HttpResponseRedirect('/users')
           else:
             for field, errors in form.errors.items():
                 for error in errors:
                      messages.error(request, f"{error}")
+                     logger.error(f"Failed to add IP space{error}")
 
             return HttpResponseRedirect('/users')
      form = AddUserForm()
@@ -99,11 +108,13 @@ def update_sync_interval(request):
           if form.is_valid():
                form.save()
                messages.success(request, "Successfully updated Sync Interval")
+               logger.info("Successfully updated Sync Interval")
                return HttpResponseRedirect('/settings')
           else:
             for _, errors in form.errors.items():
                 for error in errors:
                      messages.error(request, f"{error}")
+                     logger.error("Failed updated Sync Interval")
 
             return HttpResponseRedirect('/settings')
 
@@ -141,6 +152,8 @@ def settings(request):
 
 @login_required(login_url='login')
 def logout_user(request):
+    username = request.user.username if request.user.is_authenticated else "Anonymous"
+    logger.info(f"{username} logged out")
     logout(request)
     messages.success(request, "Successfully logged out")
     return HttpResponseRedirect('/')
