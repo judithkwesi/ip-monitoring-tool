@@ -1,32 +1,29 @@
 from pathlib import Path
 import os
+import sys
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# SECURITY WARNING: keep the secret key used in production secret!
-# with open(os.path.join(BASE_DIR, 'secret_key.txt')) as f:
-# 	SECRET_KEY = f.read().strip()
-
 if os.environ.get("GITHUB_ACTIONS") == "true":
-    # Running in GitHub Actions, get the secret key from the environment variable
     SECRET_KEY = '459a2211e3e1cb2219fde2460560070c7081872b629211708'
 else:
-    # Not running in GitHub Actions, read the secret key from the file
     with open(os.path.join(BASE_DIR, 'secret_key.txt')) as f:
         SECRET_KEY = f.read().strip()
 
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
 ALLOWED_HOSTS = ['137.63.148.213', '127.0.0.1']
 
+if 'test' in sys.argv or 'test_coverage' in sys.argv:
+    COVERAGE_MODULE_EXCLUDES = ['tests', 'mainapp/migrations', 'migrations', 'settings']
+    COVERAGE_REPORT_HTML_OUTPUT_DIR = 'coverage_html'
+
 # Application definition
 
 INSTALLED_APPS = [
-    'mainapp',  # First priority application: We shall use this application's
-                #templates instead of the inbuilt templates
-    'django.contrib.admin', #This app is to be used for authentication
+    'mainapp',
+    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -66,7 +63,6 @@ WSGI_APPLICATION = 'ip-monitoring-tool.wsgi.application'
 
 
 # Database
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -93,26 +89,19 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 # Internationalization
-
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
-
 STATIC_URL = 'static/'
 STATIC_ROOT = 'static/'
 
 
 # Default primary key field type
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_REDIRECT_URL = 'dashboard'

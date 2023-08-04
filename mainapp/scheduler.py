@@ -1,29 +1,42 @@
 from apscheduler.schedulers.background import BackgroundScheduler
 import subprocess
+from .models import SyncInterval
 
-def updater():
+
+# Constants for URLs and output file paths
+BLOCKLIST_URL = "https://lists.blocklist.de/lists/all.txt"
+CINS_URL = "http://cinsscore.com/list/ci-badguys.txt"
+SPAMHAUS_URL = "https://www.spamhaus.org/drop/drop.txt"
+SPAMHAUSV6_URL = "https://www.spamhaus.org/drop/dropv6.txt"
+
+BLOCKLIST_OUTPUT_FILE = "./mainapp/sites/blocklist.txt"
+CINS_OUTPUT_FILE = "./mainapp/sites/cins.txt"
+SPAMHAUS_OUTPUT_FILE = "./mainapp/sites/spamhaus.txt"
+SPAMHAUSV6_OUTPUT_FILE = "./mainapp/sites/spamhausv6.txt"
+
+
+def schedule_site_downloads():
+    sync_query = SyncInterval.objects.all()
+    if not sync_query.exists():
+        sync = 12
+    else:
+        sync_query = SyncInterval.objects.all()
+        sync_intervals = [ip_obj.sync_interval for ip_obj in sync_query]
+        sync = int(sync_intervals[-1])
+
     scheduler = BackgroundScheduler()
-    scheduler.add_job(download_sites_file, 'interval', hours=12)
+    scheduler.add_job(download_sites_file, 'interval', hours=sync)
     scheduler.start()
 
+
 def download_sites_file():
-    # Sites url
-    block_url = "https://lists.blocklist.de/lists/all.txt"
-    cins_url = "http://cinsscore.com/list/ci-badguys.txt"
-    spam_url = "https://www.spamhaus.org/drop/drop.txt"
-    
-		# Output path
-    block_output_file = "./mainapp/sites/blocklist.txt"
-    cins_output_file = "./mainapp/sites/cins.txt"
-    spam_output_file = "./mainapp/sites/spamhaus.txt"
-
-    # Use wget to download the file
-    download_block = f"wget -O {block_output_file} {block_url}"
-    download_cins_url = f"wget -O {cins_output_file} {cins_url}"
-    download_spamhaus = f"wget -O {spam_output_file} {spam_url}"
-
-    subprocess.call(download_spamhaus, shell=True)
-    subprocess.call(download_block, shell=True)
-    subprocess.call(download_cins_url, shell=True)
+    # Use wget to download the files
+    try:
+        subprocess.call(f"wget -O {BLOCKLIST_OUTPUT_FILE} {BLOCKLIST_URL}")
+        subprocess.call(f"wget -O {CINS_OUTPUT_FILE} {CINS_URL}")
+        subprocess.call(f"wget -O {SPAMHAUS_OUTPUT_FILE} {SPAMHAUS_URL}")
+        subprocess.call(f"wget -O {SPAMHAUSV6_OUTPUT_FILE} {SPAMHAUSV6_URL}")
+    except Exception as e:
+        print(f"Error occurred during download: {e}")
 
     return "Done"
