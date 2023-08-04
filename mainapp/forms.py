@@ -3,11 +3,18 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from .models import IPSpace
+from .models import IPSpace, SyncInterval
 
 class LoginForm(forms.Form):
     username = forms.CharField(required=True, min_length=3, widget=forms.TextInput(attrs={'placeholder': 'Enter your username'})) 
     password = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Enter your password'}))
+
+class SyncIntervalForm(forms.ModelForm):
+    sync_interval = forms.CharField(required=True, min_length=1, widget=forms.TextInput(attrs={'placeholder': 'Enter your username'}))
+
+    class Meta:
+        model = SyncInterval
+        fields = ['sync_interval']
 
 class AddIPForm(forms.ModelForm):
     ip_space = forms.CharField(required=True, min_length=3, widget=forms.TextInput(attrs={'placeholder': 'Enter your username'})) 

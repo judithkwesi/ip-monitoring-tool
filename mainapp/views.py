@@ -6,11 +6,11 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout, login
 from django.contrib.auth.models import User
 from django.core.cache import cache
-from .forms import MySelectForm, AddUserForm, AddIPForm
+from .forms import MySelectForm, AddUserForm, AddIPForm, SyncIntervalForm
 import ipaddress
 from django.views.decorators.cache import never_cache
 from django.contrib.auth.forms import AuthenticationForm
-from .models import IPSpace
+from .models import IPSpace, SyncInterval
 from django.contrib.auth.decorators import user_passes_test
 
 
@@ -123,7 +123,6 @@ def add_ip_space(request):
 def add_user(request):
      if request.method == 'POST':
           form = AddUserForm(request.POST)
-          print(request) 
           if form.is_valid():
                form.save()
                messages.success(request, "Successfully added user")
@@ -135,6 +134,27 @@ def add_user(request):
 
             return HttpResponseRedirect('/users')
      form = AddUserForm() 
+
+
+@login_required(login_url='login')
+@user_passes_test(is_superuser)
+def update_sync_interval(request):
+     if request.method == 'POST':
+          form = SyncIntervalForm(request.POST)
+
+          if form.is_valid():
+               form.save()
+               messages.success(request, "Successfully updated Sync Interval")
+               return HttpResponseRedirect('/settings')
+          else:
+            for field, errors in form.errors.items():
+                for error in errors:
+                     messages.error(request, f"{error}")
+
+            return HttpResponseRedirect('/settings')
+
+     return HttpResponseRedirect('/settings')
+      
 
 
 @login_required(login_url='login')
@@ -152,7 +172,15 @@ def users(request):
 @login_required(login_url='login')
 @user_passes_test(is_superuser)
 def settings(request):
-    return render(request, 'registration/settings.html', {'section': 'settings'})
+    sync = SyncInterval.objects.all()
+    sync_intervals = [ip_obj.sync_interval for ip_obj in sync]
+    sync_interval = int(sync_intervals[-1])
+    
+    context = {
+         "section": "settings",
+         "sync_interval": sync_interval
+    }
+    return render(request, 'registration/settings.html', context)
 
 @login_required(login_url='login')
 def logout_user(request):

@@ -11,6 +11,7 @@ urlpatterns = [
     path('login/', views.login_view, name='login'), 
     path('logout/', views.logout_user, name='logout'),
     path('add_user/', views.add_user, name='add_user'),
+    path('sync_interval/', views.update_sync_interval, name='sync_interval'),
     path('add_ip_space/', views.add_ip_space, name='add_ip_space'),
     
     # password change
