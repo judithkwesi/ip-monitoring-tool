@@ -2,6 +2,7 @@
 * {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
 body {
@@ -105,7 +106,7 @@ form {
 }
 
 form p {
-  width: 340px;
+  width: 350px;
   padding: 0 10px;
 }
 
@@ -126,8 +127,8 @@ textarea {
   background: transparent;
   border: 1px solid black;
   padding: 6px 10px;
-  width: 320px;
-  height: 28px;
+  width: 348px;
+  height: 40px;
   border-radius: 5px;
 }
 
@@ -135,12 +136,21 @@ textarea {
   margin-bottom: 16px;
 }
 
+.input-fields-user {
+  margin-bottom: 6px;
+  width: 100%;
+}
+
+.input-fields-user label {
+  font-size: 15px;
+}
+
 select {
   background: transparent;
   border: 1px solid black;
   padding: 6px 10px;
   width: 320px;
-  height: 32px;
+  height: 40px;
   border-radius: 5px;
 }
 
@@ -149,7 +159,7 @@ select {
 }
 
 .errorlist {
-  color: #cc0033;
+  color: #fff;
   float: left;
   clear: both;
   padding-left: 10px;
@@ -164,9 +174,16 @@ select {
 
 /*Messages*/
 ul.messages {
-  margin: 10px 100px;
+  position: absolute;
+  z-index: 1001;
+  margin-top: 20px;
   padding: 0;
   list-style-type: none;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
 }
 ul.messages li.success,
 ul.messages li.warning,
@@ -179,18 +196,13 @@ ul.messages li.info {
 }
 
 ul.messages li.success {
-  background: #81ce81;
-}
-ul.messages li.success a {
-  color: #0ac33e;
+  background-color: #d1e7dd;
+  color: #105233;
 }
 
 ul.messages li.error {
-  background: #a30029;
-  color: #e9828e;
-}
-ul.messages li.error {
-  color: #e9828e;
+  background-color: #f8d7da;
+  color: #86242d;
 }
 
 ul.messages li.info {
@@ -267,7 +279,7 @@ select {
   border: none;
   font-weight: bold;
   cursor: pointer;
-  height: 35px;
+  height: 40px;
   padding: 8px 20px;
 }
 
@@ -281,7 +293,7 @@ select {
   border-radius: 5px;
   font-weight: bold;
   cursor: pointer;
-  height: 35px;
+  height: 40px;
 }
 
 table {
@@ -318,4 +330,68 @@ td {
 
 .profile a {
   color: white;
+}
+
+/* Add User Overlay */
+#overlay {
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#overlay {
+  display: none;
+}
+
+#overlay-dashboard {
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#overlay-dashboard {
+  display: none;
+}
+
+#add_user_form {
+  background-color: white;
+  padding: 10px 25px;
+  opacity: 100%;
+  overflow-x: hidden;
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+  align-items: start;
+  justify-content: center;
+}
+
+.btn_group {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.cancel {
+  background-color: #808080;
+}
+
+#add_user_form input {
+  width: 100%;
+}
+
+#add_user_form textarea {
+  width: 100%;
 }
