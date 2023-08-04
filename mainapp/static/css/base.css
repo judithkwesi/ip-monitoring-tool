@@ -136,6 +136,15 @@ textarea {
   margin-bottom: 16px;
 }
 
+.input-fields-user {
+  margin-bottom: 6px;
+  width: 100%;
+}
+
+.input-fields-user label {
+  font-size: 15px;
+}
+
 select {
   background: transparent;
   border: 1px solid black;
