@@ -8,11 +8,21 @@
     <p class="change-reputation-sync-interval-rc1">
       Change Reputation Sync Interval
     </p>
-    <div class="hours">
-      <input class="" type="text" id="hours" value="12" />
-      <p>Hours</p>
-    </div>
-    <btn class="btn">Update</btn>
+    <form method="post" id="myForm" action="{% url 'sync_interval' %}">
+      {% csrf_token %}
+      <div class="hours">
+        <input
+          class=""
+          name="sync_interval"
+          type="text"
+          id="sync_interval"
+          value="{{ sync_interval }}"
+          required
+        />
+        <p>Hours</p>
+      </div>
+      <input class="btn" type="submit" value="Update" />
+    </form>
   </div>
 </div>
 {% endblock %}

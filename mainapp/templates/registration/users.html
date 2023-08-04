@@ -19,16 +19,45 @@
         id="search_element"
       />
     </form>
-    <button class="btn" id="add_user_btn">Add User</button>
+    <button class="btn" id="add_user_btn">Add RENU User</button>
   </div>
 
   <div id="overlay">
     <form action="{% url 'add_user' %}" method="post" id="add_user_form">
       {% csrf_token %}
-      <h2>Add User</h2>
-      <input type="text" name="username" placeholder="Enter username" />
-      <input type="text" name="password1" placeholder="Set password" />
-      <input type="text" name="password2" placeholder="Set password" />
+      <h2>Add RENU User</h2>
+
+      <div class="input-fields-user">
+        <label for="username">Username</label>
+        <input
+          type="text"
+          name="username"
+          id="username"
+          placeholder="Enter username"
+          required
+        />
+      </div>
+      <div class="input-fields-user">
+        <label for="password1">Password</label>
+        <input
+          type="password"
+          name="password1"
+          id="password1"
+          placeholder="Set password"
+          required
+        />
+      </div>
+      <div class="input-fields-user">
+        <label for="password2">Confirm Password</label>
+        <input
+          type="password"
+          name="password2"
+          id="password2"
+          placeholder="Confirm password"
+          required
+        />
+      </div>
+
       <div class="btn_group">
         <button type="button" class="btn cancel" id="cancel_btn">Cancel</button>
         <button type="submit" class="btn add">Add</button>
@@ -47,12 +76,7 @@
         <th class="column-2Lh">Access Levels</th>
       </tr>
     </thead>
-    <tbody>
-      <!-- <tr class="td-ASu">
-        <td>{{ user.username|capfirst }}</td>
-        <td>{% if user.is_superuser %}Admin{% else %}User{% endif %}</td>
-      </tr> -->
-    </tbody>
+    <tbody></tbody>
   </table>
 </div>
 
