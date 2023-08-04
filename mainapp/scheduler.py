@@ -1,5 +1,6 @@
 from apscheduler.schedulers.background import BackgroundScheduler
 import subprocess
+from .models import SyncInterval
 
 
 # Constants for URLs and output file paths
@@ -15,8 +16,16 @@ SPAMHAUSV6_OUTPUT_FILE = "./mainapp/sites/spamhausv6.txt"
 
 
 def schedule_site_downloads():
+    sync_query = SyncInterval.objects.all()
+    if not sync_query.exists():
+        sync = 12
+    else:
+        sync_query = SyncInterval.objects.all()
+        sync_intervals = [ip_obj.sync_interval for ip_obj in sync_query]
+        sync = int(sync_intervals[-1])
+
     scheduler = BackgroundScheduler()
-    scheduler.add_job(download_sites_file, 'interval', hours=12)
+    scheduler.add_job(download_sites_file, 'interval', hours=sync)
     scheduler.start()
 
 
