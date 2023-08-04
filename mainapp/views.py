@@ -124,15 +124,19 @@ def users(request):
 
 @custom_admin_only
 def settings(request):
-    sync = SyncInterval.objects.all()
-    sync_intervals = [ip_obj.sync_interval for ip_obj in sync]
-    sync_interval = int(sync_intervals[-1])
+     sync = SyncInterval.objects.all()
+     sync_intervals = [ip_obj.sync_interval for ip_obj in sync]
 
-    context = {
-         "section": "settings",
-         "sync_interval": sync_interval
-    }
-    return render(request, 'registration/settings.html', context)
+     if sync_intervals:
+          sync_interval = int(sync_intervals[-1])
+     else:
+          sync_interval = 12
+
+     context = {
+          "section": "settings",
+          "sync_interval": sync_interval
+     }
+     return render(request, 'registration/settings.html', context)
 
 
 @login_required(login_url='login')
