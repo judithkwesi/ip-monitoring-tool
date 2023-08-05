@@ -2,8 +2,8 @@
 
 # Constants
 REPO_URL="https://github.com/judithkwesi/ip-monitoring-tool.git"
-PROJECT_DIR="/Users/charleskasasira/Documents/Development/Intern/RENU/team1/ip-monitoring-tool"
-VENV_DIR="/Users/charleskasasira/Documents/Development/Intern/RENU/team1/env"
+PROJECT_DIR="/home/charles/ip-reputation/staging/ip-monitoring-tool"
+VENV_DIR="/home/charles/ip-reputation/staging/dev_env"
 # SYSTEMD_SERVICE="your_service_name.service"
 
 # Function to update the code from GitHub
@@ -35,8 +35,10 @@ run_collectstatic() {
     cd "$PROJECT_DIR"
     source $VENV_DIR/bin/activate
     echo "Activating Virtual Environment..."
+    chmod +w "$PROJECT_DIR"/static
 
-    yes | python manage.py collectstatic
+
+    python manage.py collectstatic --noinput
 }
 
 # Function to restart the server
