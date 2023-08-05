@@ -35,7 +35,8 @@ run_collectstatic() {
     cd "$PROJECT_DIR"
     source $VENV_DIR/bin/activate
     echo "Activating Virtual Environment..."
-    python manage.py collectstatic
+
+    yes | python manage.py collectstatic
 }
 
 # Function to restart the server
@@ -69,7 +70,7 @@ main() {
     install_dependencies
     run_migrations
     # restart_server
-    # run_collectstatic
+    run_collectstatic
     stop_program_on_port
     echo "Deployment successful!"
 }
