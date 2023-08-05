@@ -44,6 +44,25 @@ run_collectstatic() {
 #     sudo systemctl restart $SYSTEMD_SERVICE
 # }
 
+# Function to stop the program running on port 8001
+stop_program_on_port() {
+    echo "Stopping program on port 8001..."
+    local pids=$(sudo lsof -t -i :8001)
+
+    if [ -z "$pids" ]; then
+        echo "No program found running on port 8001."
+    else
+        for pid in $pids; do
+            sudo kill -9 "$pid"
+            echo "Terminated process with PID: $pid"
+        done
+        echo "Program(s) stopped successfully."
+    fi
+
+    # restart gunicorn
+    gunicorn ip-monitoring-tool.wsgi:application --bind 127.0.0.1:8001 &
+}
+
 # Main deployment process
 main() {
     update_code
@@ -51,6 +70,7 @@ main() {
     run_migrations
     # restart_server
     # run_collectstatic
+    stop_program_on_port
     echo "Deployment successful!"
 }
 
