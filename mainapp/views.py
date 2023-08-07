@@ -101,8 +101,7 @@ def add_user(request):
           if form.is_valid():
                form.save()
                messages.success(request, "Successfully added user")
-               logger.info("Successfully added user")
-               logger.error(f"200 OK {user_ip} {username} {request.path} {device_info}")
+               logger.info(f"200 OK {user_ip} {username} {request.path} {device_info}")
                return HttpResponseRedirect('/users')
           else:
             for field, errors in form.errors.items():
@@ -192,6 +191,8 @@ def github_webhook(request):
 
           print("author: ", author_name)
           print("message: ", commit_message)
+
+          logger.info(f"Deployment: {author_name} {commit_message}")
 
      #    if event_type == 'pull_request' and payload['action'] == 'closed' and payload['pull_request']['merged'] and payload['pull_request']['base']['ref'] == 'staging':
      #        # Execute the bash script
