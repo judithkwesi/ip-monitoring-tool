@@ -10,16 +10,21 @@ from .forms import MySelectForm, AddUserForm, AddIPForm, SyncIntervalForm
 from django.views.decorators.cache import never_cache
 from django.contrib.auth.forms import AuthenticationForm
 from .models import IPSpace, SyncInterval
-from mainapp.utils.utils import generateContext, handle_invalid_login_attempt, check_file
+from mainapp.utils.utils import generateContext, handle_invalid_login_attempt, check_file, get_device_info
 from mainapp.utils.custom_decorators import custom_admin_only, custom_authorised_user
 import logging
+from user_agents import parse
 
 
 logger = logging.getLogger('ip-monitoring-tool')
 
+def get_user_ip(request):
+    return request.META.get('REMOTE_ADDR', '')
 
 @never_cache
 def login_view(request):
+     user_ip = get_user_ip(request)
+     device_info = get_device_info(request)
      if request.user.is_authenticated:
           return HttpResponseRedirect('/')
      if request.method == 'POST':
@@ -27,7 +32,7 @@ def login_view(request):
         if form.is_valid():
             user = form.get_user()
             login(request, user)
-            logger.info(f"{user} logged in")
+            logger.info(f"200 OK {user_ip} {user} {request.path} {device_info}")
             messages.success(request, "Successfully logged in")
             cache.delete(f'login_attempts:{request.META.get("REMOTE_ADDR")}')
             return redirect('dashboard')
@@ -65,11 +70,14 @@ def dashboard(request):
 
 @login_required(login_url='login')
 def add_ip_space(request):
+     user_ip = get_user_ip(request)
+     device_info = get_device_info(request)
+     username = request.user.username if request.user.is_authenticated else "Anonymous"
      if request.method == 'POST':
           form = AddIPForm(request.POST)
           if form.is_valid():
                form.save()
-               logger.info("Successfully added IP space")
+               logger.info(f"200 OK {user_ip} {username} {request.path} {device_info}")
                messages.success(request, f"Successfully added IP space")
                return HttpResponseRedirect('/')
           else:
@@ -77,24 +85,29 @@ def add_ip_space(request):
                 for error in errors:
                      messages.error(request, f"{error}")
                      logger.info(f"Failed to add IP space: {error}")
+            logger.error(f"400 Bad request {user_ip} {username} {request.path} {device_info}")
 
             return HttpResponseRedirect('/')
      form = AddIPForm() 
 
 @custom_admin_only
 def add_user(request):
+     user_ip = get_user_ip(request)
+     device_info = get_device_info(request)
+     username = request.user.username if request.user.is_authenticated else "Anonymous"
      if request.method == 'POST':
           form = AddUserForm(request.POST)
           if form.is_valid():
                form.save()
                messages.success(request, "Successfully added user")
                logger.info("Successfully added user")
+               logger.error(f"200 OK {user_ip} {username} {request.path} {device_info}")
                return HttpResponseRedirect('/users')
           else:
             for field, errors in form.errors.items():
                 for error in errors:
                      messages.error(request, f"{error}")
-                     logger.error(f"Failed to add IP space{error}")
+            logger.error(f"400 Bad request {user_ip} {username} {request.path} {device_info}")
 
             return HttpResponseRedirect('/users')
      form = AddUserForm()
@@ -102,19 +115,22 @@ def add_user(request):
 
 @custom_admin_only
 def update_sync_interval(request):
+     user_ip = get_user_ip(request)
+     device_info = get_device_info(request)
+     username = request.user.username if request.user.is_authenticated else "Anonymous"
      if request.method == 'POST':
           form = SyncIntervalForm(request.POST)
 
           if form.is_valid():
                form.save()
                messages.success(request, "Successfully updated Sync Interval")
-               logger.info("Successfully updated Sync Interval")
+               logger.info(f"200 OK {user_ip} {username} {request.path} {device_info}")
                return HttpResponseRedirect('/settings')
           else:
             for _, errors in form.errors.items():
                 for error in errors:
                      messages.error(request, f"{error}")
-                     logger.error("Failed updated Sync Interval")
+            logger.error(f"400 Bad Request {user_ip} {username} {request.path} {device_info}")
 
             return HttpResponseRedirect('/settings')
 
@@ -152,8 +168,10 @@ def settings(request):
 
 @login_required(login_url='login')
 def logout_user(request):
+    user_ip = get_user_ip(request)
+    device_info = get_device_info(request)
     username = request.user.username if request.user.is_authenticated else "Anonymous"
-    logger.info(f"{username} logged out")
+    logger.info(f"200 OK {user_ip} {username} {request.path} {device_info}")
     logout(request)
     messages.success(request, "Successfully logged out")
     return HttpResponseRedirect('/')
