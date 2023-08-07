@@ -184,7 +184,6 @@ def github_webhook(request):
           payload = json.loads(request.body)
           event_type = request.headers.get('X-GitHub-Event')
           print("working on her side")
-          print(payload)
           print(event_type)
 
           author_name = payload['pusher']['name']
