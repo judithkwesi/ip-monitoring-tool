@@ -13,11 +13,7 @@ else:
 
 DEBUG = True
 
-<<<<<<< HEAD
-ALLOWED_HOSTS = ['137.63.148.213', '127.0.0.1', 'http://137.63.148.213:8888', 'crappie-first-koala.ngrok-free.app']
-=======
-ALLOWED_HOSTS = ['137.63.148.213', '127.0.0.1', 'http://137.63.148.213:8888', 'http://137.63.148.213']
->>>>>>> 7641f1b9d6a150e9bded30e51103eaf4bbda8fa5
+ALLOWED_HOSTS = ['137.63.148.213', '127.0.0.1', 'http://137.63.148.213:8888', '137.63.148.213:8888', 'crappie-first-koala.ngrok-free.app']
 
 if 'test' in sys.argv or 'test_coverage' in sys.argv:
     COVERAGE_MODULE_EXCLUDES = ['tests', 'mainapp/migrations', 'migrations', 'settings']
