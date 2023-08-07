@@ -73,7 +73,7 @@ stop_program_on_port() {
 # Main deployment process
 main() {
     update_code
-    install_dependencies
+    # install_dependencies
     run_migrations
     # restart_server
     run_collectstatic
