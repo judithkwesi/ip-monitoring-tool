@@ -180,14 +180,17 @@ def logout_user(request):
 
 @csrf_exempt
 def github_webhook(request):
+     print("something")
+     logger.info(f"Deployment: x")
      if request.method == 'POST':
           payload = json.loads(request.body)
           event_type = request.headers.get('X-GitHub-Event')
 
-          author_name = payload['pusher']['name']
-          commit_message = payload['head_commit']['message']
+          logger.info(f"Deployment: y")
 
           if event_type == 'push' and 'ref' in payload and payload['ref'] == 'refs/heads/staging':
+              author_name = payload['pusher']['name']
+              commit_message = payload['head_commit']['message']
               subprocess.run(['/bin/bash', '/home/charles/ip-reputation/staging/ip-monitoring-tool/.github/workflows/deploy.sh'])
               logger.info(f"Deployment: {author_name} - {commit_message} /{payload['ref']}")
 
