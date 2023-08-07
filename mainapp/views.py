@@ -191,7 +191,7 @@ def github_webhook(request):
                   subprocess.run(['/usr/bin/sudo', '/home/charles/ip-reputation/staging/ip-monitoring-tool/.github/workflows/deploy.sh'], check=True)
                   logger.info(f"Deployment: {author_name} - {commit_message} /{payload['ref']}")
               except subprocess.CalledProcessError as e:
-                  logger.error(f"Error deploying from {author_name} - {commit_message}: {e}")
+                  logger.error(f"Error deploying from {author_name}/ {commit_message}: {e}")
               
 
      return HttpResponse(status=200)
