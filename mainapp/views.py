@@ -15,6 +15,7 @@ from mainapp.utils.custom_decorators import custom_admin_only, custom_authorised
 import logging
 from user_agents import parse
 from django.views.decorators.csrf import csrf_exempt
+import subprocess
 
 
 logger = logging.getLogger('ip-monitoring-tool')
@@ -192,7 +193,12 @@ def github_webhook(request):
           print("author: ", author_name)
           print("message: ", commit_message)
 
-          logger.info(f"Deployment: {author_name} {commit_message}")
+          logger.info(f"Deployment: {author_name} - {commit_message}")
+
+          if event_type == 'pull_request' and payload['action'] == 'closed' and payload['pull_request']['merged'] and payload['pull_request']['base']['ref'] == 'staging':
+              print("sir, yes sir")
+              subprocess.run(['/bin/bash', '/Users/charleskasasira/Documents/Development/Intern/RENU/team1/ip-monitoring-tool/.github/workflows/test.sh'])
+              
 
      #    if event_type == 'pull_request' and payload['action'] == 'closed' and payload['pull_request']['merged'] and payload['pull_request']['base']['ref'] == 'staging':
      #        # Execute the bash script
