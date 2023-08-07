@@ -66,6 +66,8 @@ stop_program_on_port() {
     # gunicorn ip-monitoring-tool.wsgi:application --bind 127.0.0.1:8001 &
     nohup gunicorn ip-monitoring-tool.wsgi:application --bind 127.0.0.1:8001 >/dev/null 2>&1 &
     disown
+
+    echo "Gunicorn restarted on port 8001."
 }
 
 # Main deployment process
