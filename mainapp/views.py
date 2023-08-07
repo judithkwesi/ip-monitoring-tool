@@ -1,6 +1,6 @@
 import json
 from django.contrib import messages
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, HttpResponse
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout, login
@@ -14,6 +14,8 @@ from mainapp.utils.utils import generateContext, handle_invalid_login_attempt, c
 from mainapp.utils.custom_decorators import custom_admin_only, custom_authorised_user
 import logging
 from user_agents import parse
+from django.views.decorators.csrf import csrf_exempt
+import subprocess
 
 
 logger = logging.getLogger('ip-monitoring-tool')
@@ -100,8 +102,7 @@ def add_user(request):
           if form.is_valid():
                form.save()
                messages.success(request, "Successfully added user")
-               logger.info("Successfully added user")
-               logger.error(f"200 OK {user_ip} {username} {request.path} {device_info}")
+               logger.info(f"200 OK {user_ip} {username} {request.path} {device_info}")
                return HttpResponseRedirect('/users')
           else:
             for field, errors in form.errors.items():
@@ -175,3 +176,33 @@ def logout_user(request):
     logout(request)
     messages.success(request, "Successfully logged out")
     return HttpResponseRedirect('/')
+
+
+@csrf_exempt
+def github_webhook(request):
+     if request.method == 'POST':
+          payload = json.loads(request.body)
+          event_type = request.headers.get('X-GitHub-Event')
+          print("working on her side")
+          print(payload)
+          print(event_type)
+
+          author_name = payload['pusher']['name']
+          commit_message = payload['head_commit']['message']
+
+          print("author: ", author_name)
+          print("message: ", commit_message)
+
+          logger.info(f"Deployment: {author_name} - {commit_message}")
+
+          if event_type == 'pull_request' and payload['action'] == 'closed' and payload['pull_request']['merged'] and payload['pull_request']['base']['ref'] == 'staging':
+              print("sir, yes sir")
+              subprocess.run(['/bin/bash', '/Users/charleskasasira/Documents/Development/Intern/RENU/team1/ip-monitoring-tool/.github/workflows/test.sh'])
+              
+
+     #    if event_type == 'pull_request' and payload['action'] == 'closed' and payload['pull_request']['merged'] and payload['pull_request']['base']['ref'] == 'staging':
+     #        # Execute the bash script
+     #        subprocess.run(['/bin/bash', '/Users/charleskasasira/Documents/Development/Intern/RENU/team1/ip-monitoring-tool/.github/workflows/deploy.sh'])
+#     return HttpResponse(status=200)
+
+     return HttpResponse(status=200)
