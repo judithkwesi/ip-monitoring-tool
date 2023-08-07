@@ -92,7 +92,7 @@ LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'formatters': {
-        'standard': {
+        'verbose': {
             'format': '[%(asctime)s] %(message)s',
             'datefmt': '%d/%b/%Y %H:%M:%S',
         },
@@ -102,7 +102,7 @@ LOGGING = {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
             'filename': './ip-monitoring-logs.log',
-            'formatter': 'standard',
+            'formatter': 'verbose',
         },
     },
     'loggers': {

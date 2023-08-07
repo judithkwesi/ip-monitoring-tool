@@ -176,13 +176,14 @@ select {
 ul.messages {
   position: absolute;
   z-index: 1001;
+  right: 0;
   margin-top: 20px;
-  padding: 0;
+  padding: 0 10px;
   list-style-type: none;
   width: 100vw;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-end;
   gap: 10px;
 }
 ul.messages li.success,
@@ -193,6 +194,38 @@ ul.messages li.info {
   padding: 14px 20px;
   list-style: none;
   color: #fff;
+  opacity: 0;
+  border-radius: 8px;
+  transform: translateX(100%);
+  animation: slideInFromRight 0.3s ease forwards, fadeOut 0.3s ease 2s forwards;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+@keyframes slideInFromRight {
+  0% {
+    opacity: 0; /* Start the animation with the messages hidden */
+    transform: translateX(
+      100%
+    ); /* Start the animation with messages moved to the right */
+  }
+  100% {
+    opacity: 1; /* At the end of the animation, show the messages */
+    transform: translateX(
+      0
+    ); /* At the end of the animation, move the messages to the original position */
+  }
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1; /* Start the animation with full opacity */
+  }
+  100% {
+    opacity: 0; /* At the end of the animation, fade out and hide the messages */
+  }
 }
 
 ul.messages li.success {
@@ -227,6 +260,10 @@ ul.messages li a.choice {
   border: 0;
   box-shadow: none;
   text-shadow: none;
+}
+
+.toast-icons {
+  width: 25px;
 }
 
 .login-form {
