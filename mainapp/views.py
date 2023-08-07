@@ -183,7 +183,8 @@ def github_webhook(request):
      if request.method == 'POST':
           payload = json.loads(request.body)
           event_type = request.headers.get('X-GitHub-Event')
-
+          print("working on her side")
+          print(payload)
           print(event_type)
 
      #    if event_type == 'pull_request' and payload['action'] == 'closed' and payload['pull_request']['merged'] and payload['pull_request']['base']['ref'] == 'staging':
