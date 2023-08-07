@@ -187,7 +187,11 @@ def github_webhook(request):
           if event_type == 'push' and 'ref' in payload and payload['ref'] == 'refs/heads/staging':
               author_name = payload['pusher']['name']
               commit_message = payload['head_commit']['message']
-              subprocess.run(['/usr/bin/sudo', '/home/charles/ip-reputation/staging/ip-monitoring-tool/.github/workflows/deploy.sh'])
-              logger.info(f"Deployment: {author_name} - {commit_message} /{payload['ref']}")
+              try:
+                  subprocess.run(['/usr/bin/sudo', '/home/charles/ip-reputation/staging/ip-monitoring-tool/.github/workflows/deploy.sh'], check=True)
+                  logger.info(f"Deployment: {author_name} - {commit_message} /{payload['ref']}")
+              except subprocess.CalledProcessError as e:
+                  logging.error(f"Error executing the deployment script from {author_name} - {commit_message}: {e}")
+              
 
      return HttpResponse(status=200)
