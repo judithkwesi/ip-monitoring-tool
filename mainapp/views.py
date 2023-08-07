@@ -180,8 +180,6 @@ def logout_user(request):
 
 @csrf_exempt
 def github_webhook(request):
-     print("something")
-     logger.info(f"Deployment: x")
      if request.method == 'POST':
           payload = json.loads(request.body)
           event_type = request.headers.get('X-GitHub-Event')
