@@ -194,7 +194,11 @@ def github_webhook(request):
 
           logger.info(f"Deployment: {author_name} - {commit_message}")
 
-          if event_type == 'push' 'ref' in payload and payload['ref'] == 'refs/heads/staging':
+          if event_type == 'push':
+              print("sir, yes sir 36")
+              subprocess.run(['/bin/bash', '/Users/charleskasasira/Documents/Development/Intern/RENU/team1/ip-monitoring-tool/.github/workflows/test.sh'])
+
+          if event_type == 'push' and 'ref' in payload and payload['ref'] == 'refs/heads/staging':
               print("sir, yes sir 34")
               subprocess.run(['/bin/bash', '/Users/charleskasasira/Documents/Development/Intern/RENU/team1/ip-monitoring-tool/.github/workflows/test.sh'])
 
