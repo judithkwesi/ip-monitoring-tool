@@ -188,7 +188,7 @@ def github_webhook(request):
 
      #    if event_type == 'pull_request' and payload['action'] == 'closed' and payload['pull_request']['merged'] and payload['pull_request']['base']['ref'] == 'staging':
      #        # Execute the bash script
-     #        subprocess.run(['/bin/bash', '/path/to/your/bash-script.sh'])
+     #        subprocess.run(['/bin/bash', '/Users/charleskasasira/Documents/Development/Intern/RENU/team1/ip-monitoring-tool/.github/workflows/deploy.sh'])
 #     return HttpResponse(status=200)
 
      return HttpResponse(status=200)
