@@ -187,6 +187,12 @@ def github_webhook(request):
           print(payload)
           print(event_type)
 
+          author_name = payload['pusher']['name']
+          commit_message = payload['head_commit']['message']
+
+          print("author: ", author_name)
+          print("message: ", commit_message)
+
      #    if event_type == 'pull_request' and payload['action'] == 'closed' and payload['pull_request']['merged'] and payload['pull_request']['base']['ref'] == 'staging':
      #        # Execute the bash script
      #        subprocess.run(['/bin/bash', '/Users/charleskasasira/Documents/Development/Intern/RENU/team1/ip-monitoring-tool/.github/workflows/deploy.sh'])
