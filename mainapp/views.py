@@ -184,7 +184,6 @@ def github_webhook(request):
           payload = json.loads(request.body)
           event_type = request.headers.get('X-GitHub-Event')
           print("working on her side")
-          print(payload)
           print(event_type)
 
           author_name = payload['pusher']['name']
@@ -194,6 +193,10 @@ def github_webhook(request):
           print("message: ", commit_message)
 
           logger.info(f"Deployment: {author_name} - {commit_message}")
+
+          if event_type == 'push' 'ref' in payload and payload['ref'] == 'refs/heads/staging':
+              print("sir, yes sir 34")
+              subprocess.run(['/bin/bash', '/Users/charleskasasira/Documents/Development/Intern/RENU/team1/ip-monitoring-tool/.github/workflows/test.sh'])
 
           if event_type == 'pull_request' and payload['action'] == 'closed' and payload['pull_request']['merged'] and payload['pull_request']['base']['ref'] == 'staging':
               print("sir, yes sir")
