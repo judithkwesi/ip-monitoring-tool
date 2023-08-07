@@ -186,8 +186,6 @@ def github_webhook(request):
           payload = json.loads(request.body)
           event_type = request.headers.get('X-GitHub-Event')
 
-          logger.info(f"Deployment: y")
-
           if event_type == 'push' and 'ref' in payload and payload['ref'] == 'refs/heads/staging':
               author_name = payload['pusher']['name']
               commit_message = payload['head_commit']['message']
