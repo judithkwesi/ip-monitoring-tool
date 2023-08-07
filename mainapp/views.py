@@ -1,6 +1,6 @@
 import json
 from django.contrib import messages
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, HttpResponse
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout, login
@@ -14,6 +14,7 @@ from mainapp.utils.utils import generateContext, handle_invalid_login_attempt, c
 from mainapp.utils.custom_decorators import custom_admin_only, custom_authorised_user
 import logging
 from user_agents import parse
+from django.views.decorators.csrf import csrf_exempt
 
 
 logger = logging.getLogger('ip-monitoring-tool')
@@ -175,3 +176,19 @@ def logout_user(request):
     logout(request)
     messages.success(request, "Successfully logged out")
     return HttpResponseRedirect('/')
+
+
+@csrf_exempt
+def github_webhook(request):
+     if request.method == 'POST':
+          payload = json.loads(request.body)
+          event_type = request.headers.get('X-GitHub-Event')
+
+          print(event_type)
+
+     #    if event_type == 'pull_request' and payload['action'] == 'closed' and payload['pull_request']['merged'] and payload['pull_request']['base']['ref'] == 'staging':
+     #        # Execute the bash script
+     #        subprocess.run(['/bin/bash', '/path/to/your/bash-script.sh'])
+#     return HttpResponse(status=200)
+
+     return HttpResponse(status=200)

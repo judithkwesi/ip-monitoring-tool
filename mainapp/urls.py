@@ -13,6 +13,7 @@ urlpatterns = [
     path('add_user/', views.add_user, name='add_user'),
     path('sync_interval/', views.update_sync_interval, name='sync_interval'),
     path('add_ip_space/', views.add_ip_space, name='add_ip_space'),
+    path('github-action/', views.github_webhook, name='github_actions'),
     
     # password change
     path('password_change/', login_required(login_url='login')(auth_views.PasswordChangeView.as_view()), name='password_change'),
