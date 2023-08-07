@@ -11,7 +11,7 @@ else:
     with open(os.path.join(BASE_DIR, 'secret_key.txt')) as f:
         SECRET_KEY = f.read().strip()
 
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['137.63.148.213', '127.0.0.1', 'http://137.63.148.213:8888', '137.63.148.213:8888', 'crappie-first-koala.ngrok-free.app']
 
