@@ -63,13 +63,15 @@ stop_program_on_port() {
     fi
 
     # restart gunicorn
-    gunicorn ip-monitoring-tool.wsgi:application --bind 127.0.0.1:8001 &
+    # gunicorn ip-monitoring-tool.wsgi:application --bind 127.0.0.1:8001 &
+    nohup gunicorn ip-monitoring-tool.wsgi:application --bind 127.0.0.1:8001 >/dev/null 2>&1 &
+    disown
 }
 
 # Main deployment process
 main() {
     update_code
-    # install_dependencies
+    install_dependencies
     run_migrations
     # restart_server
     run_collectstatic
