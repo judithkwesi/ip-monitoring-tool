@@ -18,36 +18,6 @@ def expand_ip_to_bits(ip_address):
 
 # *********************************************IPv4*****************************************************
           
-
-"""def check_ipv4_prefix(test_ip_address, reference_ip_address):
-    try:
-
-        # Split the IPv4 address and prefix length
-        address1, _ = test_ip_address.split('/')
-        address2, prefix_length2 = reference_ip_address.split('/')
-
-        # Convert IPv4 addresses to IPv4 Address objects
-        ipv4_addr1 = ipaddress.IPv4Address(address1)
-        ipv4_addr2 = ipaddress.IPv4Address(address2)
-
-        # Expands IPv4 addresses into full form
-        ipv4_prefix1 = ipv4_addr1.exploded[:]  
-        ipv4_prefix2 = ipv4_addr2.exploded[:]
-
-        #Expands ipv4 address into bits
-
-        ipv4_prefix1_in_bits1 = expand_ip_to_bits(ipv4_prefix1)
-        ipv4_prefix1_in_bits2 = expand_ip_to_bits(ipv4_prefix2)
-
-        # Check if the first bits equal in quantity to the prefix_length2 of both addresses are similar
-        return ipv4_prefix1_in_bits1[:int(prefix_length2)] == ipv4_prefix1_in_bits2[:int(prefix_length2)]
-
-    except (ValueError, ipaddress.AddressValueError):
-        return False"""
-    
-
-    
-
 # **************************************IPv6*****************************************************
 
 def check_subnet_length(test_ip_address, reference_ip_address):
@@ -66,30 +36,38 @@ def check_subnet_length(test_ip_address, reference_ip_address):
     except ValueError:
         return False
 
-"""
-def check_ipv6_prefix(test_ip_address, reference_ip_address):
+
+def check_prefix(test_ip_address, reference_ip_address, ip_type):
     try:
-        # Split the IPv6 address and prefix length
+        # Split the IP address and prefix length
         address1, _ = test_ip_address.split('/')
         address2, prefix_length2 = reference_ip_address.split('/')
 
-        # Convert IPv6 addresses to IPv6Address objects
-        ipv6_addr1 = ipaddress.IPv6Address(address1)
-        ipv6_addr2 = ipaddress.IPv6Address(address2)
+        if ip_type == "IPv4":
+            # Convert IPv4 addresses to IPv4Address objects
+            ipv_addr1 = ipaddress.IPv4Address(address1)
+            ipv_addr2 = ipaddress.IPv4Address(address2)
+        elif ip_type == "IPv6":
+            # Convert IPv6 addresses to IPv6Address objects
+            ipv_addr1 = ipaddress.IPv6Address(address1)
+            ipv_addr2 = ipaddress.IPv6Address(address2)
+        else:
+            return False
 
-        # Expands IPv6 addresses into full form
-        ipv6_prefix1 = ipv6_addr1.exploded[:]  
-        ipv6_prefix2 = ipv6_addr2.exploded[:]
+        # Expands IP addresses into full form
+        prefix1 = ipv_addr1.exploded[:]
+        prefix2 = ipv_addr2.exploded[:]
 
-        #Expands ipv6 address into bits
-        ipv6_prefix1_in_bits1 = expand_ip_to_bits(ipv6_prefix1)
-        ipv6_prefix1_in_bits2 = expand_ip_to_bits(ipv6_prefix2)
+        # Expands IP address into bits
+        prefix1_in_bits1 = expand_ip_to_bits(prefix1)
+        prefix1_in_bits2 = expand_ip_to_bits(prefix2)
 
         # Check if the first bits equal in quantity to the prefix_length2 of both addresses are similar
-        return ipv6_prefix1_in_bits1[:int(prefix_length2)] == ipv6_prefix1_in_bits2[:int(prefix_length2)]
+        return prefix1_in_bits1[:int(prefix_length2)] == prefix1_in_bits2[:int(prefix_length2)]
 
     except (ValueError, ipaddress.AddressValueError):
-        return False"""
+        return False
+
 # ********************************************************************************************************
 
 # Identify whether ip is IPv4 or IPv6 
@@ -113,7 +91,7 @@ def identify_blacklisted_ip_addresses(input_file, reference_ip_address):
                             pass
                         else:
                     
-                            if check_ipv4_prefix(ip_full_address, reference_ip_address):
+                            if check_prefix(ip_full_address, reference_ip_address, "IPv4"):
                                 print(f"The ip address {ip_full_address} is a subnet.")
                         
                             else:
@@ -127,7 +105,7 @@ def identify_blacklisted_ip_addresses(input_file, reference_ip_address):
                             pass
                         else:
                     
-                            if check_ipv6_prefix(ip_full_address, reference_ip_address):
+                            if check_prefix(ip_full_address, reference_ip_address, "IPv6"):
                                 print(f"The ip address {ip_full_address} is a subnet.")
                         
                             else:
