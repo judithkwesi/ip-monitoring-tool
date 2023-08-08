@@ -17,7 +17,9 @@ def expand_ipv4_to_bits(ipv4_address):
 def check_ipv4_subnet_length(test_ip_address, reference_ip_address):
     try:
 
+
         # Split the IPv4 address and prefix length
+
 
         _, prefix_length1 = test_ip_address.split('/')
         _, prefix_length2= reference_ip_address.split('/')
@@ -84,10 +86,4 @@ def identify_ipv4_addresses(input_file, reference_ipv6_address):
                     else:
                         pass
                    
-
-# Calling the identify_ipv4_addresses
-Renu_ip_address = ['196.43.128.0/18', '137.63.128.0/17', '102.34.0.0/16', '2.56.192.0/22']
-
-for ip in Renu_ip_address:
-    identify_ipv4_addresses("./sites/spamhaus.txt", ip)
 
