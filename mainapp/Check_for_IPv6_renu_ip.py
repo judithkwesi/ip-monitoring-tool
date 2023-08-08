@@ -1,5 +1,6 @@
 import ipaddress
 
+
 # function to expand IPv6 address into binary(bits)
 def expand_ipv6_to_bits(ipv6_address):
     try:
