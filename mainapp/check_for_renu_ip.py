@@ -70,7 +70,7 @@ def check_prefix(test_ip_address, reference_ip_address, ip_type):
 
 # ********************************************************************************************************
 
-# Identify whether ip is IPv4 or IPv6 
+# Identify whether ip is IPv4 or IPv6 is blacklisted
 def identify_blacklisted_ip_addresses(input_file, reference_ip_address):
 
     with open(input_file, 'r') as file:
