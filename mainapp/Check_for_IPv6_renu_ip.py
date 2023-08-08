@@ -81,6 +81,3 @@ def identify_ipv6_addresses(input_file, reference_ipv6_address):
                         pass
                    
 
-# Calling the identify_ipv6_addresses
-Renu_ip_address = "2c0f:f6d0::/32"
-identify_ipv6_addresses("./sites/spamhausv6.txt", Renu_ip_address)

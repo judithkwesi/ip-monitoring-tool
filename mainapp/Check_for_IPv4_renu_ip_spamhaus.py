@@ -61,7 +61,7 @@ def check_ipv4_prefix(test_ip_address, reference_ip_address):
     
 
     
-def identify_ipv4_addresses(input_file, reference_ipv6_address):
+def identify_ipv4_addresses(input_file, reference_ipv4_address):
 
     with open(input_file, 'r') as file:
         lines = file.readlines()
@@ -69,25 +69,18 @@ def identify_ipv4_addresses(input_file, reference_ipv6_address):
     for line in lines:
         line = line.strip()
         if line and not line.startswith(';'):
-            ipv6_full_address = line.split(';')[0].strip()
+            ipv4_full_address = line.split(';')[0].strip()
         
             if __name__ == "__main__":
                 
-                if check_ipv4_subnet_length(ipv6_full_address, reference_ipv6_address):
+                if check_ipv4_subnet_length(ipv4_full_address, reference_ipv4_address):
                     
                     pass
                 else:
                     
-                    if check_ipv4_prefix(ipv6_full_address, reference_ipv6_address):
-                        print(f"The ip address {ipv6_full_address} is a subnet.")
+                    if check_ipv4_prefix(ipv4_full_address, reference_ipv4_address):
+                        print(f"The ip address {ipv4_full_address} is a subnet.")
                         
                     else:
                         pass
                    
-
-# Calling the identify_ipv4_addresses
-Renu_ip_address = ['196.43.128.0/18', '137.63.128.0/17', '102.34.0.0/16', '2.56.192.0/22']
-
-for ip in Renu_ip_address:
-    identify_ipv4_addresses("./sites/spamhaus.txt", ip)
-
