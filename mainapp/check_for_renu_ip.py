@@ -119,9 +119,3 @@ def identify_blacklisted_ip_addresses(input_file, reference_ip_address):
                 return "Invalid IP"
             
 
-
-Renu_ip_address = ['196.43.128.0/18', '137.63.128.0/17', '102.34.0.0/16', '2.56.192.0/22', '2c0f:f6d0::/32']
-
-for ip in Renu_ip_address:
-    identify_blacklisted_ip_addresses('sites/blocklist.txt', ip)
-
