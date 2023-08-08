@@ -131,5 +131,5 @@ EMAIL_PORT = 587  # Replace with your SMTP server port (587 for TLS, 465 for SSL
 EMAIL_USE_TLS = True  # Use TLS (True) or SSL (False) depending on your server configuration
 EMAIL_USE_SSL = True
 EMAIL_HOST_USER = 'testrenu@yahoo.com'  # Replace with your email address
-EMAIL_HOST_PASSWORD = 'J8hLRUp+8D$Dz,k'  # Replace with your email password or API key
+EMAIL_HOST_PASSWORD = ''  # Replace with your email password or API key
 DEFAULT_FROM_EMAIL = 'testrenu@yahoo.com'  # Replace with the email address to appear as the sender
