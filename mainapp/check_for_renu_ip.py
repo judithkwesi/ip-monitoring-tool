@@ -1,17 +1,21 @@
 import ipaddress
 
-# *********************************************IPv4*****************************************************
-def expand_ipv4_to_bits(ipv4_address):
+# ****************Expand to bits*************************************************************
+def expand_ip_to_bits(ip_address):
     try:
-        # Convert IPv4 address to an IPv4Address object
-        ipv4_addr = ipaddress.IPv4Address(ipv4_address)
+        ip_obj = ipaddress.ip_address(ip_address)
+        if isinstance(ip_obj, ipaddress.IPv4Address):
+            ip_bits = bin(int(ip_obj))[2:].zfill(32)  # IPv4 has 32 bits
+        elif isinstance(ip_obj, ipaddress.IPv6Address):
+            ip_bits = bin(int(ip_obj))[2:].zfill(128)  # IPv6 has 128 bits
+        else:
+            return None
 
-        # Get the full binary representation of the IPv4 address
-        ipv4_binary = bin(int(ipv4_addr))[2:].zfill(32)
-
-        return ipv4_binary
+        return ip_bits
     except ipaddress.AddressValueError:
         return None
+
+# *********************************************IPv4*****************************************************
     
 def check_ipv4_subnet_length(test_ip_address, reference_ip_address):
     try:
@@ -49,8 +53,8 @@ def check_ipv4_prefix(test_ip_address, reference_ip_address):
 
         #Expands ipv4 address into bits
 
-        ipv4_prefix1_in_bits1 = expand_ipv4_to_bits(ipv4_prefix1)
-        ipv4_prefix1_in_bits2 = expand_ipv4_to_bits(ipv4_prefix2)
+        ipv4_prefix1_in_bits1 = expand_ip_to_bits(ipv4_prefix1)
+        ipv4_prefix1_in_bits2 = expand_ip_to_bits(ipv4_prefix2)
 
         # Check if the first bits equal in quantity to the prefix_length2 of both addresses are similar
         return ipv4_prefix1_in_bits1[:int(prefix_length2)] == ipv4_prefix1_in_bits2[:int(prefix_length2)]
@@ -84,19 +88,6 @@ def identify_ipv4_addresses(input_file, reference_ipv4_address):
                         pass
 
 # **************************************IPv6*****************************************************
-# function to expand IPv6 address into binary(bits)
-def expand_ipv6_to_bits(ipv6_address):
-    try:
-        # Convert IPv6 address to an IPv6Address object
-        ipv6_addr = ipaddress.IPv6Address(ipv6_address)
-
-        # Get the full binary representation of the IPv6 address
-        ipv6_binary = "".join(format(int(x, 16), '04b') for x in ipv6_addr.exploded.replace(':', ''))
-
-        return ipv6_binary
-    except ipaddress.AddressValueError:
-        return None
-    
 
 def check_ipv6_subnet_length(test_ip_address, reference_ip_address):
     try:
@@ -130,8 +121,8 @@ def check_ipv6_prefix(test_ip_address, reference_ip_address):
         ipv6_prefix2 = ipv6_addr2.exploded[:]
 
         #Expands ipv6 address into bits
-        ipv6_prefix1_in_bits1 = expand_ipv6_to_bits(ipv6_prefix1)
-        ipv6_prefix1_in_bits2 = expand_ipv6_to_bits(ipv6_prefix2)
+        ipv6_prefix1_in_bits1 = expand_ip_to_bits(ipv6_prefix1)
+        ipv6_prefix1_in_bits2 = expand_ip_to_bits(ipv6_prefix2)
 
         # Check if the first bits equal in quantity to the prefix_length2 of both addresses are similar
         return ipv6_prefix1_in_bits1[:int(prefix_length2)] == ipv6_prefix1_in_bits2[:int(prefix_length2)]
@@ -141,7 +132,7 @@ def check_ipv6_prefix(test_ip_address, reference_ip_address):
 # ********************************************************************************************************
 
 # Identify whether ip is IPv4 or IPv6 
-def identify_ip_addresses_type(input_file, reference_ip_address):
+def identify_blacklisted_ip_addresses(input_file, reference_ip_address):
 
     with open(input_file, 'r') as file:
         lines = file.readlines()
@@ -151,7 +142,7 @@ def identify_ip_addresses_type(input_file, reference_ip_address):
         if line and not line.startswith(';'):
             ip_full_address = line.split(';')[0].strip()
             try:
-                ip = ipaddress.ip_network(ip_str, strict=False)
+                ip = ipaddress.ip_network(ip_full_address, strict=False)
                 if ip.version == 4:
                     
                     if __name__ == "__main__":
@@ -167,7 +158,6 @@ def identify_ip_addresses_type(input_file, reference_ip_address):
                             else:
                                 pass
                                 
-
                 elif ip.version == 6:
                     if __name__ == "__main__":
                 
@@ -189,3 +179,10 @@ def identify_ip_addresses_type(input_file, reference_ip_address):
             except ValueError:
                 return "Invalid IP"
             
+
+
+Renu_ip_address = ['196.43.128.0/18', '137.63.128.0/17', '102.34.0.0/16', '2.56.192.0/22', '2c0f:f6d0::/32']
+
+for ip in Renu_ip_address:
+    identify_blacklisted_ip_addresses('sites/blocklist.txt', ip)
+
