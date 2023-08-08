@@ -41,20 +41,20 @@ def check_ipv4_prefix(test_ip_address, reference_ip_address):
         address2, prefix_length2 = reference_ip_address.split('/')
 
         # Convert IPv4 addresses to IPv4 Address objects
-        ipv6_addr1 = ipaddress.IPv4Address(address1)
-        ipv6_addr2 = ipaddress.IPv4Address(address2)
+        ipv4_addr1 = ipaddress.IPv4Address(address1)
+        ipv4_addr2 = ipaddress.IPv4Address(address2)
 
         # Expands IPv4 addresses into full form
-        ipv6_prefix1 = ipv6_addr1.exploded[:]  
-        ipv6_prefix2 = ipv6_addr2.exploded[:]
+        ipv4_prefix1 = ipv4_addr1.exploded[:]  
+        ipv4_prefix2 = ipv4_addr2.exploded[:]
 
         #Expands ipv4 address into bits
 
-        ipv6_prefix1_in_bits1 = expand_ipv4_to_bits(ipv6_prefix1)
-        ipv6_prefix1_in_bits2 = expand_ipv4_to_bits(ipv6_prefix2)
+        ipv4_prefix1_in_bits1 = expand_ipv4_to_bits(ipv4_prefix1)
+        ipv4_prefix1_in_bits2 = expand_ipv4_to_bits(ipv4_prefix2)
 
         # Check if the first bits equal in quantity to the prefix_length2 of both addresses are similar
-        return ipv6_prefix1_in_bits1[:int(prefix_length2)] == ipv6_prefix1_in_bits2[:int(prefix_length2)]
+        return ipv4_prefix1_in_bits1[:int(prefix_length2)] == ipv4_prefix1_in_bits2[:int(prefix_length2)]
 
     except (ValueError, ipaddress.AddressValueError):
         return False

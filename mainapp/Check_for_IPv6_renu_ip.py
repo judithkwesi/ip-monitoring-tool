@@ -1,5 +1,26 @@
 import ipaddress
 
+# program to identify  if an ip is either ipv4 or ipv6
+def identify_ip_type(ip_str):
+    try:
+        ip = ipaddress.ip_network(ip_str, strict=False)
+        if ip.version == 4:
+            return "IPv4"
+        elif ip.version == 6:
+            return "IPv6"
+        else:
+            return "Invalid IP"
+    except ValueError:
+        return "Invalid IP"
+
+# Test cases
+print(identify_ip_type("192.168.1.1"))  # Output: IPv4
+print(identify_ip_type("2001:db8::1"))   # Output: IPv6
+print(identify_ip_type("invalid_ip"))    # Output: Invalid IP
+
+
+
+
 # function to expand IPv6 address into binary(bits)
 def expand_ipv6_to_bits(ipv6_address):
     try:

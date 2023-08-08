@@ -113,23 +113,3 @@ SESSION_COOKIE_AGE = 3600  # 1 hour
 
 # Secure flag for the session cookie (set it to True for HTTPS-only)
 SESSION_COOKIE_SECURE = False
-
-# settings.py
-# AUTH_USER_MODEL = 'your_app.CustomUser'
-
-# settings.py
-
-# # Set the email backend for sending emails through SMTP
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-
-# Set the email backend for sending emails through console
-# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-
-# SMTP settings
-EMAIL_HOST = 'smtp.mail.yahoo.com.'  # Replace with your SMTP server address
-EMAIL_PORT = 587  # Replace with your SMTP server port (587 for TLS, 465 for SSL)
-EMAIL_USE_TLS = True  # Use TLS (True) or SSL (False) depending on your server configuration
-EMAIL_USE_SSL = True
-EMAIL_HOST_USER = 'testrenu@yahoo.com'  # Replace with your email address
-EMAIL_HOST_PASSWORD = ''  # Replace with your email password or API key
-DEFAULT_FROM_EMAIL = 'testrenu@yahoo.com'  # Replace with the email address to appear as the sender
