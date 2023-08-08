@@ -144,3 +144,75 @@ def logout_user(request):
     logout(request)
     messages.success(request, "Successfully logged out")
     return HttpResponseRedirect('/')
+
+
+# for testing purposes only
+
+
+# from django.conf import settings
+# from django.contrib.auth.forms import PasswordResetForm
+# from django.contrib.auth.models import User
+# from django.contrib.auth.tokens import default_token_generator
+# from django.core.mail import BadHeaderError, send_mail
+# from django.db.models import Q
+# from django.shortcuts import render, redirect
+# from django.http import HttpResponse
+# from django.template.loader import render_to_string
+# from django.utils.encoding import force_bytes
+# from django.utils.http import urlsafe_base64_encode
+# # def password_reset_request(request):
+# #     if request.method == "POST":
+# #         domain = request.headers['Host']
+# #         password_reset_form = PasswordResetForm(request.POST)
+# #         if password_reset_form.is_valid():
+# #             data = password_reset_form.cleaned_data['email']
+# #             associated_users = User.objects.filter(Q(email=data))
+# #             # You can use more than one way like this for resetting the password.
+# #             # ...filter(Q(email=data) | Q(username=data))
+# #             # but with this you may need to change the password_reset form as well.
+# #             if associated_users.exists():
+# #                 for user in associated_users:
+# #                     subject = "Password Reset Requested"
+# #                     email_template_name = "admin/accounts/password/password_reset_email.txt"
+# #                     c = {
+# #                         "email": user.email,
+# #                         'domain': domain,
+# #                         'site_name': 'Interface',
+# #                         "uid": urlsafe_base64_encode(force_bytes(user.pk)),
+# #                         "user": user,
+# #                         'token': default_token_generator.make_token(user),
+# #                         'protocol': 'http',
+# #                     }
+# #                     email = render_to_string(email_template_name, c)
+# #                     try:
+# #                         send_mail(subject, email, settings.EMAIL_HOST_USER, [user.email], fail_silently=False)
+# #                     except BadHeaderError:
+# #                         return HttpResponse('Invalid header found.')
+# #                     return redirect("/core/password_reset/done/")
+# #     password_reset_form = PasswordResetForm()
+# #     return render(request=request, template_name="admin/accounts/password/password_reset.html",
+# #                   context={"password_reset_form": password_reset_form})
+
+from django.shortcuts import render, redirect
+from django.contrib.auth import views as auth_views
+from django.views.decorators.cache import never_cache
+
+# Password Reset View
+@never_cache
+def password_reset(request):
+    return auth_views.PasswordResetView.as_view()(request)
+
+# Password Reset Done View
+@never_cache
+def password_reset_done(request):
+    return auth_views.PasswordResetDoneView.as_view()(request)
+
+# Password Reset Confirm View
+@never_cache
+def password_reset_confirm(request, uidb64, token):
+    return auth_views.PasswordResetConfirmView.as_view()(request, uidb64=uidb64, token=token)
+
+# Password Reset Complete View
+@never_cache
+def password_reset_complete(request):
+    return auth_views.PasswordResetCompleteView.as_view()(request)

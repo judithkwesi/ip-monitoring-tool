@@ -46,7 +46,7 @@ ROOT_URLCONF = 'ip-monitoring-tool.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -115,18 +115,21 @@ SESSION_COOKIE_AGE = 3600  # 1 hour
 SESSION_COOKIE_SECURE = False
 
 # settings.py
+# AUTH_USER_MODEL = 'your_app.CustomUser'
 
-# Set the email backend for sending emails through SMTP
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# settings.py
+
+# # Set the email backend for sending emails through SMTP
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 # Set the email backend for sending emails through console
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # SMTP settings
-# EMAIL_HOST = 'smtp.gmail.com'  # Replace with your SMTP server address
-# EMAIL_PORT = 587  # Replace with your SMTP server port (587 for TLS, 465 for SSL)
-# EMAIL_USE_TLS = True  # Use TLS (True) or SSL (False) depending on your server configuration
-# EMAIL_USE_SSL = False
-# EMAIL_HOST_USER = 'daveseynabou@gmail.com'  # Replace with your email address
-# EMAIL_HOST_PASSWORD = 'your_email_password'  # Replace with your email password or API key
-# DEFAULT_FROM_EMAIL = 'admin@renu.ac.ug'  # Replace with the email address to appear as the sender
+EMAIL_HOST = 'smtp.mail.yahoo.com.'  # Replace with your SMTP server address
+EMAIL_PORT = 587  # Replace with your SMTP server port (587 for TLS, 465 for SSL)
+EMAIL_USE_TLS = True  # Use TLS (True) or SSL (False) depending on your server configuration
+EMAIL_USE_SSL = True
+EMAIL_HOST_USER = 'testrenu@yahoo.com'  # Replace with your email address
+EMAIL_HOST_PASSWORD = 'J8hLRUp+8D$Dz,k'  # Replace with your email password or API key
+DEFAULT_FROM_EMAIL = 'testrenu@yahoo.com'  # Replace with the email address to appear as the sender
