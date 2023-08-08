@@ -1,6 +1,7 @@
 import ipaddress
 
 # ****************Expand to bits*************************************************************
+
 def expand_ip_to_bits(ip_address):
     try:
         ip_obj = ipaddress.ip_address(ip_address)
@@ -16,27 +17,9 @@ def expand_ip_to_bits(ip_address):
         return None
 
 # *********************************************IPv4*****************************************************
-    
-def check_ipv4_subnet_length(test_ip_address, reference_ip_address):
-    try:
+          
 
-        # Split the IPv4 address and prefix length
-
-        _, prefix_length1 = test_ip_address.split('/')
-        _, prefix_length2= reference_ip_address.split('/')
-
-        # Convert the prefix length to an integer
-        prefix_length1 = int(prefix_length1)
-        prefix_length2 = int(prefix_length2)
-        
-        # Check if the test prefix length  is less than to reference prefix length
-        return prefix_length1 < prefix_length2
-        
-    except ValueError:
-        return False
-            
-
-def check_ipv4_prefix(test_ip_address, reference_ip_address):
+"""def check_ipv4_prefix(test_ip_address, reference_ip_address):
     try:
 
         # Split the IPv4 address and prefix length
@@ -60,52 +43,30 @@ def check_ipv4_prefix(test_ip_address, reference_ip_address):
         return ipv4_prefix1_in_bits1[:int(prefix_length2)] == ipv4_prefix1_in_bits2[:int(prefix_length2)]
 
     except (ValueError, ipaddress.AddressValueError):
-        return False
+        return False"""
     
 
     
-def identify_ipv4_addresses(input_file, reference_ipv4_address):
-
-    with open(input_file, 'r') as file:
-        lines = file.readlines()
-
-    for line in lines:
-        line = line.strip()
-        if line and not line.startswith(';'):
-            ipv4_full_address = line.split(';')[0].strip()
-        
-            if __name__ == "__main__":
-                
-                if check_ipv4_subnet_length(ipv4_full_address, reference_ipv4_address):
-                    
-                    pass
-                else:
-                    
-                    if check_ipv4_prefix(ipv4_full_address, reference_ipv4_address):
-                        print(f"The ip address {ipv4_full_address} is a subnet.")
-                        
-                    else:
-                        pass
 
 # **************************************IPv6*****************************************************
 
-def check_ipv6_subnet_length(test_ip_address, reference_ip_address):
+def check_subnet_length(test_ip_address, reference_ip_address):
     try:
-        # Split the IPv6 address and prefix length
+        # Split the IP address and prefix length
         _, prefix_length1 = test_ip_address.split('/')
-        _, prefix_length2= reference_ip_address.split('/')
+        _, prefix_length2 = reference_ip_address.split('/')
 
         # Convert the prefix length to an integer
         prefix_length1 = int(prefix_length1)
         prefix_length2 = int(prefix_length2)
-        
-        # Check if the test prefix length  is less than to reference prefix length
+
+        # Check if the test prefix length is less than the reference prefix length
         return prefix_length1 < prefix_length2
-        
+
     except ValueError:
         return False
-            
 
+"""
 def check_ipv6_prefix(test_ip_address, reference_ip_address):
     try:
         # Split the IPv6 address and prefix length
@@ -128,7 +89,7 @@ def check_ipv6_prefix(test_ip_address, reference_ip_address):
         return ipv6_prefix1_in_bits1[:int(prefix_length2)] == ipv6_prefix1_in_bits2[:int(prefix_length2)]
 
     except (ValueError, ipaddress.AddressValueError):
-        return False
+        return False"""
 # ********************************************************************************************************
 
 # Identify whether ip is IPv4 or IPv6 
@@ -147,7 +108,7 @@ def identify_blacklisted_ip_addresses(input_file, reference_ip_address):
                     
                     if __name__ == "__main__":
                 
-                        if check_ipv4_subnet_length(ip_full_address, reference_ip_address):
+                        if check_subnet_length(ip_full_address, reference_ip_address):
                     
                             pass
                         else:
@@ -161,7 +122,7 @@ def identify_blacklisted_ip_addresses(input_file, reference_ip_address):
                 elif ip.version == 6:
                     if __name__ == "__main__":
                 
-                        if check_ipv6_subnet_length(ip_full_address, reference_ip_address):
+                        if check_subnet_length(ip_full_address, reference_ip_address):
                     
                             pass
                         else:
