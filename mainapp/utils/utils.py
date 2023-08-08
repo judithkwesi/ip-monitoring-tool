@@ -4,6 +4,16 @@ from django.shortcuts import redirect
 from django.http import HttpResponseForbidden
 from django.core.cache import cache
 import ipaddress
+import logging
+from user_agents import parse
+
+
+logger = logging.getLogger('ip-monitoring-tool')
+
+def get_device_info(request):
+     user_agent_string = request.META.get('HTTP_USER_AGENT', '')
+     user_agent = parse(user_agent_string)
+     return f'{user_agent.device.brand} {user_agent.device.model}'
 
 
 def generateContext(selected_option, blocklist, form):
@@ -20,6 +30,8 @@ def generateContext(selected_option, blocklist, form):
 
 
 def handle_invalid_login_attempt(request):
+    device_info = get_device_info(request)
+    username = request.user.username if request.user.is_authenticated else "Anonymous"
     user_ip = request.META.get('REMOTE_ADDR')
     key = f'login_attempts:{user_ip}'
     attempts = cache.get(key, 0)
@@ -31,6 +43,7 @@ def handle_invalid_login_attempt(request):
     else:
         cache.set(key, attempts + 1, 3600)
         messages.error(request, "Invalid username or password.")
+        logger.error(f"401 Unauthorised {user_ip} {username} {request.path} {device_info}")
 
     return redirect('login')
 

@@ -13,7 +13,7 @@ else:
 
 DEBUG = False
 
-ALLOWED_HOSTS = ['137.63.148.213', '127.0.0.1']
+ALLOWED_HOSTS = ['137.63.148.213', '127.0.0.1', 'http://137.63.148.213:8888', '137.63.148.213:8888', 'crappie-first-koala.ngrok-free.app']
 
 if 'test' in sys.argv or 'test_coverage' in sys.argv:
     COVERAGE_MODULE_EXCLUDES = ['tests', 'mainapp/migrations', 'migrations', 'settings']
@@ -88,6 +88,34 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '[%(asctime)s] %(message)s',
+            'datefmt': '%d/%b/%Y %H:%M:%S',
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': './ip-monitoring-logs.log',
+            'formatter': 'verbose',
+        },
+    },
+    'loggers': {
+        'ip-monitoring-tool': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
+
+
+
 # Internationalization
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
@@ -113,3 +141,5 @@ SESSION_COOKIE_AGE = 3600  # 1 hour
 
 # Secure flag for the session cookie (set it to True for HTTPS-only)
 SESSION_COOKIE_SECURE = False
+
+# CSRF_TRUSTED_ORIGINS = ['https://crappie-first-koala.ngrok-free.app']

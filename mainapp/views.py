@@ -1,6 +1,6 @@
 import json
 from django.contrib import messages
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, HttpResponse
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout, login
@@ -10,12 +10,23 @@ from .forms import MySelectForm, AddUserForm, AddIPForm, SyncIntervalForm
 from django.views.decorators.cache import never_cache
 from django.contrib.auth.forms import AuthenticationForm
 from .models import IPSpace, SyncInterval
-from mainapp.utils.utils import generateContext, handle_invalid_login_attempt, check_file
+from mainapp.utils.utils import generateContext, handle_invalid_login_attempt, check_file, get_device_info
 from mainapp.utils.custom_decorators import custom_admin_only, custom_authorised_user
+import logging
+from user_agents import parse
+from django.views.decorators.csrf import csrf_exempt
+import subprocess
 
+
+logger = logging.getLogger('ip-monitoring-tool')
+
+def get_user_ip(request):
+    return request.META.get('REMOTE_ADDR', '')
 
 @never_cache
 def login_view(request):
+     user_ip = get_user_ip(request)
+     device_info = get_device_info(request)
      if request.user.is_authenticated:
           return HttpResponseRedirect('/')
      if request.method == 'POST':
@@ -23,6 +34,7 @@ def login_view(request):
         if form.is_valid():
             user = form.get_user()
             login(request, user)
+            logger.info(f"200 OK {user_ip} {user} {request.path} {device_info}")
             messages.success(request, "Successfully logged in")
             cache.delete(f'login_attempts:{request.META.get("REMOTE_ADDR")}')
             return redirect('dashboard')
@@ -60,32 +72,43 @@ def dashboard(request):
 
 @login_required(login_url='login')
 def add_ip_space(request):
+     user_ip = get_user_ip(request)
+     device_info = get_device_info(request)
+     username = request.user.username if request.user.is_authenticated else "Anonymous"
      if request.method == 'POST':
           form = AddIPForm(request.POST)
           if form.is_valid():
                form.save()
+               logger.info(f"200 OK {user_ip} {username} {request.path} {device_info}")
                messages.success(request, f"Successfully added IP space")
                return HttpResponseRedirect('/')
           else:
             for field, errors in form.errors.items():
                 for error in errors:
                      messages.error(request, f"{error}")
+                     logger.info(f"Failed to add IP space: {error}")
+            logger.error(f"400 Bad request {user_ip} {username} {request.path} {device_info}")
 
             return HttpResponseRedirect('/')
      form = AddIPForm() 
 
 @custom_admin_only
 def add_user(request):
+     user_ip = get_user_ip(request)
+     device_info = get_device_info(request)
+     username = request.user.username if request.user.is_authenticated else "Anonymous"
      if request.method == 'POST':
           form = AddUserForm(request.POST)
           if form.is_valid():
                form.save()
                messages.success(request, "Successfully added user")
+               logger.info(f"200 OK {user_ip} {username} {request.path} {device_info}")
                return HttpResponseRedirect('/users')
           else:
             for field, errors in form.errors.items():
                 for error in errors:
                      messages.error(request, f"{error}")
+            logger.error(f"400 Bad request {user_ip} {username} {request.path} {device_info}")
 
             return HttpResponseRedirect('/users')
      form = AddUserForm()
@@ -93,17 +116,22 @@ def add_user(request):
 
 @custom_admin_only
 def update_sync_interval(request):
+     user_ip = get_user_ip(request)
+     device_info = get_device_info(request)
+     username = request.user.username if request.user.is_authenticated else "Anonymous"
      if request.method == 'POST':
           form = SyncIntervalForm(request.POST)
 
           if form.is_valid():
                form.save()
                messages.success(request, "Successfully updated Sync Interval")
+               logger.info(f"200 OK {user_ip} {username} {request.path} {device_info}")
                return HttpResponseRedirect('/settings')
           else:
             for _, errors in form.errors.items():
                 for error in errors:
                      messages.error(request, f"{error}")
+            logger.error(f"400 Bad Request {user_ip} {username} {request.path} {device_info}")
 
             return HttpResponseRedirect('/settings')
 
@@ -141,6 +169,29 @@ def settings(request):
 
 @login_required(login_url='login')
 def logout_user(request):
+    user_ip = get_user_ip(request)
+    device_info = get_device_info(request)
+    username = request.user.username if request.user.is_authenticated else "Anonymous"
+    logger.info(f"200 OK {user_ip} {username} {request.path} {device_info}")
     logout(request)
     messages.success(request, "Successfully logged out")
     return HttpResponseRedirect('/')
+
+
+@csrf_exempt
+def github_webhook(request):
+     if request.method == 'POST':
+          payload = json.loads(request.body)
+          event_type = request.headers.get('X-GitHub-Event')
+
+          if event_type == 'push' and 'ref' in payload and payload['ref'] == 'refs/heads/staging':
+              author_name = payload['pusher']['name']
+              commit_message = payload['head_commit']['message']
+              try:
+                  subprocess.run(['/usr/bin/sudo', '/home/charles/ip-reputation/staging/ip-monitoring-tool/.github/workflows/deploy.sh'], check=True)
+                  logger.info(f"Deployment: {author_name} - {commit_message} /{payload['ref']}")
+              except subprocess.CalledProcessError as e:
+                  logger.error(f"Error deploying from {author_name}/ {commit_message}: {e}")
+              
+
+     return HttpResponse(status=200)
