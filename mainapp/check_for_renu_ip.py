@@ -1,7 +1,6 @@
 import ipaddress
 
-# ****************Expand to bits*************************************************************
-
+# function that expands ip address to bits
 def expand_ip_to_bits(ip_address):
     try:
         ip_obj = ipaddress.ip_address(ip_address)
@@ -16,16 +15,50 @@ def expand_ip_to_bits(ip_address):
     except ipaddress.AddressValueError:
         return None
 
-# *********************************************IPv4*****************************************************
-          
-# **************************************IPv6*****************************************************
+#Function that checks whether an ip has a subnet '/' or not
+def has_subnet(ip_address):
+    try:
+        ip_obj = ipaddress.ip_interface(ip_address)
+        return ip_obj.network.prefixlen < ip_obj.network.max_prefixlen
+    except ValueError:
+        return False
+        
+#Split function for subnet_length function        
+def split_for_subnet_length(test_ip_address, reference_ip_address):
+    if has_subnet(test_ip_address) and has_subnet(reference_ip_address):
+        _, prefix_length1 = test_ip_address.split('/')
+        _, prefix_length2 = reference_ip_address.split('/')
+        return prefix_length1, prefix_length2
+    elif not has_subnet(test_ip_address) and has_subnet(reference_ip_address):
+        _, prefix_length2 = reference_ip_address.split('/')
+        return None, prefix_length2
+    else:
+        return None, None
+    
 
+#Split function for check_prefix function
+def split_for_check_prefix(test_ip_address, reference_ip_address):
+    if has_subnet(test_ip_address) and has_subnet(reference_ip_address):
+        address1, _ = test_ip_address.split('/')
+        address2, prefix_length2 = reference_ip_address.split('/')
+        return address1, address2, prefix_length2
+    elif not has_subnet(test_ip_address) and has_subnet(reference_ip_address):
+        address1 = test_ip_address
+        address2, prefix_length2 = reference_ip_address.split('/')
+        return address1, address2, prefix_length2
+    else:
+        return None, None, None
+
+
+#function to check subnet length and comapre them
 def check_subnet_length(test_ip_address, reference_ip_address):
     try:
         # Split the IP address and prefix length
-        _, prefix_length1 = test_ip_address.split('/')
-        _, prefix_length2 = reference_ip_address.split('/')
+        prefix_length1, prefix_length2 = split_for_subnet_length(test_ip_address, reference_ip_address)
 
+        if prefix_length1 == None or prefix_length2 == None:
+            return False
+           
         # Convert the prefix length to an integer
         prefix_length1 = int(prefix_length1)
         prefix_length2 = int(prefix_length2)
@@ -36,12 +69,10 @@ def check_subnet_length(test_ip_address, reference_ip_address):
     except ValueError:
         return False
 
-
+#Function to check the prefix length
 def check_prefix(test_ip_address, reference_ip_address, ip_type):
     try:
-        # Split the IP address and prefix length
-        address1, _ = test_ip_address.split('/')
-        address2, prefix_length2 = reference_ip_address.split('/')
+        address1, address2, prefix_length2 = split_for_check_prefix(test_ip_address, reference_ip_address)
 
         if ip_type == "IPv4":
             # Convert IPv4 addresses to IPv4Address objects
@@ -68,8 +99,32 @@ def check_prefix(test_ip_address, reference_ip_address, ip_type):
     except (ValueError, ipaddress.AddressValueError):
         return False
 
-# ********************************************************************************************************
+#Main functon of identify_blacklisted_ip_addresses
+def main(ip_full_address, reference_ip_address):
+    ip = ipaddress.ip_network(ip_full_address, strict=False)
+    
+    if ip.version == 4:
+        if check_subnet_length(ip_full_address, reference_ip_address):
+            pass
+        else:
+            if check_prefix(ip_full_address, reference_ip_address, "IPv4"):
+                print(f"The IP address {ip_full_address} is a subnet.")
+            else:
+                pass
+    elif ip.version == 6:
+        if check_subnet_length(ip_full_address, reference_ip_address):
+            pass
+        else:
+            if check_prefix(ip_full_address, reference_ip_address, "IPv6"):
+                print(f"The IP address {ip_full_address} is a subnet.")
+            else:
+                pass
+    
+    else:
+        return "Invalid IP"
 
+
+#function to be called
 # Identify whether ip is IPv4 or IPv6 is blacklisted
 def identify_blacklisted_ip_addresses(input_file, reference_ip_address):
 
@@ -80,40 +135,9 @@ def identify_blacklisted_ip_addresses(input_file, reference_ip_address):
         line = line.strip()
         if line and not line.startswith(';'):
             ip_full_address = line.split(';')[0].strip()
+            
             try:
-                ip = ipaddress.ip_network(ip_full_address, strict=False)
-                if ip.version == 4:
-                    
-                    if __name__ == "__main__":
-                
-                        if check_subnet_length(ip_full_address, reference_ip_address):
-                    
-                            pass
-                        else:
-                    
-                            if check_prefix(ip_full_address, reference_ip_address, "IPv4"):
-                                print(f"The ip address {ip_full_address} is a subnet.")
-                        
-                            else:
-                                pass
-                                
-                elif ip.version == 6:
-                    if __name__ == "__main__":
-                
-                        if check_subnet_length(ip_full_address, reference_ip_address):
-                    
-                            pass
-                        else:
-                    
-                            if check_prefix(ip_full_address, reference_ip_address, "IPv6"):
-                                print(f"The ip address {ip_full_address} is a subnet.")
-                        
-                            else:
-                                pass
-                        
-                else:
-                    return "Invalid IP"
-                
+                main(ip_full_address, reference_ip_address)
 
             except ValueError:
                 return "Invalid IP"
