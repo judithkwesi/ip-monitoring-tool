@@ -126,7 +126,8 @@ def main(ip_full_address, reference_ip_address):
 
 #function to be called
 # Identify whether ip is IPv4 or IPv6 is blacklisted
-def identify_blacklisted_ip_addresses(input_file, reference_ip_address):
+def identify_blacklisted_ip_addresses(input_file, reference_ip_address, blocklist):
+    blocklist_spam = []
 
     with open(input_file, 'r') as file:
         lines = file.readlines()
@@ -142,4 +143,4 @@ def identify_blacklisted_ip_addresses(input_file, reference_ip_address):
             except ValueError:
                 return "Invalid IP"
             
-
+    return blocklist_spam
