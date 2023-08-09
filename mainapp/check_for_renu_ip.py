@@ -143,5 +143,3 @@ def identify_blacklisted_ip_addresses(input_file, reference_ip_address):
                 return "Invalid IP"
             
 
-
-
