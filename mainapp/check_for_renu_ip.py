@@ -71,7 +71,8 @@ def check_prefix(test_ip_address, reference_ip_address, ip_type):
 # ********************************************************************************************************
 
 # Identify whether ip is IPv4 or IPv6 is blacklisted
-def identify_blacklisted_ip_addresses(input_file, reference_ip_address):
+def identify_blacklisted_ip_addresses(input_file, reference_ip_address, blocklist):
+    blocklist_spam = []
 
     with open(input_file, 'r') as file:
         lines = file.readlines()
@@ -83,8 +84,6 @@ def identify_blacklisted_ip_addresses(input_file, reference_ip_address):
             try:
                 ip = ipaddress.ip_network(ip_full_address, strict=False)
                 if ip.version == 4:
-                    
-                    if __name__ == "__main__":
                 
                         if check_subnet_length(ip_full_address, reference_ip_address):
                     
@@ -92,13 +91,14 @@ def identify_blacklisted_ip_addresses(input_file, reference_ip_address):
                         else:
                     
                             if check_prefix(ip_full_address, reference_ip_address, "IPv4"):
-                                print(f"The ip address {ip_full_address} is a subnet.")
+                                # print(f"The ip address {ip_full_address} is a subnet.")
+                                blocklist.append({"ip": str(ip_full_address), "source": "Spamhaus"})
+                                # return f"The ip address {ip_full_address} is a subnet."
                         
                             else:
                                 pass
                                 
                 elif ip.version == 6:
-                    if __name__ == "__main__":
                 
                         if check_subnet_length(ip_full_address, reference_ip_address):
                     
@@ -106,7 +106,8 @@ def identify_blacklisted_ip_addresses(input_file, reference_ip_address):
                         else:
                     
                             if check_prefix(ip_full_address, reference_ip_address, "IPv6"):
-                                print(f"The ip address {ip_full_address} is a subnet.")
+                                # print(f"The ip address {ip_full_address} is a subnet.")
+                                blocklist.append({"ip": str(ip_full_address), "source": "Spamhaus"})
                         
                             else:
                                 pass
@@ -118,4 +119,4 @@ def identify_blacklisted_ip_addresses(input_file, reference_ip_address):
             except ValueError:
                 return "Invalid IP"
             
-
+    return blocklist_spam

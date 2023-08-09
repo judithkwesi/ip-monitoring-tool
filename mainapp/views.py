@@ -16,6 +16,7 @@ import logging
 from user_agents import parse
 from django.views.decorators.csrf import csrf_exempt
 import subprocess
+from .check_for_renu_ip import identify_blacklisted_ip_addresses
 
 
 logger = logging.getLogger('ip-monitoring-tool')
@@ -52,8 +53,12 @@ def dashboard(request):
 
      check_file('./mainapp/sites/cins.txt', renu_ips, blocklist, "CINS")
      check_file('./mainapp/sites/blocklist.txt', renu_ips, blocklist, "Blocklist")
+     identify_blacklisted_ip_addresses('./mainapp/sites/spamhausv6.txt', '2c0f:f6d0::/32', blocklist)
+     identify_blacklisted_ip_addresses('./mainapp/sites/spamhaus.txt', '137.63.128.0/17', blocklist)
 
      sorted_data = sorted(blocklist, key=lambda x: x['ip'])
+
+     print("ips: ", sorted_data)
 
      if request.method == 'POST':
           form = MySelectForm(request.POST)
