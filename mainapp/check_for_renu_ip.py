@@ -1,4 +1,6 @@
 import ipaddress
+from multiprocessing import Pool
+from functools import partial
 
 # function that expands ip address to bits
 def expand_ip_to_bits(ip_address):
@@ -100,7 +102,7 @@ def check_prefix(test_ip_address, reference_ip_address, ip_type):
         return False
 
 #Main functon of identify_blacklisted_ip_addresses
-def main(ip_full_address, reference_ip_address):
+def main(ip_full_address, reference_ip_address, blocklist, site):
     ip = ipaddress.ip_network(ip_full_address, strict=False)
     
     if ip.version == 4:
@@ -108,7 +110,7 @@ def main(ip_full_address, reference_ip_address):
             pass
         else:
             if check_prefix(ip_full_address, reference_ip_address, "IPv4"):
-                print(f"The IP address {ip_full_address} is a subnet.")
+                blocklist.append({"ip": str(ip_full_address), "source": site})
             else:
                 pass
     elif ip.version == 6:
@@ -116,7 +118,7 @@ def main(ip_full_address, reference_ip_address):
             pass
         else:
             if check_prefix(ip_full_address, reference_ip_address, "IPv6"):
-                print(f"The IP address {ip_full_address} is a subnet.")
+                blocklist.append({"ip": str(ip_full_address), "source": site})
             else:
                 pass
     
@@ -124,23 +126,32 @@ def main(ip_full_address, reference_ip_address):
         return "Invalid IP"
 
 
-#function to be called
-# Identify whether ip is IPv4 or IPv6 is blacklisted
-def identify_blacklisted_ip_addresses(input_file, reference_ip_address, blocklist):
-    blocklist_spam = []
+def process_chunk(chunk, reference_ip_address, site):
+    result = []
+    for line in chunk:
+        line = line.strip()
+        if line and not line.startswith(';'):
+            # ip_full_address = line.strip().split(';', 1)[0]
+            ip_full_address = line.split(';')[0].strip()
+            try:
+                main(ip_full_address, reference_ip_address, result, site)
+            except ValueError:
+                pass
+    return result
 
+def identify_blacklisted_ip_addresses(input_file, reference_ip_address, blocklist, site):
     with open(input_file, 'r') as file:
         lines = file.readlines()
 
-    for line in lines:
-        line = line.strip()
-        if line and not line.startswith(';'):
-            ip_full_address = line.split(';')[0].strip()
-            
-            try:
-                main(ip_full_address, reference_ip_address)
+    num_processes = 1  # Number of processes (cores) to use
+    chunk_size = len(lines) // num_processes
 
-            except ValueError:
-                return "Invalid IP"
-            
-    return blocklist_spam
+    chunks = [lines[i:i+chunk_size] for i in range(0, len(lines), chunk_size)]
+
+    process_chunk_partial = partial(process_chunk, reference_ip_address=reference_ip_address, site=site)
+
+    with Pool(num_processes) as pool:
+        results = pool.map(process_chunk_partial, chunks)
+
+    for result in results:
+        blocklist.extend(result)
