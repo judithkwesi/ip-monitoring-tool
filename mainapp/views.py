@@ -17,6 +17,8 @@ from user_agents import parse
 from django.views.decorators.csrf import csrf_exempt
 import subprocess
 from .check_for_renu_ip import identify_blacklisted_ip_addresses
+from django.contrib.auth import views as auth_views
+
 
 
 logger = logging.getLogger('ip-monitoring-tool')
@@ -194,6 +196,27 @@ def logout_user(request):
     return HttpResponseRedirect('/')
 
 
+
+
+# Password Reset View
+@never_cache
+def password_reset(request):
+    return auth_views.PasswordResetView.as_view()(request)
+
+# Password Reset Done View
+@never_cache
+def password_reset_done(request):
+    return auth_views.PasswordResetDoneView.as_view()(request)
+
+# Password Reset Confirm View
+@never_cache
+def password_reset_confirm(request, uidb64, token):
+    return auth_views.PasswordResetConfirmView.as_view()(request, uidb64=uidb64, token=token)
+
+# Password Reset Complete View
+@never_cache
+def password_reset_complete(request):
+    return auth_views.PasswordResetCompleteView.as_view()(request)
 @csrf_exempt
 def github_webhook(request):
      if request.method == 'POST':
