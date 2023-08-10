@@ -4,13 +4,7 @@ from django.contrib.auth import views as auth_views
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import never_cache
 
-from django.contrib.auth.views import (
-    
-    PasswordResetView, 
-    PasswordResetDoneView, 
-    PasswordResetConfirmView,
-    PasswordResetCompleteView
-)
+
 
 
 urlpatterns = [
@@ -27,4 +21,12 @@ urlpatterns = [
     # password change
     path('password_change/', login_required(login_url='login')(auth_views.PasswordChangeView.as_view()), name='password_change'),
     path('password_change/done/', login_required(login_url='login')(auth_views.PasswordChangeDoneView.as_view()), name='password_change_done'), 
+
+    # password reset
+
+    path('password_reset/', never_cache(auth_views.PasswordResetView.as_view()), name='password_reset'),
+    path('password_reset/done/', never_cache(auth_views.PasswordResetDoneView.as_view()), name='password_reset_done'),
+    path('reset/<uidb64>/<token>/', never_cache(auth_views.PasswordResetConfirmView.as_view()), name='password_reset_confirm'),
+    path('reset/done/', never_cache(auth_views.PasswordResetCompleteView.as_view()), name='password_reset_complete'),
+
 ]
