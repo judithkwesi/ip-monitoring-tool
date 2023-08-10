@@ -11,7 +11,7 @@ class LoginForm(forms.Form):
     password = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Enter your password'}))
 
 class SyncIntervalForm(forms.ModelForm):
-    sync_interval = forms.CharField(required=True, min_length=1, widget=forms.TextInput(attrs={'placeholder': 'Enter your username'}))
+    sync_interval = forms.IntegerField(required=True, min_value=3,max_value=36, widget=forms.NumberInput(attrs={'placeholder': 'Enter sync interval (3-36)'}))
 
     class Meta:
         model = SyncInterval

@@ -11,9 +11,9 @@ else:
     with open(os.path.join(BASE_DIR, 'secret_key.txt')) as f:
         SECRET_KEY = f.read().strip()
 
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['137.63.148.213', '127.0.0.1']
+ALLOWED_HOSTS = ['137.63.148.213', '127.0.0.1', 'crappie-first-koala.ngrok-free.app']
 
 if 'test' in sys.argv or 'test_coverage' in sys.argv:
     COVERAGE_MODULE_EXCLUDES = ['tests', 'mainapp/migrations', 'migrations', 'settings']
@@ -143,5 +143,5 @@ SESSION_COOKIE_AGE = 3600  # 1 hour
 # Secure flag for the session cookie (set it to True for HTTPS-only)
 SESSION_COOKIE_SECURE = False
 
-# CSRF_TRUSTED_ORIGINS = ['https://crappie-first-koala.ngrok-free.app', 'http://137.63.148.213:8888']
-CSRF_TRUSTED_ORIGINS = ['http://137.63.148.213:8888']
+CSRF_TRUSTED_ORIGINS = ['https://crappie-first-koala.ngrok-free.app', 'http://137.63.148.213:8888']
+# CSRF_TRUSTED_ORIGINS = ['http://137.63.148.213:8888']
