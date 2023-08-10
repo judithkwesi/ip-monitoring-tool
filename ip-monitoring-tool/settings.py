@@ -11,7 +11,7 @@ else:
     with open(os.path.join(BASE_DIR, 'secret_key.txt')) as f:
         SECRET_KEY = f.read().strip()
 
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['137.63.148.213', '127.0.0.1', 'crappie-first-koala.ngrok-free.app']
 
@@ -46,7 +46,7 @@ ROOT_URLCONF = 'ip-monitoring-tool.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
