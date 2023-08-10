@@ -1,6 +1,6 @@
 import json
 from django.contrib import messages
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, HttpResponse
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout, login
@@ -10,12 +10,31 @@ from .forms import MySelectForm, AddUserForm, AddIPForm, SyncIntervalForm
 from django.views.decorators.cache import never_cache
 from django.contrib.auth.forms import AuthenticationForm
 from .models import IPSpace, SyncInterval
-from mainapp.utils.utils import generateContext, handle_invalid_login_attempt, check_file
+from mainapp.utils.utils import generateContext, handle_invalid_login_attempt, check_file, get_device_info
 from mainapp.utils.custom_decorators import custom_admin_only, custom_authorised_user
+import logging
+from user_agents import parse
+from django.views.decorators.csrf import csrf_exempt
+import subprocess
+from .check_for_renu_ip import identify_blacklisted_ip_addresses
+from django.contrib.auth import views as auth_views
 
+
+
+logger = logging.getLogger('ip-monitoring-tool')
+
+def get_user_ip(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip
 
 @never_cache
 def login_view(request):
+     user_ip = get_user_ip(request)
+     device_info = get_device_info(request)
      if request.user.is_authenticated:
           return HttpResponseRedirect('/')
      if request.method == 'POST':
@@ -23,6 +42,7 @@ def login_view(request):
         if form.is_valid():
             user = form.get_user()
             login(request, user)
+            logger.info(f"200 OK {user_ip} {user} {request.path} {device_info}")
             messages.success(request, "Successfully logged in")
             cache.delete(f'login_attempts:{request.META.get("REMOTE_ADDR")}')
             return redirect('dashboard')
@@ -40,8 +60,18 @@ def dashboard(request):
 
      check_file('./mainapp/sites/cins.txt', renu_ips, blocklist, "CINS")
      check_file('./mainapp/sites/blocklist.txt', renu_ips, blocklist, "Blocklist")
+     identify_blacklisted_ip_addresses('./mainapp/sites/spamhausv6.txt', '2c0f:f6d0::/32', blocklist)
+     identify_blacklisted_ip_addresses('./mainapp/sites/spamhaus.txt', '137.63.128.0/17', blocklist)
+
+     for ip_space in renu_ips:
+         if ":" in ip_space:
+             identify_blacklisted_ip_addresses('./mainapp/sites/spamhausv6.txt', ip_space, blocklist, "Spamhaus")
+         else:
+             identify_blacklisted_ip_addresses('./mainapp/sites/spamhaus.txt', ip_space, blocklist, "Spamhaus")
 
      sorted_data = sorted(blocklist, key=lambda x: x['ip'])
+
+     print("ips: ", sorted_data)
 
      if request.method == 'POST':
           form = MySelectForm(request.POST)
@@ -60,32 +90,43 @@ def dashboard(request):
 
 @login_required(login_url='login')
 def add_ip_space(request):
+     user_ip = get_user_ip(request)
+     device_info = get_device_info(request)
+     username = request.user.username if request.user.is_authenticated else "Anonymous"
      if request.method == 'POST':
           form = AddIPForm(request.POST)
           if form.is_valid():
                form.save()
+               logger.info(f"200 OK {user_ip} {username} {request.path} {device_info}")
                messages.success(request, f"Successfully added IP space")
                return HttpResponseRedirect('/')
           else:
             for field, errors in form.errors.items():
                 for error in errors:
                      messages.error(request, f"{error}")
+                     logger.info(f"Failed to add IP space: {error}")
+            logger.error(f"400 Bad request {user_ip} {username} {request.path} {device_info}")
 
             return HttpResponseRedirect('/')
      form = AddIPForm() 
 
 @custom_admin_only
 def add_user(request):
+     user_ip = get_user_ip(request)
+     device_info = get_device_info(request)
+     username = request.user.username if request.user.is_authenticated else "Anonymous"
      if request.method == 'POST':
           form = AddUserForm(request.POST)
           if form.is_valid():
                form.save()
                messages.success(request, "Successfully added user")
+               logger.info(f"200 OK {user_ip} {username} {request.path} {device_info}")
                return HttpResponseRedirect('/users')
           else:
             for field, errors in form.errors.items():
                 for error in errors:
                      messages.error(request, f"{error}")
+            logger.error(f"400 Bad request {user_ip} {username} {request.path} {device_info}")
 
             return HttpResponseRedirect('/users')
      form = AddUserForm()
@@ -93,17 +134,22 @@ def add_user(request):
 
 @custom_admin_only
 def update_sync_interval(request):
+     user_ip = get_user_ip(request)
+     device_info = get_device_info(request)
+     username = request.user.username if request.user.is_authenticated else "Anonymous"
      if request.method == 'POST':
           form = SyncIntervalForm(request.POST)
 
           if form.is_valid():
                form.save()
                messages.success(request, "Successfully updated Sync Interval")
+               logger.info(f"200 OK {user_ip} {username} {request.path} {device_info}")
                return HttpResponseRedirect('/settings')
           else:
             for _, errors in form.errors.items():
                 for error in errors:
                      messages.error(request, f"{error}")
+            logger.error(f"400 Bad Request {user_ip} {username} {request.path} {device_info}")
 
             return HttpResponseRedirect('/settings')
 
@@ -141,61 +187,16 @@ def settings(request):
 
 @login_required(login_url='login')
 def logout_user(request):
+    user_ip = get_user_ip(request)
+    device_info = get_device_info(request)
+    username = request.user.username if request.user.is_authenticated else "Anonymous"
+    logger.info(f"200 OK {user_ip} {username} {request.path} {device_info}")
     logout(request)
     messages.success(request, "Successfully logged out")
     return HttpResponseRedirect('/')
 
 
-# for testing purposes only
 
-
-# from django.conf import settings
-# from django.contrib.auth.forms import PasswordResetForm
-# from django.contrib.auth.models import User
-# from django.contrib.auth.tokens import default_token_generator
-# from django.core.mail import BadHeaderError, send_mail
-# from django.db.models import Q
-# from django.shortcuts import render, redirect
-# from django.http import HttpResponse
-# from django.template.loader import render_to_string
-# from django.utils.encoding import force_bytes
-# from django.utils.http import urlsafe_base64_encode
-# # def password_reset_request(request):
-# #     if request.method == "POST":
-# #         domain = request.headers['Host']
-# #         password_reset_form = PasswordResetForm(request.POST)
-# #         if password_reset_form.is_valid():
-# #             data = password_reset_form.cleaned_data['email']
-# #             associated_users = User.objects.filter(Q(email=data))
-# #             # You can use more than one way like this for resetting the password.
-# #             # ...filter(Q(email=data) | Q(username=data))
-# #             # but with this you may need to change the password_reset form as well.
-# #             if associated_users.exists():
-# #                 for user in associated_users:
-# #                     subject = "Password Reset Requested"
-# #                     email_template_name = "admin/accounts/password/password_reset_email.txt"
-# #                     c = {
-# #                         "email": user.email,
-# #                         'domain': domain,
-# #                         'site_name': 'Interface',
-# #                         "uid": urlsafe_base64_encode(force_bytes(user.pk)),
-# #                         "user": user,
-# #                         'token': default_token_generator.make_token(user),
-# #                         'protocol': 'http',
-# #                     }
-# #                     email = render_to_string(email_template_name, c)
-# #                     try:
-# #                         send_mail(subject, email, settings.EMAIL_HOST_USER, [user.email], fail_silently=False)
-# #                     except BadHeaderError:
-# #                         return HttpResponse('Invalid header found.')
-# #                     return redirect("/core/password_reset/done/")
-# #     password_reset_form = PasswordResetForm()
-# #     return render(request=request, template_name="admin/accounts/password/password_reset.html",
-# #                   context={"password_reset_form": password_reset_form})
-
-from django.shortcuts import render, redirect
-from django.contrib.auth import views as auth_views
-from django.views.decorators.cache import never_cache
 
 # Password Reset View
 @never_cache
@@ -216,3 +217,21 @@ def password_reset_confirm(request, uidb64, token):
 @never_cache
 def password_reset_complete(request):
     return auth_views.PasswordResetCompleteView.as_view()(request)
+@csrf_exempt
+def github_webhook(request):
+     if request.method == 'POST':
+          payload = json.loads(request.body)
+          event_type = request.headers.get('X-GitHub-Event')
+
+          if event_type == 'push' and 'ref' in payload and payload['ref'] == 'refs/heads/staging':
+              author_name = payload['pusher']['name']
+              commit_message = payload['head_commit']['message']
+              logger.info(f"Attempt to deployment: {author_name} - {commit_message} /{payload['ref']}")
+              try:
+                  subprocess.run(['/usr/bin/sudo', '/home/charles/ip-reputation/staging/ip-monitoring-tool/.github/workflows/deploy.sh'])
+                  logger.info(f"Deployment: {author_name} - {commit_message} /{payload['ref']}")
+              except subprocess.CalledProcessError as e:
+                  logger.error(f"Error deploying from {author_name}/ {commit_message}: {e}")
+              
+
+     return HttpResponse(status=200)

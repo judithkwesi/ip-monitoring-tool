@@ -88,6 +88,34 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '[%(asctime)s] %(message)s',
+            'datefmt': '%d/%b/%Y %H:%M:%S',
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': './ip-monitoring-logs.log',
+            'formatter': 'verbose',
+        },
+    },
+    'loggers': {
+        'ip-monitoring-tool': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
+
+
+
 # Internationalization
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
@@ -109,7 +137,11 @@ LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
 
 # Session
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_COOKIE_AGE = 3600  # 1 hour
 
 # Secure flag for the session cookie (set it to True for HTTPS-only)
 SESSION_COOKIE_SECURE = False
+
+# CSRF_TRUSTED_ORIGINS = ['https://crappie-first-koala.ngrok-free.app', 'http://137.63.148.213:8888']
+CSRF_TRUSTED_ORIGINS = ['http://137.63.148.213:8888']

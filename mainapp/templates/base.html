@@ -12,7 +12,7 @@
         {% if messages %}
             <ul class="messages" id="msg">
             {% for message in messages %}
-                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}><img class="toast-icons" src="{% static 'icons/'|add:message.tags|add:'.png' %}" />{{ message }}</li>
             {% endfor %}
             </ul>
         {% endif %}
@@ -39,6 +39,25 @@
                 <p class = "user-details">{{ request.user.username|upper }} </p>
                 <a href="{% url 'logout' %}">\ Logout</a>
             </div>
+            
+            <button class="menu-icon" id="hamburger">&#9776;</button>
+            <ul class="mobile-menu" id="menu-links">
+                <li  {% if section == "dashboard" %} class="selected" {% else %} class="" {% endif %}>
+                    <a href="{%url 'dashboard' %}">Monitor</a>
+                </li>
+                {% if user.is_superuser %}
+                    <li {% if section == "users" %} class="selected" {% else %} class="" {% endif %}>
+                        <a href="{%url 'users' %}">Users</a>
+                    </li>
+                    <li {% if section == "settings" %} class="selected" {% else %} class="" {% endif %}>
+                        <a href="{%url 'settings' %}">Settings</a>
+                    </li>
+                {% endif %}
+                <div class="mobile-profile">
+                    <p class = "user-details">{{ request.user.username|upper }} </p>
+                    <a href="{% url 'logout' %}">\ Logout</a>
+                </div>
+              </ul>
         </nav>
         {% endif %}
         <div >
