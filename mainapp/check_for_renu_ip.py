@@ -143,7 +143,7 @@ def identify_blacklisted_ip_addresses(input_file, reference_ip_address, blocklis
     with open(input_file, 'r') as file:
         lines = file.readlines()
 
-    num_processes = 1  # Number of processes (cores) to use
+    num_processes = 7  # Number of processes (cores) to use
     chunk_size = len(lines) // num_processes
 
     chunks = [lines[i:i+chunk_size] for i in range(0, len(lines), chunk_size)]
