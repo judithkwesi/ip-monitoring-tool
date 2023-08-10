@@ -22,7 +22,12 @@ from .check_for_renu_ip import identify_blacklisted_ip_addresses
 logger = logging.getLogger('ip-monitoring-tool')
 
 def get_user_ip(request):
-    return request.META.get('REMOTE_ADDR', '')
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip
 
 @never_cache
 def login_view(request):
@@ -53,12 +58,14 @@ def dashboard(request):
 
      check_file('./mainapp/sites/cins.txt', renu_ips, blocklist, "CINS")
      check_file('./mainapp/sites/blocklist.txt', renu_ips, blocklist, "Blocklist")
-     identify_blacklisted_ip_addresses('./mainapp/sites/spamhausv6.txt', '2c0f:f6d0::/32', blocklist)
-     identify_blacklisted_ip_addresses('./mainapp/sites/spamhaus.txt', '137.63.128.0/17', blocklist)
+
+     for ip_space in renu_ips:
+         if ":" in ip_space:
+             identify_blacklisted_ip_addresses('./mainapp/sites/spamhausv6.txt', ip_space, blocklist, "Spamhaus")
+         else:
+             identify_blacklisted_ip_addresses('./mainapp/sites/spamhaus.txt', ip_space, blocklist, "Spamhaus")
 
      sorted_data = sorted(blocklist, key=lambda x: x['ip'])
-
-     print("ips: ", sorted_data)
 
      if request.method == 'POST':
           form = MySelectForm(request.POST)
