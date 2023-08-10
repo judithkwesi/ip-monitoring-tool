@@ -60,8 +60,12 @@ def dashboard(request):
 
      check_file('./mainapp/sites/cins.txt', renu_ips, blocklist, "CINS")
      check_file('./mainapp/sites/blocklist.txt', renu_ips, blocklist, "Blocklist")
-     identify_blacklisted_ip_addresses('./mainapp/sites/spamhausv6.txt', '2c0f:f6d0::/32', blocklist)
-     identify_blacklisted_ip_addresses('./mainapp/sites/spamhaus.txt', '137.63.128.0/17', blocklist)
+
+     for ip_space in renu_ips:
+         if ":" in ip_space:
+             identify_blacklisted_ip_addresses('./mainapp/sites/spamhausv6.txt', ip_space, blocklist, "Spamhaus")
+         else:
+             identify_blacklisted_ip_addresses('./mainapp/sites/spamhaus.txt', ip_space, blocklist, "Spamhaus")
 
      for ip_space in renu_ips:
          if ":" in ip_space:
@@ -70,8 +74,6 @@ def dashboard(request):
              identify_blacklisted_ip_addresses('./mainapp/sites/spamhaus.txt', ip_space, blocklist, "Spamhaus")
 
      sorted_data = sorted(blocklist, key=lambda x: x['ip'])
-
-     print("ips: ", sorted_data)
 
      if request.method == 'POST':
           form = MySelectForm(request.POST)

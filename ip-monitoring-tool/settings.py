@@ -13,7 +13,7 @@ else:
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['137.63.148.213', '127.0.0.1']
+ALLOWED_HOSTS = ['137.63.148.213', '127.0.0.1', 'crappie-first-koala.ngrok-free.app']
 
 if 'test' in sys.argv or 'test_coverage' in sys.argv:
     COVERAGE_MODULE_EXCLUDES = ['tests', 'mainapp/migrations', 'migrations', 'settings']
@@ -143,6 +143,7 @@ SESSION_COOKIE_AGE = 3600  # 1 hour
 # Secure flag for the session cookie (set it to True for HTTPS-only)
 SESSION_COOKIE_SECURE = False
 
+
 # CSRF_TRUSTED_ORIGINS = ['https://crappie-first-koala.ngrok-free.app', 'http://137.63.148.213:8888']
 CSRF_TRUSTED_ORIGINS = ['http://137.63.148.213:8888']
 
@@ -165,3 +166,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # EMAIL_HOST_USER = 'daveseynabou@gmail.com'  # Replace with your email address
 # EMAIL_HOST_PASSWORD = 'your_email_password'  # Replace with your email password or API key
 # DEFAULT_FROM_EMAIL = 'admin@renu.ac.ug'  # Replace with the email address to appear as the sender
+
+CSRF_TRUSTED_ORIGINS = ['https://crappie-first-koala.ngrok-free.app', 'http://137.63.148.213:8888']
+# CSRF_TRUSTED_ORIGINS = ['http://137.63.148.213:8888']
+
