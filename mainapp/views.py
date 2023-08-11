@@ -87,12 +87,6 @@ def dashboard(request):
          else:
              identify_blacklisted_ip_addresses('./mainapp/sites/spamhaus.txt', ip_space, blocklist, "Spamhaus")
 
-     for ip_space in renu_ips:
-         if ":" in ip_space:
-             identify_blacklisted_ip_addresses('./mainapp/sites/spamhausv6.txt', ip_space, blocklist, "Spamhaus")
-         else:
-             identify_blacklisted_ip_addresses('./mainapp/sites/spamhaus.txt', ip_space, blocklist, "Spamhaus")
-
      sorted_data = sorted(blocklist, key=lambda x: x['ip'])
 
      if request.method == 'POST':
