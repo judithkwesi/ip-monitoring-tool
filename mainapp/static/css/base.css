@@ -382,7 +382,23 @@ td {
   justify-content: center;
 }
 
+#overlay-delete {
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 #overlay {
+  display: none;
+}
+
+#overlay-delete {
   display: none;
 }
 
@@ -414,6 +430,18 @@ td {
   justify-content: center;
 }
 
+#editForm, #deleteForm {
+  background-color: white;
+  padding: 10px 25px;
+  opacity: 100%;
+  overflow-x: hidden;
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+  align-items: start;
+  justify-content: center;
+}
+
 .btn_group {
   width: 100%;
   display: flex;
@@ -425,11 +453,11 @@ td {
   background-color: #808080;
 }
 
-#add_user_form input {
+#add_user_form input, #editForm input, #deleteForm input {
   width: 100%;
 }
 
-#add_user_form textarea {
+#add_user_form textarea, #editForm textarea, #deleteForm textarea {
   width: 100%;
 }
 
@@ -508,6 +536,10 @@ td {
 
   .input-fields {
     width: 100%;
+  }
+
+  #delete_ip{
+    font-weight: bolder;
   }
 
   /* CSS for search and result elements - Mobile view */
@@ -623,4 +655,15 @@ td {
 
 .mar {
   margin-top: 15px;
+}
+
+.btn-icons {
+  border: none;
+  padding: 5px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-icons img {
+  width: 20px;
 }

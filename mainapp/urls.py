@@ -15,6 +15,8 @@ urlpatterns = [
     path('sync_interval/', views.update_sync_interval, name='sync_interval'),
     path('add_ip_space/', views.add_ip_space, name='add_ip_space'),
     path('github-action/', views.github_webhook, name='github_actions'),
+    path('edit_ip/<int:ip_id>/', views.edit_ip, name='edit_ip'),
+    path('delete_ip/<int:ip_id>/', views.delete_ip, name='delete_ip'),
     
     # password change
     path('password_change/', login_required(login_url='login')(auth_views.PasswordChangeView.as_view()), name='password_change'),
