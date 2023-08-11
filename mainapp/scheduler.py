@@ -29,7 +29,7 @@ def schedule_site_downloads():
         sync = int(sync_intervals[-1])
 
     scheduler = BackgroundScheduler()
-    scheduler.add_job(download_sites_file, 'interval', hours=sync)
+    scheduler.add_job(download_sites_file, 'interval', minutes=1)
     scheduler.start()
 
 

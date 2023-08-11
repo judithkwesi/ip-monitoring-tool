@@ -19,6 +19,10 @@ if 'test' in sys.argv or 'test_coverage' in sys.argv:
     COVERAGE_MODULE_EXCLUDES = ['tests', 'mainapp/migrations', 'migrations', 'settings']
     COVERAGE_REPORT_HTML_OUTPUT_DIR = 'coverage_html'
 
+if 'test' in sys.argv or 'test_coverage' in sys.argv:
+    COVERAGE_MODULE_EXCLUDES = ['tests', 'mainapp/migrations', 'migrations', 'settings']
+    COVERAGE_REPORT_HTML_OUTPUT_DIR = 'coverage_html'
+
 # Application definition
 
 INSTALLED_APPS = [
