@@ -151,5 +151,5 @@ EMAIL_PORT = 587  # Replace with your SMTP server port (587 for TLS, 465 for SSL
 EMAIL_USE_TLS = True  # Use TLS (True) or SSL (False) depending on your server configuration
 EMAIL_USE_SSL = False
 EMAIL_HOST_USER = 'renutest100@gmail.com'  # Replace with your email address
-EMAIL_HOST_PASSWORD = 'vfnuweouqangxodj'  # Replace with your email password or API key
+EMAIL_HOST_PASSWORD = ''  # Replace with your email password or API key
 DEFAULT_FROM_EMAIL = 'admin@renu.ac.ug'  # Replace with the email address to appear as the sender
