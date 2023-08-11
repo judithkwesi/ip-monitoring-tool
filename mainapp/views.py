@@ -1,12 +1,12 @@
 import json
 from django.contrib import messages
-from django.shortcuts import render, redirect, HttpResponse
+from django.shortcuts import render, redirect, HttpResponse, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout, login
 from django.contrib.auth.models import User
 from django.core.cache import cache
-from .forms import MySelectForm, AddUserForm, AddIPForm, SyncIntervalForm
+from .forms import MySelectForm, AddUserForm, AddIPForm, SyncIntervalForm, IPSpaceEditForm
 from django.views.decorators.cache import never_cache
 from django.contrib.auth.forms import AuthenticationForm
 from .models import IPSpace, SyncInterval
@@ -18,6 +18,7 @@ from django.views.decorators.csrf import csrf_exempt
 import subprocess
 from .check_for_renu_ip import identify_blacklisted_ip_addresses
 from django.contrib.auth import views as auth_views
+from .models import IPSpace
 
 
 
@@ -31,6 +32,25 @@ def get_user_ip(request):
         ip = request.META.get('REMOTE_ADDR')
     return ip
 
+def edit_ip(request, ip_id):
+     ip = get_object_or_404(IPSpace, id=ip_id)
+
+     if request.method == 'POST':
+          form = IPSpaceEditForm(request.POST, instance=ip)
+          if form.is_valid():
+               form.save()
+               messages.success(request, "Successfully editted")
+               return redirect('settings')  # Redirect to the settings page after editing
+          else:
+              messages.error(request, "Failed to edit IP space")
+     return redirect('settings')
+
+def delete_ip(request, ip_id):
+    ip = get_object_or_404(IPSpace, id=ip_id)
+    ip.delete()
+    messages.success(request, "Successfully deleted IP space")
+    return redirect('settings')  # Redirect to the settings page after deletio
+        
 @never_cache
 def login_view(request):
      user_ip = get_user_ip(request)
@@ -180,9 +200,13 @@ def settings(request):
      else:
           sync_interval = 12
 
+     ips = IPSpace.objects.all()
+     ips_list = [{"id": ip.id, "ip": ip.ip_space, "description": ip.description} for ip in ips]
+
      context = {
           "section": "settings",
-          "sync_interval": sync_interval
+          "sync_interval": sync_interval,
+          "ips_list": ips_list
      }
      return render(request, 'registration/settings.html', context)
 

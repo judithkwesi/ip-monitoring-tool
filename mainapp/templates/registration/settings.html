@@ -24,5 +24,139 @@
       <input class="btn" type="submit" value="Update" />
     </form>
   </div>
+
+  <div id="overlay-dashboard">
+    <form action="{% url 'edit_ip' 0 %}" method="post" id="editForm">
+      {% csrf_token %}
+      <h2>Edit RENU IP Space</h2>
+      <div class="input-fields-user">
+        <label for="ip_space">IP space</label>
+        <input
+          type="text"
+          name="ip_space"
+          id="edit_ip_input"
+          placeholder="x.x.x.x/x"
+          required
+        />
+      </div>
+      <div class="input-fields-user">
+        <label for="description">Description</label>
+        <textarea
+          name="description"
+          id="edit_desc_input"
+          cols="30"
+          rows="10"
+          placeholder="Enter description"
+          required
+        ></textarea>
+      </div>
+
+      <div class="btn_group">
+        <button type="button" class="btn cancel" id="cancel_btn">Cancel</button>
+        <button type="submit" class="btn add">Edit</button>
+      </div>
+    </form>
+  </div>
+
+  <div id="overlay-delete">
+    <form action="{% url 'delete_ip' 0 %}" method="post" id="deleteForm">
+      {% csrf_token %}
+      <h2>Delete <span id="delete_ip"></span></h2>
+      <p>Are you sure you want to delete this IP, this action is irreversible.</p>
+
+      <div class="btn_group">
+        <button type="button" class="btn cancel" id="cancel_btn_1">
+          No, Cancel
+        </button>
+        <button type="submit" class="btn add">Yes, Delete</button>
+      </div>
+    </form>
+  </div>
+
+  <h2>IP Space Management</h2>
+
+  <table class="auto-group-p2pf-Vw7" id="ipTable">
+    <thead class="frame-11-N7j">
+      <tr>
+        <th class="column-3Um">IP Space</th>
+        <th class="column-2Lh">Descripton</th>
+        <th class="column-2Lh">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for value in ips_list %}
+      <tr class="td-ASu">
+        <td>{{ value.ip }}</td>
+        <td>{{ value.description }}</td>
+        <td>
+          <button
+            class="btn-icons"
+            id="edit_ip_btn"
+            onclick="editIP(' {{ value.id }} ', ' {{ value.ip|escapejs }} ', ' {{ value.description|escapejs }} ')"
+          >
+            <img src="{% static 'icons/edit.svg' %}" />
+          </button>
+          <button
+            class="btn-icons"
+            onclick="
+          deleteIP('{{ value.id }}', '{{ value.ip }}')"
+          >
+            <img src="{% static 'icons/delete.svg' %}" />
+          </button>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 </div>
+
+<!-- Add the JavaScript to handle the change event -->
+<script data-ips_list="{{ ips_list }}">
+  const data = document.currentScript.dataset;
+
+  const overlay = document.getElementById("overlay-dashboard");
+  const deleteOverlay = document.getElementById("overlay-delete");
+
+  const editIP = (id, ip, description) => {
+    const editIpInput = document.getElementById("edit_ip_input");
+    const editDescInput = document.getElementById("edit_desc_input");
+    const form = document.getElementById('editForm');
+    editIpInput.value = ip;
+    editDescInput.value = description;
+
+    const editUrl = `/edit_ip/${id.trim()}/`;
+
+    // Update the form's action attribute
+    form.action = editUrl;
+    
+    overlay.style.display = "flex";
+  };
+
+  const deleteIP = (id, ip) => {
+    const ipToDelete = document.getElementById("delete_ip");
+    const form = document.getElementById('deleteForm');
+    ipToDelete.innerHTML = ip
+
+    const editUrl = `/delete_ip/${id.trim()}/`;
+
+    // Update the form's action attribute
+    form.action = editUrl;
+
+    deleteOverlay.style.display = "flex";
+  };
+
+  document.addEventListener("DOMContentLoaded", function () {
+
+    const cancelBtn = document.getElementById("cancel_btn");
+    const cancelBtn1 = document.getElementById("cancel_btn_1");
+
+    cancelBtn.addEventListener("click", function (event) {
+      overlay.style.display = "none";
+    });
+
+    cancelBtn1.addEventListener("click", function (event) {
+      deleteOverlay.style.display = "none";
+    });
+  });
+</script>
 {% endblock %}

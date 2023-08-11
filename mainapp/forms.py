@@ -17,6 +17,11 @@ class SyncIntervalForm(forms.ModelForm):
         model = SyncInterval
         fields = ['sync_interval']
 
+class IPSpaceEditForm(forms.ModelForm):
+    class Meta:
+        model = IPSpace
+        fields = ['ip_space', 'description']
+    
 class AddIPForm(forms.ModelForm):
     ip_space = forms.CharField(required=True, min_length=3, widget=forms.TextInput(attrs={'placeholder': 'Enter your username'})) 
     description = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Enter your password'}))
