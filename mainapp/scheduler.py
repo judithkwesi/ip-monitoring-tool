@@ -1,6 +1,10 @@
 from apscheduler.schedulers.background import BackgroundScheduler
 import subprocess
 from .models import SyncInterval
+import logging
+
+
+logger = logging.getLogger('ip-monitoring-tool')
 
 
 # Constants for URLs and output file paths
@@ -25,18 +29,22 @@ def schedule_site_downloads():
         sync = int(sync_intervals[-1])
 
     scheduler = BackgroundScheduler()
-    scheduler.add_job(download_sites_file, 'interval', hours=sync)
+    scheduler.add_job(download_sites_file, 'interval', minutes=1)
     scheduler.start()
 
 
 def download_sites_file():
     # Use wget to download the files
     try:
-        subprocess.call(f"wget -O {BLOCKLIST_OUTPUT_FILE} {BLOCKLIST_URL}")
-        subprocess.call(f"wget -O {CINS_OUTPUT_FILE} {CINS_URL}")
-        subprocess.call(f"wget -O {SPAMHAUS_OUTPUT_FILE} {SPAMHAUS_URL}")
-        subprocess.call(f"wget -O {SPAMHAUSV6_OUTPUT_FILE} {SPAMHAUSV6_URL}")
+        subprocess.run(["wget", "-O", BLOCKLIST_OUTPUT_FILE, BLOCKLIST_URL], check=True)
+        logger.info("Blocklist updated successfully.")
+        subprocess.run(["wget", "-O", CINS_OUTPUT_FILE, CINS_URL], check=True)
+        logger.info("CINS updated successfully.")
+        subprocess.run(["wget", "-O", SPAMHAUS_OUTPUT_FILE, SPAMHAUS_URL], check=True)
+        logger.info("Spamhaus IPv4 updated successfully.")
+        subprocess.run(["wget", "-O", SPAMHAUSV6_OUTPUT_FILE, SPAMHAUSV6_URL], check=True)
+        logger.info("Spamhaus IPv6 updated successfully.")
     except Exception as e:
-        print(f"Error occurred during download: {e}")
+        logger.error(f"Error occurred during download: {e}")
 
     return "Done"

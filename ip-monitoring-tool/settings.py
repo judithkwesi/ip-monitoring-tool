@@ -13,7 +13,11 @@ else:
 
 DEBUG = False
 
-ALLOWED_HOSTS = ['137.63.148.213', '127.0.0.1']
+ALLOWED_HOSTS = ['137.63.148.213', '127.0.0.1', 'crappie-first-koala.ngrok-free.app']
+
+if 'test' in sys.argv or 'test_coverage' in sys.argv:
+    COVERAGE_MODULE_EXCLUDES = ['tests', 'mainapp/migrations', 'migrations', 'settings']
+    COVERAGE_REPORT_HTML_OUTPUT_DIR = 'coverage_html'
 
 if 'test' in sys.argv or 'test_coverage' in sys.argv:
     COVERAGE_MODULE_EXCLUDES = ['tests', 'mainapp/migrations', 'migrations', 'settings']
@@ -46,7 +50,7 @@ ROOT_URLCONF = 'ip-monitoring-tool.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -88,6 +92,34 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '[%(asctime)s] %(message)s',
+            'datefmt': '%d/%b/%Y %H:%M:%S',
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': './ip-monitoring-logs.log',
+            'formatter': 'verbose',
+        },
+    },
+    'loggers': {
+        'ip-monitoring-tool': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
+
+
+
 # Internationalization
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
@@ -109,7 +141,19 @@ LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
 
 # Session
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_COOKIE_AGE = 3600  # 1 hour
 
 # Secure flag for the session cookie (set it to True for HTTPS-only)
 SESSION_COOKIE_SECURE = False
+
+CSRF_TRUSTED_ORIGINS = ['https://crappie-first-koala.ngrok-free.app', 'http://137.63.148.213:8888']
+# CSRF_TRUSTED_ORIGINS = ['http://137.63.148.213:8888']
+
+EMAIL_HOST = 'smtp.gmail.com'  # Replace with your SMTP server address
+EMAIL_PORT = 587  # Replace with your SMTP server port (587 for TLS, 465 for SSL)
+EMAIL_USE_TLS = True  # Use TLS (True) or SSL (False) depending on your server configuration
+EMAIL_USE_SSL = False
+EMAIL_HOST_USER = 'renutest100@gmail.com'  # Replace with your email address
+EMAIL_HOST_PASSWORD = ''  # Replace with your email password or API key
+DEFAULT_FROM_EMAIL = 'admin@renu.ac.ug'  # Replace with the email address to appear as the sender

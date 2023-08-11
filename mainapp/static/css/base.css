@@ -176,13 +176,14 @@ select {
 ul.messages {
   position: absolute;
   z-index: 1001;
+  right: 0;
   margin-top: 20px;
-  padding: 0;
+  padding: 0 10px;
   list-style-type: none;
   width: 100vw;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-end;
   gap: 10px;
 }
 ul.messages li.success,
@@ -193,6 +194,38 @@ ul.messages li.info {
   padding: 14px 20px;
   list-style: none;
   color: #fff;
+  opacity: 0;
+  border-radius: 8px;
+  transform: translateX(100%);
+  animation: slideInFromRight 0.3s ease forwards, fadeOut 0.3s ease 2s forwards;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+@keyframes slideInFromRight {
+  0% {
+    opacity: 0; /* Start the animation with the messages hidden */
+    transform: translateX(
+      100%
+    ); /* Start the animation with messages moved to the right */
+  }
+  100% {
+    opacity: 1; /* At the end of the animation, show the messages */
+    transform: translateX(
+      0
+    ); /* At the end of the animation, move the messages to the original position */
+  }
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1; /* Start the animation with full opacity */
+  }
+  100% {
+    opacity: 0; /* At the end of the animation, fade out and hide the messages */
+  }
 }
 
 ul.messages li.success {
@@ -227,6 +260,10 @@ ul.messages li a.choice {
   border: 0;
   box-shadow: none;
   text-shadow: none;
+}
+
+.toast-icons {
+  width: 25px;
 }
 
 .login-form {
@@ -345,7 +382,23 @@ td {
   justify-content: center;
 }
 
+#overlay-delete {
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 #overlay {
+  display: none;
+}
+
+#overlay-delete {
   display: none;
 }
 
@@ -377,6 +430,18 @@ td {
   justify-content: center;
 }
 
+#editForm, #deleteForm {
+  background-color: white;
+  padding: 10px 25px;
+  opacity: 100%;
+  overflow-x: hidden;
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+  align-items: start;
+  justify-content: center;
+}
+
 .btn_group {
   width: 100%;
   display: flex;
@@ -388,10 +453,217 @@ td {
   background-color: #808080;
 }
 
-#add_user_form input {
+#add_user_form input, #editForm input, #deleteForm input {
   width: 100%;
 }
 
-#add_user_form textarea {
+#add_user_form textarea, #editForm textarea, #deleteForm textarea {
   width: 100%;
+}
+
+.menu-icon {
+  display: none;
+}
+
+.mobile-menu {
+  display: none;
+}
+
+/* Media Query for Mobile View - up to 768px width */
+@media (max-width: 768px) {
+  /* CSS for nav - Mobile view */
+  nav {
+    padding: 0 20px; /* Reduced padding for mobile */
+  }
+
+  nav ul.menu {
+    display: none; /* Hide the menu on mobile */
+  }
+
+  .logo-menu {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Reduced gap for mobile */
+    height: 60px;
+  }
+
+  #logo {
+    width: 30px; /* Reduced logo size for mobile */
+  }
+
+  .menu-item a {
+    display: none; /* Hide menu items on mobile */
+  }
+
+  .profile {
+    display: none;
+  }
+
+  .menu-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    color: white;
+  }
+
+  /* CSS for content - Mobile view */
+  #content {
+    padding: 0 20px; /* Reduced padding for mobile */
+  }
+
+  /* ... (Other styles for forms, messages, tables, etc.) */
+
+  /* CSS for login styles - Mobile view */
+  .login-form-container {
+    width: 100vw;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-x: hidden;
+  }
+
+  .login-form {
+    width: 100%; /* Full width for mobile */
+    padding: 15px 20px;
+  }
+
+  .login-form form {
+    width: 100%;
+  }
+
+  .input-fields {
+    width: 100%;
+  }
+
+  #delete_ip{
+    font-weight: bolder;
+  }
+
+  /* CSS for search and result elements - Mobile view */
+  .search {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .result {
+    margin-top: 10px; /* Reduced margin for mobile */
+  }
+
+  /* CSS for buttons - Mobile view */
+  select,
+  .btn,
+  .login-btn {
+    width: 100%; /* Full width for mobile */
+  }
+
+  input,
+  textarea {
+    width: 100%;
+  }
+
+  #myForm {
+    width: 100%;
+  }
+
+  /* Add User Overlay - Mobile view */
+  #add_user_form {
+    padding: 10px; /* Reduced padding for mobile */
+    gap: 5px; /* Reduced gap for mobile */
+  }
+
+  .menu-icon {
+    border: none;
+    background-color: transparent;
+    color: white;
+    font-size: 25px;
+    cursor: pointer;
+  }
+
+  .mobile-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background-color: #00334e;
+    position: absolute;
+    z-index: 1002;
+    width: 100%;
+    right: 0;
+    left: 0;
+    top: 50px;
+    padding: 20px 20px;
+  }
+
+  .mobile-menu li {
+    list-style: none;
+  }
+
+  .mobile-menu a {
+    height: 40px;
+    padding: 0 16px;
+    display: flex;
+    align-items: center;
+    /* justify-content: center; */
+  }
+
+  .mobile-menu a:hover {
+    background-color: #074e6f8d;
+  }
+
+  .selected {
+    background-color: #074e6f;
+  }
+
+  .mobile-profile {
+    margin-top: 10px;
+    padding: 0 16px;
+    display: flex;
+    align-items: center;
+    color: white;
+  }
+
+  .mobile-profile a {
+    color: white;
+  }
+
+  .mobile-profile a:hover {
+    color: white;
+    background-color: transparent;
+  }
+
+  #menu-links {
+    display: none;
+  }
+}
+
+.login-welcome {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.login-welcome img {
+  width: 80px;
+}
+
+.login-welcome p {
+  font-size: 18px;
+}
+
+.mar {
+  margin-top: 15px;
+}
+
+.btn-icons {
+  border: none;
+  padding: 5px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-icons img {
+  width: 20px;
 }

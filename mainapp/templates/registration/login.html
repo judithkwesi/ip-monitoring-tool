@@ -3,7 +3,17 @@
 
 <main class="login-form-container">
   <div class="login-form">
-    <h1>Welcome</h1>
+    <div class="login-welcome">
+      {% load static %}
+      <a href="{%url 'dashboard' %}" class=""
+        ><img
+          src="{% static 'renu_logo.png' %}"
+          width="80px"
+          alt="RENU Logo"
+      /></a>
+      <p>Welcome</p>
+    </div>
+
     <form action="{% url 'login' %}" method="POST">
       {% csrf_token %}
       <div class="input-fields">
@@ -32,11 +42,10 @@
           />
         </div>
       </div>
-      <!-- {{form.as_p}} {% csrf_token %} -->
       <input type="submit" value="Login" class="login-btn" />
     </form>
     <p>
-      <a href="#">Forgot your Password? </a>
+      <a href="{% url 'password_reset' %}">Forgot your Password? </a>
     </p>
   </div>
 </main>

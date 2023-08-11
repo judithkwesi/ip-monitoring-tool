@@ -4,18 +4,24 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from .models import IPSpace, SyncInterval
+from ipaddress import ip_network, AddressValueError
 
 class LoginForm(forms.Form):
     username = forms.CharField(required=True, min_length=3, widget=forms.TextInput(attrs={'placeholder': 'Enter your username'})) 
     password = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Enter your password'}))
 
 class SyncIntervalForm(forms.ModelForm):
-    sync_interval = forms.CharField(required=True, min_length=1, widget=forms.TextInput(attrs={'placeholder': 'Enter your username'}))
+    sync_interval = forms.IntegerField(required=True, min_value=3,max_value=36, widget=forms.NumberInput(attrs={'placeholder': 'Enter sync interval (3-36)'}))
 
     class Meta:
         model = SyncInterval
         fields = ['sync_interval']
 
+class IPSpaceEditForm(forms.ModelForm):
+    class Meta:
+        model = IPSpace
+        fields = ['ip_space', 'description']
+    
 class AddIPForm(forms.ModelForm):
     ip_space = forms.CharField(required=True, min_length=3, widget=forms.TextInput(attrs={'placeholder': 'Enter your username'})) 
     description = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Enter your password'}))
@@ -23,6 +29,16 @@ class AddIPForm(forms.ModelForm):
     class Meta:
         model = IPSpace
         fields = ['ip_space', 'description']
+
+    def clean_ip_space(self):
+        ip_space = self.cleaned_data.get('ip_space')
+        
+        try:
+            ip_network(ip_space)  # This will raise an exception if the IP range is invalid
+        except (AddressValueError, ValueError) as e:
+            raise forms.ValidationError("Invalid IP address range.")
+        
+        return ip_space
 
 class AddUserForm(UserCreationForm):
     username = forms.CharField(required=True, min_length=3, widget=forms.TextInput(attrs={'placeholder': 'Enter your username'})) 
