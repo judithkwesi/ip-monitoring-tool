@@ -105,7 +105,7 @@ LOGGING = {
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': './ip-monitoring-logs.log',
+            'filename': 'ip-monitoring-logs.log',
             'formatter': 'verbose',
         },
     },
