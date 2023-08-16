@@ -1,5 +1,7 @@
 from apscheduler.schedulers.background import BackgroundScheduler
 import subprocess
+
+from mainapp.utils.utils import process_and_store_blacklist
 from .models import SyncInterval
 import logging
 
@@ -46,5 +48,7 @@ def download_sites_file():
         logger.info("Spamhaus IPv6 updated successfully.")
     except Exception as e:
         logger.error(f"Error occurred during download: {e}")
+
+    process_and_store_blacklist()
 
     return "Done"
