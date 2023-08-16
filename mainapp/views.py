@@ -10,7 +10,7 @@ from .forms import MySelectForm, AddUserForm, AddIPForm, SyncIntervalForm, IPSpa
 from django.views.decorators.cache import never_cache
 from django.contrib.auth.forms import AuthenticationForm
 from .models import IPSpace, SyncInterval
-from mainapp.utils.utils import generateContext, handle_invalid_login_attempt, check_file, get_device_info
+from mainapp.utils.utils import generateContext, get_blacklist_from_file, handle_invalid_login_attempt, check_file, get_device_info
 from mainapp.utils.custom_decorators import custom_admin_only, custom_authorised_user
 import logging
 from user_agents import parse
@@ -76,20 +76,19 @@ def login_view(request):
 
 @custom_authorised_user
 def dashboard(request):
-     all_ips = IPSpace.objects.all()
-     renu_ips = [ip_obj.ip_space for ip_obj in all_ips]
-     blocklist = []
-
-     check_file('./mainapp/sites/cins.txt', renu_ips, blocklist, "CINS")
-     check_file('./mainapp/sites/blocklist.txt', renu_ips, blocklist, "Blocklist")
-
-     for ip_space in renu_ips:
-         if ":" in ip_space:
-             identify_blacklisted_ip_addresses('./mainapp/sites/spamhausv6.txt', ip_space, blocklist, "Spamhaus")
-         else:
-             identify_blacklisted_ip_addresses('./mainapp/sites/spamhaus.txt', ip_space, blocklist, "Spamhaus")
-
+     blocklist = get_blacklist_from_file()
      sorted_data = sorted(blocklist, key=lambda x: x['ip'])
+
+     # check_file('./mainapp/sites/cins.txt', renu_ips, blocklist, "CINS")
+     # check_file('./mainapp/sites/blocklist.txt', renu_ips, blocklist, "Blocklist")
+
+     # for ip_space in renu_ips:
+     #     if ":" in ip_space:
+     #         identify_blacklisted_ip_addresses('./mainapp/sites/spamhausv6.txt', ip_space, blocklist, "Spamhaus")
+     #     else:
+     #         identify_blacklisted_ip_addresses('./mainapp/sites/spamhaus.txt', ip_space, blocklist, "Spamhaus")
+
+     # sorted_data = sorted(blocklist, key=lambda x: x['ip'])
 
      if request.method == 'POST':
           form = MySelectForm(request.POST)
