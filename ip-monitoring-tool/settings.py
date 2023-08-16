@@ -105,13 +105,35 @@ LOGGING = {
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': 'ip-monitoring-logs.log',
+            'filename': 'logs/ip-monitoring-logs.log',
+            'formatter': 'verbose',
+        },
+        'file2': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': 'logs/deployment-logs.log',
+            'formatter': 'verbose',
+        },
+        'file3': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': 'logs/auth-logs.log',
             'formatter': 'verbose',
         },
     },
     'loggers': {
         'ip-monitoring-tool': {
             'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'deployment': {
+            'handlers': ['file2'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'auth': {
+            'handlers': ['file3'],
             'level': 'DEBUG',
             'propagate': True,
         },
