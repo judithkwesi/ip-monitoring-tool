@@ -23,6 +23,8 @@ from .models import IPSpace
 
 
 logger = logging.getLogger('ip-monitoring-tool')
+deploy_logger = logging.getLogger('deployment')
+auth_logger = logging.getLogger('auth')
 
 def get_user_ip(request):
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
@@ -62,7 +64,7 @@ def login_view(request):
         if form.is_valid():
             user = form.get_user()
             login(request, user)
-            logger.info(f"200 OK {user_ip} {user} {request.path} {device_info}")
+            auth_logger.info(f"200 OK {user_ip} {user} {request.path} {device_info}")
             messages.success(request, "Successfully logged in")
             cache.delete(f'login_attempts:{request.META.get("REMOTE_ADDR")}')
             return redirect('dashboard')
@@ -210,7 +212,7 @@ def logout_user(request):
     user_ip = get_user_ip(request)
     device_info = get_device_info(request)
     username = request.user.username if request.user.is_authenticated else "Anonymous"
-    logger.info(f"200 OK {user_ip} {username} {request.path} {device_info}")
+    auth_logger.info(f"200 OK {user_ip} {username} {request.path} {device_info}")
     logout(request)
     messages.success(request, "Successfully logged out")
     return HttpResponseRedirect('/')
@@ -246,12 +248,12 @@ def github_webhook(request):
           if event_type == 'push' and 'ref' in payload and payload['ref'] == 'refs/heads/staging':
               author_name = payload['pusher']['name']
               commit_message = payload['head_commit']['message']
-              logger.info(f"Attempt to deployment: {author_name} - {commit_message} /{payload['ref']}")
+              deploy_logger.info(f"Attempt to deployment: {author_name} - {commit_message} /{payload['ref']}")
               try:
                   subprocess.run(['/usr/bin/sudo', '/home/charles/ip-reputation/staging/ip-monitoring-tool/.github/workflows/deploy.sh'])
-                  logger.info(f"Deployment: {author_name} - {commit_message} /{payload['ref']}")
+                  deploy_logger.info(f"Deployment: {author_name} - {commit_message} /{payload['ref']}")
               except subprocess.CalledProcessError as e:
-                  logger.error(f"Error deploying from {author_name}/ {commit_message}: {e}")
+                  deploy_logger.error(f"Error deploying from {author_name}/ {commit_message}: {e}")
               
 
      return HttpResponse(status=200)

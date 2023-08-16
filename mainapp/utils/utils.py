@@ -8,7 +8,7 @@ import logging
 from user_agents import parse
 
 
-logger = logging.getLogger('ip-monitoring-tool')
+auth_logger = logging.getLogger('auth')
 
 def get_device_info(request):
      user_agent_string = request.META.get('HTTP_USER_AGENT', '')
@@ -44,7 +44,7 @@ def handle_invalid_login_attempt(request):
     else:
         cache.set(key, attempts + 1, 3600)
         messages.error(request, "Invalid username or password.")
-        logger.error(f"401 Unauthorised {user_ip} {username} {request.path} {device_info}")
+        auth_logger.error(f"401 Unauthorised {user_ip} {username} {request.path} {device_info}")
 
 
 def check_file(file, renu_ips, blocklist, site):

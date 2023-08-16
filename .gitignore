@@ -14,6 +14,7 @@ secret_key.txt
 **/__pycache__/
 ip-monitoring-tool/__pycache__/
 **/migrations/
+logs
 
 .coverage
 htmlcov/
