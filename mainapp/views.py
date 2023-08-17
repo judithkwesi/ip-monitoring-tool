@@ -10,13 +10,11 @@ from .forms import MySelectForm, AddUserForm, AddIPForm, SyncIntervalForm, IPSpa
 from django.views.decorators.cache import never_cache
 from django.contrib.auth.forms import AuthenticationForm
 from .models import IPSpace, SyncInterval
-from mainapp.utils.utils import generateContext, get_blacklist_from_file, handle_invalid_login_attempt, check_file, get_device_info
+from mainapp.utils.utils import generateContext, get_blacklist_from_file, handle_invalid_login_attempt, get_device_info
 from mainapp.utils.custom_decorators import custom_admin_only, custom_authorised_user
 import logging
-from user_agents import parse
 from django.views.decorators.csrf import csrf_exempt
 import subprocess
-from .check_for_renu_ip import identify_blacklisted_ip_addresses
 from django.contrib.auth import views as auth_views
 from .models import IPSpace
 
@@ -78,7 +76,7 @@ def login_view(request):
 def dashboard(request):
      blocklist = get_blacklist_from_file()
      sorted_data = sorted(blocklist, key=lambda x: x['ip'])
-
+     # TODO
      if request.method == 'POST':
           form = MySelectForm(request.POST)
           if form.is_valid():

@@ -394,6 +394,12 @@ td {
   justify-content: center;
 }
 
+#deleteForm p {
+  padding: 0;
+  width: 100%;
+  word-wrap: anywhere;
+}
+
 #overlay-edit {
   width: 100vw;
   height: 100vh;
@@ -445,7 +451,7 @@ td {
 
 #editForm, #deleteForm {
   background-color: white;
-  padding: 10px 25px;
+  padding: 30px 25px;
   opacity: 100%;
   overflow-x: hidden;
   display: flex;

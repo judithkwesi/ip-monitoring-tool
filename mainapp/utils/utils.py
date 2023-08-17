@@ -76,8 +76,8 @@ def process_and_store_blacklist():
     blocklist = []
 
     check_file('./mainapp/sites/cins.txt', renu_ips, blocklist, "CINS")
-    check_file('./mainapp/sites/blocklist.txt', renu_ips, blocklist, "Blocklist")
-    check_file('./mainapp/sites/abuseIPDB.txt', renu_ips, blocklist, "Blocklist")
+    check_file('./mainapp/sites/blocklist.txt', renu_ips, blocklist, "Blocklist.de")
+    check_file('./mainapp/sites/abuseIPDB.txt', renu_ips, blocklist, "AbuseIPDB")
 
     try:
         for ip_space in renu_ips:
