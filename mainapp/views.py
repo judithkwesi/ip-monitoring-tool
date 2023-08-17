@@ -206,12 +206,18 @@ def logout_user(request):
     return HttpResponseRedirect('/')
 
 
-
-
-# Password Reset View
-@never_cache
 def password_reset(request):
-    return auth_views.PasswordResetView.as_view()(request)
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        print("email")
+
+        # Check if the email exists in the database
+        if User.objects.filter(email=email).exists():
+            return auth_views.PasswordResetView.as_view()(request)
+        else:
+          messages.error(request, "Email not found")
+
+    return render(request, 'registration/password_reset_form.html')
 
 # Password Reset Done View
 @never_cache
@@ -227,6 +233,7 @@ def password_reset_confirm(request, uidb64, token):
 @never_cache
 def password_reset_complete(request):
     return auth_views.PasswordResetCompleteView.as_view()(request)
+
 @csrf_exempt
 def github_webhook(request):
      if request.method == 'POST':

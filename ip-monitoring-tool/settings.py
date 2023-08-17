@@ -1,6 +1,7 @@
 from pathlib import Path
 import os
 import sys
+from decouple import config
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -171,10 +172,10 @@ SESSION_COOKIE_SECURE = False
 
 CSRF_TRUSTED_ORIGINS = ['http://ip.it.renu.ac.ug']
 
-EMAIL_HOST = 'smtp.gmail.com'  # Replace with your SMTP server address
+EMAIL_HOST = 'smtp.gmail.com' 
 EMAIL_PORT = 587  # Replace with your SMTP server port (587 for TLS, 465 for SSL)
 EMAIL_USE_TLS = True  # Use TLS (True) or SSL (False) depending on your server configuration
 EMAIL_USE_SSL = False
 EMAIL_HOST_USER = 'renutest100@gmail.com'  # Replace with your email address
-EMAIL_HOST_PASSWORD = ''  # Replace with your email password or API key
+EMAIL_HOST_PASSWORD = config('EMAIL_PASSWORD')
 DEFAULT_FROM_EMAIL = 'admin@renu.ac.ug'  # Replace with the email address to appear as the sender
