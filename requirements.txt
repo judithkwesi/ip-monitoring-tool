@@ -1,4 +1,6 @@
 APScheduler==3.10.1
+requests==2.31.0
+user-agents==2.2.0
+python-decouple==3.8
 sqlparse==0.4.4
 typing_extensions==4.7.1
-user-agents==2.2.0
