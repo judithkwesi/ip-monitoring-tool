@@ -1,5 +1,6 @@
 from pathlib import Path
 import os
+import socket
 import sys
 from decouple import config
 
@@ -172,7 +173,7 @@ SESSION_COOKIE_SECURE = False
 
 CSRF_TRUSTED_ORIGINS = ['http://ip.it.renu.ac.ug']
 
-EMAIL_HOST = 'smtp.gmail.com' 
+EMAIL_HOST = socket.gethostbyname('smtp.gmail.com')
 EMAIL_PORT = 587  # Replace with your SMTP server port (587 for TLS, 465 for SSL)
 EMAIL_USE_TLS = True  # Use TLS (True) or SSL (False) depending on your server configuration
 EMAIL_USE_SSL = False
