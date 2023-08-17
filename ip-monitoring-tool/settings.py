@@ -12,7 +12,7 @@ else:
     with open(os.path.join(BASE_DIR, 'secret_key.txt')) as f:
         SECRET_KEY = f.read().strip()
 
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['137.63.148.211', 'ip.it.renu.ac.ug', '127.0.0.1']
 

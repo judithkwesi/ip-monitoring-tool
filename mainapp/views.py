@@ -206,10 +206,10 @@ def logout_user(request):
     return HttpResponseRedirect('/')
 
 
+@never_cache
 def password_reset(request):
     if request.method == 'POST':
         email = request.POST.get('email')
-        print("email")
 
         # Check if the email exists in the database
         if User.objects.filter(email=email).exists():
