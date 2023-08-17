@@ -165,7 +165,7 @@ def update_sync_interval(request):
 @custom_admin_only
 def users(request):
     users = User.objects.all()
-    usernames_list = [{"username": user.username, "access_level": user.is_superuser} for user in users]
+    usernames_list = [{"id": user.id, "username": user.username, "access_level": user.is_superuser} for user in users]
     data = {"users": usernames_list}
     context = {
          "users": json.dumps(data),

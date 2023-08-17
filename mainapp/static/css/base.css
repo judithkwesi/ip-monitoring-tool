@@ -394,6 +394,19 @@ td {
   justify-content: center;
 }
 
+#overlay-edit {
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+
 #overlay {
   display: none;
 }
@@ -666,4 +679,9 @@ td {
 
 .btn-icons img {
   width: 20px;
+}
+
+.btn-space {
+  display: flex;
+  gap: 8px;
 }
