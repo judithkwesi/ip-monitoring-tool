@@ -1,5 +1,8 @@
 from apscheduler.schedulers.background import BackgroundScheduler
 import subprocess
+from mainapp.utils.get_abuseIPDB import make_abuseipdb_request
+
+from mainapp.utils.utils import process_and_store_blacklist
 from .models import SyncInterval
 import logging
 
@@ -29,7 +32,7 @@ def schedule_site_downloads():
         sync = int(sync_intervals[-1])
 
     scheduler = BackgroundScheduler()
-    scheduler.add_job(download_sites_file, 'interval', minutes=1)
+    scheduler.add_job(download_sites_file, 'interval', hours=sync)
     scheduler.start()
 
 
@@ -44,7 +47,11 @@ def download_sites_file():
         logger.info("Spamhaus IPv4 updated successfully.")
         subprocess.run(["wget", "-O", SPAMHAUSV6_OUTPUT_FILE, SPAMHAUSV6_URL], check=True)
         logger.info("Spamhaus IPv6 updated successfully.")
+
+        make_abuseipdb_request()
     except Exception as e:
         logger.error(f"Error occurred during download: {e}")
+
+    process_and_store_blacklist()
 
     return "Done"

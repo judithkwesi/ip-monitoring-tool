@@ -1,3 +1,4 @@
+import datetime
 import ipaddress
 from multiprocessing import Pool
 from functools import partial
@@ -104,13 +105,14 @@ def check_prefix(test_ip_address, reference_ip_address, ip_type):
 #Main functon of identify_blacklisted_ip_addresses
 def main(ip_full_address, reference_ip_address, blocklist, site):
     ip = ipaddress.ip_network(ip_full_address, strict=False)
+    current_timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     
     if ip.version == 4:
         if check_subnet_length(ip_full_address, reference_ip_address):
             pass
         else:
             if check_prefix(ip_full_address, reference_ip_address, "IPv4"):
-                blocklist.append({"ip": str(ip_full_address), "source": site})
+                blocklist.append({"ip": str(ip_full_address), "timestamp": f"{ current_timestamp }", "source": site})
             else:
                 pass
     elif ip.version == 6:
@@ -118,7 +120,7 @@ def main(ip_full_address, reference_ip_address, blocklist, site):
             pass
         else:
             if check_prefix(ip_full_address, reference_ip_address, "IPv6"):
-                blocklist.append({"ip": str(ip_full_address), "source": site})
+                blocklist.append({"ip": str(ip_full_address), "timestamp": f"{current_timestamp }", "source": site})
             else:
                 pass
     
@@ -143,10 +145,15 @@ def identify_blacklisted_ip_addresses(input_file, reference_ip_address, blocklis
     with open(input_file, 'r') as file:
         lines = file.readlines()
 
-    num_processes = 1  # Number of processes (cores) to use
+    num_processes = 4  # Number of processes (cores) to use
     chunk_size = len(lines) // num_processes
+    remaining_lines = len(lines) % num_processes
 
-    chunks = [lines[i:i+chunk_size] for i in range(0, len(lines), chunk_size)]
+    chunks = [lines[i:i+chunk_size] for i in range(0, len(lines) - remaining_lines, chunk_size)]
+
+    # Add a separate chunk for the remaining lines
+    if remaining_lines > 0:
+        chunks.append(lines[-remaining_lines:])
 
     process_chunk_partial = partial(process_chunk, reference_ip_address=reference_ip_address, site=site)
 

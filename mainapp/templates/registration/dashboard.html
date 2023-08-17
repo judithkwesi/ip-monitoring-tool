@@ -43,6 +43,7 @@
       <thead class="frame-11-N7j">
         <tr>
           <th class="column-3Um">IP address</th>
+          <th>Timestamp</th>
           <th class="column-2Lh">Site</th>
         </tr>
       </thead>
@@ -50,6 +51,7 @@
         {% for value in blocklist %}
         <tr class="td-ASu">
           <td >{{ value.ip }}</td>
+          <td>{{ value.timestamp }}</td>
           <td>{{ value.source }}</td>
         </tr>
         {% endfor %}
@@ -100,9 +102,12 @@
           const row = document.createElement('tr');
           const ipCell = document.createElement('td');
           ipCell.textContent = entry.ip;
+          const timestampCell = document.createElement('td')
+          timestampCell.textContent = entry.timestamp;
           const sourceCell = document.createElement('td');
           sourceCell.textContent = entry.source;
           row.appendChild(ipCell);
+          row.appendChild(timestampCell)
           row.appendChild(sourceCell);
           ipTableBody.appendChild(row);
     });
