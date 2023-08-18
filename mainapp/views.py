@@ -17,6 +17,7 @@ from django.views.decorators.csrf import csrf_exempt
 import subprocess
 from django.contrib.auth import views as auth_views
 from .models import IPSpace
+from execution
 
 
 
@@ -48,8 +49,16 @@ def delete_ip(request, ip_id):
 def login_view(request):
      user_ip = get_user_ip(request)
      device_info = get_device_info(request)
+     username = request.POST.get('username', 'Anonymous')
+     key = f'login_attempts:{user_ip}'
+     attempts = cache.get(key, 0)
+     MAX_LOGIN_ATTEMPTS_PER_HOUR = 5
+
      if request.user.is_authenticated:
           return HttpResponseRedirect('/')
+     
+     if attempts >= MAX_LOGIN_ATTEMPTS_PER_HOUR:
+        raise PermissionDenied()
      if request.method == 'POST':
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
