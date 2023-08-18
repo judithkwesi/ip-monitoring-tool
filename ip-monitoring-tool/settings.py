@@ -1,6 +1,8 @@
 from pathlib import Path
 import os
+import socket
 import sys
+from decouple import config
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -8,12 +10,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 if os.environ.get("GITHUB_ACTIONS") == "true":
     SECRET_KEY = '459a2211e3e1cb2219fde2460560070c7081872b629211708'
 else:
-    with open(os.path.join(BASE_DIR, 'secret_key.txt')) as f:
-        SECRET_KEY = f.read().strip()
+    SECRET_KEY = config('SECRET_KEY')
 
 DEBUG = False
 
-ALLOWED_HOSTS = ['137.63.148.213', '127.0.0.1', 'crappie-first-koala.ngrok-free.app']
+ALLOWED_HOSTS = ['137.63.148.211', 'ip.it.renu.ac.ug', '127.0.0.1']
 
 if 'test' in sys.argv or 'test_coverage' in sys.argv:
     COVERAGE_MODULE_EXCLUDES = ['tests', 'mainapp/migrations', 'migrations', 'settings']
@@ -105,13 +106,35 @@ LOGGING = {
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': './ip-monitoring-logs.log',
+            'filename': 'logs/ip-monitoring-logs.log',
+            'formatter': 'verbose',
+        },
+        'file2': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': 'logs/deployment-logs.log',
+            'formatter': 'verbose',
+        },
+        'file3': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': 'logs/auth-logs.log',
             'formatter': 'verbose',
         },
     },
     'loggers': {
         'ip-monitoring-tool': {
             'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'deployment': {
+            'handlers': ['file2'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'auth': {
+            'handlers': ['file3'],
             'level': 'DEBUG',
             'propagate': True,
         },
@@ -122,7 +145,7 @@ LOGGING = {
 
 # Internationalization
 LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Africa/Nairobi'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
@@ -142,18 +165,17 @@ LOGOUT_URL = 'logout'
 
 # Session
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
-SESSION_COOKIE_AGE = 3600  # 1 hour
+SESSION_COOKIE_AGE = 900 # 15minutes
 
 # Secure flag for the session cookie (set it to True for HTTPS-only)
 SESSION_COOKIE_SECURE = False
 
-CSRF_TRUSTED_ORIGINS = ['https://crappie-first-koala.ngrok-free.app', 'http://137.63.148.213:8888']
-# CSRF_TRUSTED_ORIGINS = ['http://137.63.148.213:8888']
+CSRF_TRUSTED_ORIGINS = ['http://ip.it.renu.ac.ug']
 
-EMAIL_HOST = 'smtp.gmail.com'  # Replace with your SMTP server address
+EMAIL_HOST = socket.gethostbyname('smtp.gmail.com')
 EMAIL_PORT = 587  # Replace with your SMTP server port (587 for TLS, 465 for SSL)
 EMAIL_USE_TLS = True  # Use TLS (True) or SSL (False) depending on your server configuration
 EMAIL_USE_SSL = False
 EMAIL_HOST_USER = 'renutest100@gmail.com'  # Replace with your email address
-EMAIL_HOST_PASSWORD = ''  # Replace with your email password or API key
+EMAIL_HOST_PASSWORD = config('EMAIL_PASSWORD')
 DEFAULT_FROM_EMAIL = 'admin@renu.ac.ug'  # Replace with the email address to appear as the sender

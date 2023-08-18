@@ -10,27 +10,20 @@ from .forms import MySelectForm, AddUserForm, AddIPForm, SyncIntervalForm, IPSpa
 from django.views.decorators.cache import never_cache
 from django.contrib.auth.forms import AuthenticationForm
 from .models import IPSpace, SyncInterval
-from mainapp.utils.utils import generateContext, handle_invalid_login_attempt, check_file, get_device_info
+from mainapp.utils.utils import generateContext, get_blacklist_from_file, get_user_ip, handle_invalid_login_attempt, get_device_info
 from mainapp.utils.custom_decorators import custom_admin_only, custom_authorised_user
 import logging
-from user_agents import parse
 from django.views.decorators.csrf import csrf_exempt
 import subprocess
-from .check_for_renu_ip import identify_blacklisted_ip_addresses
 from django.contrib.auth import views as auth_views
 from .models import IPSpace
 
 
 
 logger = logging.getLogger('ip-monitoring-tool')
+deploy_logger = logging.getLogger('deployment')
+auth_logger = logging.getLogger('auth')
 
-def get_user_ip(request):
-    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-    if x_forwarded_for:
-        ip = x_forwarded_for.split(',')[0]
-    else:
-        ip = request.META.get('REMOTE_ADDR')
-    return ip
 
 def edit_ip(request, ip_id):
      ip = get_object_or_404(IPSpace, id=ip_id)
@@ -62,7 +55,7 @@ def login_view(request):
         if form.is_valid():
             user = form.get_user()
             login(request, user)
-            logger.info(f"200 OK {user_ip} {user} {request.path} {device_info}")
+            auth_logger.info(f"200 OK {user_ip} {user} {request.path} {device_info}")
             messages.success(request, "Successfully logged in")
             cache.delete(f'login_attempts:{request.META.get("REMOTE_ADDR")}')
             return redirect('dashboard')
@@ -74,32 +67,20 @@ def login_view(request):
 
 @custom_authorised_user
 def dashboard(request):
-     all_ips = IPSpace.objects.all()
-     renu_ips = [ip_obj.ip_space for ip_obj in all_ips]
-     blocklist = []
-
-     check_file('./mainapp/sites/cins.txt', renu_ips, blocklist, "CINS")
-     check_file('./mainapp/sites/blocklist.txt', renu_ips, blocklist, "Blocklist")
-
-     for ip_space in renu_ips:
-         if ":" in ip_space:
-             identify_blacklisted_ip_addresses('./mainapp/sites/spamhausv6.txt', ip_space, blocklist, "Spamhaus")
-         else:
-             identify_blacklisted_ip_addresses('./mainapp/sites/spamhaus.txt', ip_space, blocklist, "Spamhaus")
-
+     blocklist = get_blacklist_from_file()
      sorted_data = sorted(blocklist, key=lambda x: x['ip'])
-
+     # The if statement gets by posting a selected option contrary to  the http convention.
      if request.method == 'POST':
           form = MySelectForm(request.POST)
           if form.is_valid():
                selected_option = form.cleaned_data['select_choice']
-               context = generateContext(selected_option, sorted_data, form)
+               context = generateContext(request, selected_option, sorted_data, form)
 
                return render(request, 'registration/dashboard.html', context)
      else:
           form = MySelectForm(initial={'select_choice': 'option1'})
           selected_option = form.initial['select_choice']
-          context = generateContext(selected_option, sorted_data, form)
+          context = generateContext(request, selected_option, sorted_data, form)
 
           return render(request, 'registration/dashboard.html', context)
      
@@ -175,7 +156,7 @@ def update_sync_interval(request):
 @custom_admin_only
 def users(request):
     users = User.objects.all()
-    usernames_list = [{"username": user.username, "access_level": user.is_superuser} for user in users]
+    usernames_list = [{"id": user.id, "username": user.username, "access_level": user.is_superuser} for user in users]
     data = {"users": usernames_list}
     context = {
          "users": json.dumps(data),
@@ -210,33 +191,39 @@ def logout_user(request):
     user_ip = get_user_ip(request)
     device_info = get_device_info(request)
     username = request.user.username if request.user.is_authenticated else "Anonymous"
-    logger.info(f"200 OK {user_ip} {username} {request.path} {device_info}")
+    auth_logger.info(f"200 OK {user_ip} {username} {request.path} {device_info}")
     logout(request)
     messages.success(request, "Successfully logged out")
     return HttpResponseRedirect('/')
 
 
-
-
-# Password Reset View
 @never_cache
 def password_reset(request):
-    return auth_views.PasswordResetView.as_view()(request)
+    if request.method == 'POST':
+        email = request.POST.get('email')
 
-# Password Reset Done View
+        # Check if the email exists in the database
+        if User.objects.filter(email=email).exists():
+            return auth_views.PasswordResetView.as_view()(request)
+        else:
+          messages.error(request, "Email not found")
+
+    return render(request, 'registration/password_reset_form.html')
+
+
 @never_cache
 def password_reset_done(request):
     return auth_views.PasswordResetDoneView.as_view()(request)
 
-# Password Reset Confirm View
 @never_cache
 def password_reset_confirm(request, uidb64, token):
     return auth_views.PasswordResetConfirmView.as_view()(request, uidb64=uidb64, token=token)
 
-# Password Reset Complete View
+
 @never_cache
 def password_reset_complete(request):
     return auth_views.PasswordResetCompleteView.as_view()(request)
+
 @csrf_exempt
 def github_webhook(request):
      if request.method == 'POST':
@@ -246,12 +233,12 @@ def github_webhook(request):
           if event_type == 'push' and 'ref' in payload and payload['ref'] == 'refs/heads/staging':
               author_name = payload['pusher']['name']
               commit_message = payload['head_commit']['message']
-              logger.info(f"Attempt to deployment: {author_name} - {commit_message} /{payload['ref']}")
+              deploy_logger.info(f"Attempt to deployment: {author_name} - {commit_message} /{payload['ref']}")
               try:
                   subprocess.run(['/usr/bin/sudo', '/home/charles/ip-reputation/staging/ip-monitoring-tool/.github/workflows/deploy.sh'])
-                  logger.info(f"Deployment: {author_name} - {commit_message} /{payload['ref']}")
+                  deploy_logger.info(f"Deployment: {author_name} - {commit_message} /{payload['ref']}")
               except subprocess.CalledProcessError as e:
-                  logger.error(f"Error deploying from {author_name}/ {commit_message}: {e}")
+                  deploy_logger.error(f"Error deploying from {author_name}/ {commit_message}: {e}")
               
 
      return HttpResponse(status=200)

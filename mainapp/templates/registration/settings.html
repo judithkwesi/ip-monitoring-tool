@@ -28,7 +28,7 @@
   <div id="overlay-dashboard">
     <form action="{% url 'edit_ip' 0 %}" method="post" id="editForm">
       {% csrf_token %}
-      <h2>Edit RENU IP Space</h2>
+      <h3>Edit RENU IP Space</h3>
       <div class="input-fields-user">
         <label for="ip_space">IP space</label>
         <input
@@ -61,7 +61,7 @@
   <div id="overlay-delete">
     <form action="{% url 'delete_ip' 0 %}" method="post" id="deleteForm">
       {% csrf_token %}
-      <h2>Delete <span id="delete_ip"></span></h2>
+      <h3>Delete <span id="delete_ip"></span></h3>
       <p>Are you sure you want to delete this IP, this action is irreversible.</p>
 
       <div class="btn_group">
@@ -121,8 +121,8 @@
     const editIpInput = document.getElementById("edit_ip_input");
     const editDescInput = document.getElementById("edit_desc_input");
     const form = document.getElementById('editForm');
-    editIpInput.value = ip;
-    editDescInput.value = description;
+    editIpInput.value = ip.trim();
+    editDescInput.value = description.trim();
 
     const editUrl = `/edit_ip/${id.trim()}/`;
 
@@ -135,7 +135,7 @@
   const deleteIP = (id, ip) => {
     const ipToDelete = document.getElementById("delete_ip");
     const form = document.getElementById('deleteForm');
-    ipToDelete.innerHTML = ip
+    ipToDelete.innerHTML = ip.trim()
 
     const editUrl = `/delete_ip/${id.trim()}/`;
 

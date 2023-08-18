@@ -1,22 +1,13 @@
 from apscheduler.schedulers.background import BackgroundScheduler
 import subprocess
+from mainapp.utils.get_abuseIPDB import make_abuseipdb_request
+from mainapp.utils.constants import Urls, OutputFile
+from mainapp.utils.utils import process_and_store_blacklist
 from .models import SyncInterval
 import logging
 
 
 logger = logging.getLogger('ip-monitoring-tool')
-
-
-# Constants for URLs and output file paths
-BLOCKLIST_URL = "https://lists.blocklist.de/lists/all.txt"
-CINS_URL = "http://cinsscore.com/list/ci-badguys.txt"
-SPAMHAUS_URL = "https://www.spamhaus.org/drop/drop.txt"
-SPAMHAUSV6_URL = "https://www.spamhaus.org/drop/dropv6.txt"
-
-BLOCKLIST_OUTPUT_FILE = "./mainapp/sites/blocklist.txt"
-CINS_OUTPUT_FILE = "./mainapp/sites/cins.txt"
-SPAMHAUS_OUTPUT_FILE = "./mainapp/sites/spamhaus.txt"
-SPAMHAUSV6_OUTPUT_FILE = "./mainapp/sites/spamhausv6.txt"
 
 
 def schedule_site_downloads():
@@ -29,22 +20,30 @@ def schedule_site_downloads():
         sync = int(sync_intervals[-1])
 
     scheduler = BackgroundScheduler()
-    scheduler.add_job(download_sites_file, 'interval', minutes=1)
+    scheduler.add_job(download_sites_file, 'interval', hours=sync)
     scheduler.start()
 
 
 def download_sites_file():
-    # Use wget to download the files
+    """
+        Downloads files from the databases/sites, currently uses wget
+        params: null
+        return: string
+    """
     try:
-        subprocess.run(["wget", "-O", BLOCKLIST_OUTPUT_FILE, BLOCKLIST_URL], check=True)
+        subprocess.run(["wget", "-O", OutputFile.BLOCKLIST, Urls.BLOCKLISTDE], check=True)
         logger.info("Blocklist updated successfully.")
-        subprocess.run(["wget", "-O", CINS_OUTPUT_FILE, CINS_URL], check=True)
+        subprocess.run(["wget", "-O", OutputFile.CINS, Urls.CINS], check=True)
         logger.info("CINS updated successfully.")
-        subprocess.run(["wget", "-O", SPAMHAUS_OUTPUT_FILE, SPAMHAUS_URL], check=True)
+        subprocess.run(["wget", "-O", OutputFile.SPAMHAUS, Urls.SPAMHAUS], check=True)
         logger.info("Spamhaus IPv4 updated successfully.")
-        subprocess.run(["wget", "-O", SPAMHAUSV6_OUTPUT_FILE, SPAMHAUSV6_URL], check=True)
+        subprocess.run(["wget", "-O", OutputFile.SPAMHAUSV6, Urls.SPAMHAUSV6], check=True)
         logger.info("Spamhaus IPv6 updated successfully.")
+
+        make_abuseipdb_request()
     except Exception as e:
         logger.error(f"Error occurred during download: {e}")
+
+    process_and_store_blacklist()
 
     return "Done"

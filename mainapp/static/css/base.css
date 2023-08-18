@@ -9,6 +9,7 @@ body {
   font-family: "Roboto", sans-serif;
   width: 100vw;
   overflow: hidden;
+  overflow-y: scroll;
   min-height: 100vh;
   background-color: #f4f4f4;
 }
@@ -394,6 +395,25 @@ td {
   justify-content: center;
 }
 
+#deleteForm p {
+  padding: 0;
+  width: 100%;
+  word-wrap: anywhere;
+}
+
+#overlay-edit {
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+
 #overlay {
   display: none;
 }
@@ -432,7 +452,7 @@ td {
 
 #editForm, #deleteForm {
   background-color: white;
-  padding: 10px 25px;
+  padding: 30px 25px;
   opacity: 100%;
   overflow-x: hidden;
   display: flex;
@@ -667,3 +687,45 @@ td {
 .btn-icons img {
   width: 20px;
 }
+
+.btn-space {
+  display: flex;
+  gap: 8px;
+}
+
+.later {
+  background-color: #f06b7873;
+padding: 20px 20px;
+border-radius: 8px;
+color: #b91828;
+border: 1px solid #b91828
+}
+
+.later-info {
+  background-color: #6bcdf05a;
+padding: 20px 20px;
+border-radius: 8px;
+color: #1180ad;
+border: 1px solid #1180ad;
+}
+
+#dashboard-header {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.your_ip{
+  display: flex;
+gap: 2px;
+font-size: 12px;
+background: #d7d7d7de;
+color: #646363;
+padding: 5px 8px;
+border-radius: 12px;
+}
+
+#my_ip {
+  font-weight: bold;
+}
+

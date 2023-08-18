@@ -1,7 +1,12 @@
 {% extends "base.html" %} {% block title %}Dashboard{% endblock %} 
 {% block content %}
 <div id="content">
-  <h2>Reputation Monitor</h2>
+  <div id="dashboard-header"><h2>Reputation Monitor</h2>
+    <div class="your_ip">
+      <p>Your IP:</p>
+      <p id="my_ip"></p>
+    </div>
+    </div>
 
   <div class="search">
     <form method="post" id="myForm">
@@ -43,6 +48,7 @@
       <thead class="frame-11-N7j">
         <tr>
           <th class="column-3Um">IP address</th>
+          <th>Timestamp</th>
           <th class="column-2Lh">Site</th>
         </tr>
       </thead>
@@ -50,6 +56,7 @@
         {% for value in blocklist %}
         <tr class="td-ASu">
           <td >{{ value.ip }}</td>
+          <td>{{ value.timestamp }}</td>
           <td>{{ value.source }}</td>
         </tr>
         {% endfor %}
@@ -60,7 +67,7 @@
 </div>
 
 <!-- Add the JavaScript to handle the change event -->
-<script data-blocklist="{{ blocklist }}" data-label="{{ selected_label }}">
+<script data-blocklist="{{ blocklist }}" data-label="{{ selected_label }}" data-my_ip="{{ my_ip }}">
   const data = document.currentScript.dataset
   
   document.addEventListener('DOMContentLoaded', function() {
@@ -72,6 +79,7 @@
       cancelBtn = document.getElementById("cancel_btn");
       addUserBtn = document.getElementById("add_ip_btn");
       const overlay = document.getElementById("overlay-dashboard");
+      const myIP = document.getElementById("my_ip")
 
       addUserBtn.addEventListener("click", function (event) {
         overlay.style.display = "flex";
@@ -84,6 +92,11 @@
 
       const blocklist = JSON.parse(data.blocklist)
       const selectedLabel = data.label
+      const my_ip = data.my_ip
+
+      if(my_ip){
+        myIP.innerHTML = my_ip
+      }
 
         let currentList = []
         if(selectedLabel === "All Databases"){
@@ -100,9 +113,12 @@
           const row = document.createElement('tr');
           const ipCell = document.createElement('td');
           ipCell.textContent = entry.ip;
+          const timestampCell = document.createElement('td')
+          timestampCell.textContent = entry.timestamp;
           const sourceCell = document.createElement('td');
           sourceCell.textContent = entry.source;
           row.appendChild(ipCell);
+          row.appendChild(timestampCell)
           row.appendChild(sourceCell);
           ipTableBody.appendChild(row);
     });
