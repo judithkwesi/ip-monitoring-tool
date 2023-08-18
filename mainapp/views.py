@@ -62,7 +62,7 @@ def login_view(request):
         else:
             handle_invalid_login_attempt(request)
 
-     return render(request, 'registration/login.html', {})
+     return render(request, 'mainapp/login.html', {})
 
 
 @custom_authorised_user
@@ -76,13 +76,13 @@ def dashboard(request):
                selected_option = form.cleaned_data['select_choice']
                context = generateContext(request, selected_option, sorted_data, form)
 
-               return render(request, 'registration/dashboard.html', context)
+               return render(request, 'mainapp/dashboard.html', context)
      else:
           form = MySelectForm(initial={'select_choice': 'option1'})
           selected_option = form.initial['select_choice']
           context = generateContext(request, selected_option, sorted_data, form)
 
-          return render(request, 'registration/dashboard.html', context)
+          return render(request, 'mainapp/dashboard.html', context)
      
 
 @login_required(login_url='login')
@@ -162,7 +162,7 @@ def users(request):
          "users": json.dumps(data),
          "section": "users"
     }
-    return render(request, 'registration/users.html', context)
+    return render(request, 'mainapp/users.html', context)
 
 
 @custom_admin_only
@@ -183,7 +183,7 @@ def settings(request):
           "sync_interval": sync_interval,
           "ips_list": ips_list
      }
-     return render(request, 'registration/settings.html', context)
+     return render(request, 'mainapp/settings.html', context)
 
 
 @login_required(login_url='login')
@@ -208,7 +208,7 @@ def password_reset(request):
         else:
           messages.error(request, "Email not found")
 
-    return render(request, 'registration/password_reset_form.html')
+    return render(request, 'mainapp/password_reset_form.html')
 
 
 @never_cache
