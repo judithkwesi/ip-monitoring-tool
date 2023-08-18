@@ -10,8 +10,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 if os.environ.get("GITHUB_ACTIONS") == "true":
     SECRET_KEY = '459a2211e3e1cb2219fde2460560070c7081872b629211708'
 else:
-    with open(os.path.join(BASE_DIR, 'secret_key.txt')) as f:
-        SECRET_KEY = f.read().strip()
+    SECRET_KEY = config('SECRET_KEY')
 
 DEBUG = True
 
