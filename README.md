@@ -12,7 +12,7 @@ The IP Reputation Monitoring Application is a web-based tool that enables the or
 - [x] Settings
 - [x] Download Sites files
 - [x] Checking for ips in the sites
-- [ ] Documents
+- [ ] Documentation
 
 #### Team 1
 
