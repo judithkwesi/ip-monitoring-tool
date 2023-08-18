@@ -17,8 +17,7 @@ from django.views.decorators.csrf import csrf_exempt
 import subprocess
 from django.contrib.auth import views as auth_views
 from .models import IPSpace
-from execution
-
+from django.core.exceptions import PermissionDenied
 
 
 logger = logging.getLogger('ip-monitoring-tool')
@@ -51,13 +50,13 @@ def login_view(request):
      device_info = get_device_info(request)
      username = request.POST.get('username', 'Anonymous')
      key = f'login_attempts:{user_ip}'
-     attempts = cache.get(key, 0)
+     attempts = cache.get(key, 1)
      MAX_LOGIN_ATTEMPTS_PER_HOUR = 5
 
      if request.user.is_authenticated:
           return HttpResponseRedirect('/')
      
-     if attempts >= MAX_LOGIN_ATTEMPTS_PER_HOUR:
+     if attempts > MAX_LOGIN_ATTEMPTS_PER_HOUR:
         raise PermissionDenied()
      if request.method == 'POST':
         form = AuthenticationForm(request, data=request.POST)
@@ -69,7 +68,8 @@ def login_view(request):
             cache.delete(f'login_attempts:{request.META.get("REMOTE_ADDR")}')
             return HttpResponseRedirect('/')
         else:
-            handle_invalid_login_attempt(request)
+            cache.set(key, attempts + 1, 3600)
+            handle_invalid_login_attempt(request, attempts, MAX_LOGIN_ATTEMPTS_PER_HOUR, username)
             return HttpResponseRedirect('/login')
 
      return render(request, 'mainapp/login.html', {})

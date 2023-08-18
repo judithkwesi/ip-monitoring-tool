@@ -42,22 +42,15 @@ def generateContext(request, selected_option, blocklist, form):
      return context
 
 
-def handle_invalid_login_attempt(request):
+def handle_invalid_login_attempt(request, attempts, MAX_LOGIN_ATTEMPTS_PER_HOUR, username):
     device_info = get_device_info(request)
-    username = request.POST.get('username', 'Anonymous')
     user_ip = user_ip = get_user_ip(request)
-    key = f'login_attempts:{user_ip}'
-    attempts = cache.get(key, 0)
-    MAX_LOGIN_ATTEMPTS_PER_HOUR = 5
 
-    if attempts >= MAX_LOGIN_ATTEMPTS_PER_HOUR:
-        raise PermissionDenied()
+    if attempts == MAX_LOGIN_ATTEMPTS_PER_HOUR - 1:
+        messages.info(request, "You are left with 1 attempt!.")
     else:
-        if attempts >= MAX_LOGIN_ATTEMPTS_PER_HOUR -1:
-             messages.info(request, "You are left with 1 attempt!.")
-        cache.set(key, attempts + 1, 3600)
         messages.error(request, "Invalid username or password.")
-        auth_logger.error(f"401 Unauthorised {user_ip} {username} {request.path} {device_info}")
+    auth_logger.error(f"401 Unauthorised {user_ip} {username} {request.path} {device_info}")
 
 
 def check_file(file, renu_ips, blocklist, site):
