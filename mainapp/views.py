@@ -10,13 +10,11 @@ from .forms import MySelectForm, AddUserForm, AddIPForm, SyncIntervalForm, IPSpa
 from django.views.decorators.cache import never_cache
 from django.contrib.auth.forms import AuthenticationForm
 from .models import IPSpace, SyncInterval
-from mainapp.utils.utils import generateContext, get_blacklist_from_file, handle_invalid_login_attempt, check_file, get_device_info
+from mainapp.utils.utils import generateContext, get_blacklist_from_file, get_user_ip, handle_invalid_login_attempt, get_device_info
 from mainapp.utils.custom_decorators import custom_admin_only, custom_authorised_user
 import logging
-from user_agents import parse
 from django.views.decorators.csrf import csrf_exempt
 import subprocess
-from .check_for_renu_ip import identify_blacklisted_ip_addresses
 from django.contrib.auth import views as auth_views
 from .models import IPSpace
 
@@ -26,13 +24,6 @@ logger = logging.getLogger('ip-monitoring-tool')
 deploy_logger = logging.getLogger('deployment')
 auth_logger = logging.getLogger('auth')
 
-def get_user_ip(request):
-    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-    if x_forwarded_for:
-        ip = x_forwarded_for.split(',')[0]
-    else:
-        ip = request.META.get('REMOTE_ADDR')
-    return ip
 
 def edit_ip(request, ip_id):
      ip = get_object_or_404(IPSpace, id=ip_id)
@@ -78,7 +69,7 @@ def login_view(request):
 def dashboard(request):
      blocklist = get_blacklist_from_file()
      sorted_data = sorted(blocklist, key=lambda x: x['ip'])
-
+     # The if statement gets by posting a selected option contrary to  the http convention.
      if request.method == 'POST':
           form = MySelectForm(request.POST)
           if form.is_valid():
@@ -219,17 +210,16 @@ def password_reset(request):
 
     return render(request, 'registration/password_reset_form.html')
 
-# Password Reset Done View
+
 @never_cache
 def password_reset_done(request):
     return auth_views.PasswordResetDoneView.as_view()(request)
 
-# Password Reset Confirm View
 @never_cache
 def password_reset_confirm(request, uidb64, token):
     return auth_views.PasswordResetConfirmView.as_view()(request, uidb64=uidb64, token=token)
 
-# Password Reset Complete View
+
 @never_cache
 def password_reset_complete(request):
     return auth_views.PasswordResetCompleteView.as_view()(request)

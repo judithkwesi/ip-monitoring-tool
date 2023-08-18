@@ -1,0 +1,103 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: "Roboto", sans-serif;
+    width: 100vw;
+    overflow: hidden;
+    overflow-y: scroll;
+    min-height: 100vh;
+    background-color: #f4f4f4;
+  }
+
+#header {
+    width: auto;
+height: auto;
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: 10px 40px;
+background: #00334e;
+  color: #fff;
+overflow: hidden;
+}
+
+div.breadcrumbs {
+    background-color: #00334e;
+    color: white;
+}
+
+#content-related{
+    visibility: hidden;
+    position: absolute;
+}
+
+#changelist-filter{
+    visibility: hidden;
+    position: absolute;
+}
+
+#nav-sidebar{
+    visibility: hidden;
+    position: absolute;
+}
+
+/* Example: Change the color of the admin sidebar links */
+.app-list .app-model a {
+    color: #00334e;
+}
+
+.btn, a.addlink {
+    color: white;
+    background-color: #00334e !important;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    height: 40px;
+    padding: 8px 20px;
+    display: flex;
+    align-items: center;
+  }
+
+  .main.shifted > #nav-sidebar + .content {
+    max-width: 100%;
+  }
+
+  .colMS {
+    margin-right: 0 !important;
+  }
+
+  .dashboard #content {
+    width: 100%;
+  }
+  
+  input[type="submit"] {
+    width: 350px;
+    color: white;
+    background-color: #00334e;
+    padding: 8px 12px;
+    margin-top: 0px;
+    margin-bottom: 16px;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    height: 40px;
+  }
+
+  input[type="submit"]:hover {
+    width: 350px;
+    color: white;
+    background-color: #00334e;
+  }
+
+input[type="text"] {
+  background: transparent;
+  border: 1px solid black;
+  padding: 6px 10px;
+  width: 348px;
+  height: 40px;
+  border-radius: 5px;
+}
