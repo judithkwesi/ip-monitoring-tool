@@ -58,9 +58,10 @@ def login_view(request):
             auth_logger.info(f"200 OK {user_ip} {user} {request.path} {device_info}")
             messages.success(request, "Successfully logged in")
             cache.delete(f'login_attempts:{request.META.get("REMOTE_ADDR")}')
-            return redirect('dashboard')
+            return HttpResponseRedirect('/')
         else:
             handle_invalid_login_attempt(request)
+            return HttpResponseRedirect('/login')
 
      return render(request, 'mainapp/login.html', {})
 
