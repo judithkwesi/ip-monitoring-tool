@@ -74,13 +74,13 @@ def dashboard(request):
           form = MySelectForm(request.POST)
           if form.is_valid():
                selected_option = form.cleaned_data['select_choice']
-               context = generateContext(selected_option, sorted_data, form)
+               context = generateContext(request, selected_option, sorted_data, form)
 
                return render(request, 'registration/dashboard.html', context)
      else:
           form = MySelectForm(initial={'select_choice': 'option1'})
           selected_option = form.initial['select_choice']
-          context = generateContext(selected_option, sorted_data, form)
+          context = generateContext(request, selected_option, sorted_data, form)
 
           return render(request, 'registration/dashboard.html', context)
      

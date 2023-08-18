@@ -27,10 +27,10 @@ def get_device_info(request):
     return f'(device: {user_agent})'
 
 
-def generateContext(selected_option, blocklist, form):
+def generateContext(request, selected_option, blocklist, form):
      selected_option_label = dict(form.fields['select_choice'].choices).get(selected_option)
      blocklist_json = json.dumps(blocklist)
-     my_ip = get_my_ip()
+     my_ip = get_user_ip(request)
      context = {
                "blocklist": blocklist_json,
                'section': 'dashboard',
