@@ -202,14 +202,15 @@
           actionCell.classList.add("btn-space")
 
           // Delete button
-          const editButton = document.createElement("button");
+          const editButton = document.createElement("a");
           editButton.classList.add("btn-icons"); // Add a class to the button
           const editIcon = document.createElement("img");
           editIcon.src = "{% static 'icons/edit.svg' %}"; // Replace with actual path
           editButton.appendChild(editIcon);
-          editButton.addEventListener("click", () => {
-              editOverlay.style.display = "flex"
-          });
+          editButton.href = `/cp1/auth/user/${entry.id}/change/`
+          // editButton.addEventListener("click", () => {
+          //     editOverlay.style.display = "flex"
+          // });
 
           // Delete button
           const deleteButton = document.createElement("button");

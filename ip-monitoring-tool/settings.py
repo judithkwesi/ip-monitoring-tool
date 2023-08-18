@@ -12,7 +12,7 @@ if os.environ.get("GITHUB_ACTIONS") == "true":
 else:
     SECRET_KEY = config('SECRET_KEY')
 
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['137.63.148.211', 'ip.it.renu.ac.ug', '127.0.0.1']
 
@@ -165,7 +165,7 @@ LOGOUT_URL = 'logout'
 
 # Session
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
-SESSION_COOKIE_AGE = 900  # 1 hour
+SESSION_COOKIE_AGE = 900 # 15minutes
 
 # Secure flag for the session cookie (set it to True for HTTPS-only)
 SESSION_COOKIE_SECURE = False
