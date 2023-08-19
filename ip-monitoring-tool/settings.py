@@ -14,7 +14,7 @@ else:
 
 DEBUG = False
 
-ALLOWED_HOSTS = ['137.63.148.211', 'ip.it.renu.ac.ug', '127.0.0.1', 'f36c-197-239-9-19.ngrok-free.app']
+ALLOWED_HOSTS = ['137.63.148.211', 'ip.it.renu.ac.ug', '127.0.0.1', 'c92c-102-85-93-250.ngrok-free.app']
 
 if 'test' in sys.argv or 'test_coverage' in sys.argv:
     COVERAGE_MODULE_EXCLUDES = ['tests', 'mainapp/migrations', 'migrations', 'settings']
@@ -170,12 +170,12 @@ SESSION_COOKIE_AGE = 900 # 15minutes
 # Secure flag for the session cookie (set it to True for HTTPS-only)
 SESSION_COOKIE_SECURE = True
 
-CSRF_TRUSTED_ORIGINS = ['https://ip.it.renu.ac.ug', 'https://f36c-197-239-9-19.ngrok-free.app']
+CSRF_TRUSTED_ORIGINS = ['https://ip.it.renu.ac.ug', 'https://c92c-102-85-93-250.ngrok-free.app']
 
-EMAIL_HOST = socket.gethostbyname('smtp.gmail.com')
+EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587  # Replace with your SMTP server port (587 for TLS, 465 for SSL)
-EMAIL_USE_TLS = False  # Use TLS (True) or SSL (False) depending on your server configuration
-EMAIL_USE_SSL = True
+EMAIL_USE_TLS = True  # Use TLS (True) or SSL (False) depending on your server configuration
+EMAIL_USE_SSL = False
 EMAIL_HOST_USER = 'renutest100@gmail.com'  # Replace with your email address
 EMAIL_HOST_PASSWORD = config('EMAIL_PASSWORD')
 DEFAULT_FROM_EMAIL = 'admin@renu.ac.ug'  # Replace with the email address to appear as the sender

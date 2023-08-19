@@ -1,4 +1,5 @@
 import json
+import ssl
 from django.contrib import messages
 from django.shortcuts import render
 from django.core.cache import cache
@@ -12,6 +13,8 @@ from mainapp.models import IPSpace
 from mainapp.check_for_renu_ip import identify_blacklisted_ip_addresses
 from datetime import datetime
 from django.core.exceptions import PermissionDenied
+from django.core.mail import send_mail
+from django.conf import settings
 
 
 auth_logger = logging.getLogger('auth')
@@ -61,6 +64,16 @@ def check_file(file, renu_ips, blocklist, site):
                     for entry in renu_ips:
                          if ip_address in ipaddress.ip_network(entry):
                               blocklist.append({"ip": str(ip_address), "timestamp": f"{ current_timestamp }", "source": site})
+                              send_response_email(ip_address)
+
+
+def send_response_email(ip):
+    subject = "RENU IP Found in List"
+    message = f"The IP {ip} was found in the list."
+    from_email = 'renutest100@gmail.com'
+    recipient_list = ["charleskasasira01@gmail.com"]
+    send_mail(subject, message, from_email, recipient_list)
+
 
 
 def get_user_ip(request):
