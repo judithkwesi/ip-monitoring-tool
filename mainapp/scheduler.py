@@ -12,9 +12,8 @@ logger = logging.getLogger('ip-monitoring-tool')
 
 def schedule_site_downloads():
     sync_query = SyncInterval.objects.all()
-    if not sync_query.exists():
-        sync = 12
-    else:
+    sync = 12
+    if sync_query.exists():
         sync_query = SyncInterval.objects.all()
         sync_intervals = [ip_obj.sync_interval for ip_obj in sync_query]
         sync = int(sync_intervals[-1])

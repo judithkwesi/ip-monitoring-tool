@@ -1,0 +1,90 @@
+{% load i18n static %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>{% block title %}{% endblock %}</title>
+  {% block extra_css %}{% endblock %}
+  <link type="text/css" href="{% static 'css\base.css' %}" rel="stylesheet">
+  <link rel="icon" type="image/x-icon" href="{% static 'renu_logo.png' %}">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+{% block extrahead %}{% endblock %}
+{% block blockbots %}<meta name="robots" content="NONE,NOARCHIVE">{% endblock %}
+</head>
+
+<body>
+    {% if messages %}
+            <ul class="messages" id="msg">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}><img class="toast-icons" src="{% static 'icons/'|add:message.tags|add:'.png' %}" />{{ message }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+
+        {% if request.user.is_authenticated %}
+        <nav>
+            <div class="logo-menu">
+                <a href="{%url 'dashboard' %}" class=""><img src="{% static 'renu_logo.png' %}" width="50px" id="logo" alt="RENU Logo"></a>
+            <ul class="menu">
+                <li  {% if section == "dashboard" %} class="menu-item selected" {% else %} class="menu-item" {% endif %}>
+                    <a href="{%url 'dashboard' %}">Monitor</a>
+                </li>
+                {% if user.is_superuser %}
+                    <li {% if section == "users" %} class="menu-item selected" {% else %} class="menu-item" {% endif %}>
+                        <a href="{%url 'users' %}">Users</a>
+                    </li>
+                    <li {% if section == "settings" %} class="menu-item selected" {% else %} class="menu-item" {% endif %}>
+                        <a href="{%url 'settings' %}">Settings</a>
+                    </li>
+                {% endif %}
+            </ul>
+            </div>
+            
+            <div class="profile">
+                <p class = "user-details">{{ request.user.username|upper }} </p>
+                <a href="{% url 'logout' %}">\ Logout</a>
+            </div>
+            
+            <button class="menu-icon" id="hamburger">&#9776;</button>
+            <ul class="mobile-menu" id="menu-links">
+                <li  {% if section == "dashboard" %} class="selected" {% else %} class="" {% endif %}>
+                    <a href="{%url 'dashboard' %}">Monitor</a>
+                </li>
+                {% if user.is_superuser %}
+                    <li {% if section == "users" %} class="selected" {% else %} class="" {% endif %}>
+                        <a href="{%url 'users' %}">Users</a>
+                    </li>
+                    <li {% if section == "settings" %} class="selected" {% else %} class="" {% endif %}>
+                        <a href="{%url 'settings' %}">Settings</a>
+                    </li>
+                {% endif %}
+                <div class="mobile-profile">
+                    <p class = "user-details">{{ request.user.username|upper }} </p>
+                    <a href="{% url 'logout' %}">\ Logout</a>
+                </div>
+              </ul>
+        </nav>
+        {% endif %}
+
+<!-- Container -->
+<div id="content">
+
+        <!-- Content -->
+          {% block content_subtitle %}{% if subtitle %}<h2>{{ subtitle }}</h2>{% endif %}{% endblock %}
+          {% block content %}
+            {{ content }}
+          {% endblock %}
+</div>
+<!-- END Container -->
+
+<!-- SVGs -->
+<svg xmlns="http://www.w3.org/2000/svg" class="base-svgs">
+  <symbol viewBox="0 0 24 24" width="1rem" height="1rem" id="icon-auto"><path d="M0 0h24v24H0z" fill="currentColor"/><path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2V4a8 8 0 1 0 0 16z"/></symbol>
+  <symbol viewBox="0 0 24 24" width="1rem" height="1rem" id="icon-moon"><path d="M0 0h24v24H0z" fill="currentColor"/><path d="M10 7a7 7 0 0 0 12 4.9v.1c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2h.1A6.979 6.979 0 0 0 10 7zm-6 5a8 8 0 0 0 15.062 3.762A9 9 0 0 1 8.238 4.938 7.999 7.999 0 0 0 4 12z"/></symbol>
+  <symbol viewBox="0 0 24 24" width="1rem" height="1rem" id="icon-sun"><path d="M0 0h24v24H0z" fill="currentColor"/><path d="M12 18a6 6 0 1 1 0-12 6 6 0 0 1 0 12zm0-2a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM11 1h2v3h-2V1zm0 19h2v3h-2v-3zM3.515 4.929l1.414-1.414L7.05 5.636 5.636 7.05 3.515 4.93zM16.95 18.364l1.414-1.414 2.121 2.121-1.414 1.414-2.121-2.121zm2.121-14.85l1.414 1.415-2.121 2.121-1.414-1.414 2.121-2.121zM5.636 16.95l1.414 1.414-2.121 2.121-1.414-1.414 2.121-2.121zM23 11v2h-3v-2h3zM4 11v2H1v-2h3z"/></symbol>
+</svg>
+<!-- END SVGs -->
+
+</body>
+</html>

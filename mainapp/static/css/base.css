@@ -729,3 +729,12 @@ border-radius: 12px;
   font-weight: bold;
 }
 
+
+#user_form{
+  width: 100%;
+}
+
+.module{
+margin-bottom: 20px;
+padding: 10px 20px;
+}
